@@ -8,15 +8,24 @@ import '../../node_modules/iview/dist/styles/iview.css'
 import '../../node_modules/iview/dist/iview.js'
 Vue.use(Router)
 
-import Login from '@/components/login/login'
-import home from '@/page/home/home.vue'
-import order from '@/page/order/order.vue'
-import o_checkorder  from '@/page/order/o_checkorder.vue'
+import Login from '@/components/login/login'//登录页
+import home from '@/page/home/home.vue'//主页
+import order from '@/page/order/order.vue'//订单管理
+import o_checkorder  from '@/page/order/o_checkorder.vue'//查看订单信息
 import cavalier from '@/page/cavalier/cavalier.vue'//骑士管理
 import cAuditing from '@/page/cavalier/c_auditing.vue'//骑士审核
 import c_message from '@/page/cavalier/c_message.vue'//查看骑士信息
 import cPersonal from '@/page/cavalier/c_personal.vue'//骑士-人员管理
 import cTrain from '@/page/cavalier/c_train.vue'//培训管理
+import courseTrain from '@/page/cavalier/courseTrain.vue'//培训管理-课程管理
+import addcourse from '@/page/cavalier/addcourse.vue'//培训管理-课程管理-增加
+import courseinfo from '@/page/cavalier/courseinfo.vue'//培训管理-课程管理=查看
+
+import courseAudit from '@/page/cavalier/courseAudit.vue'//培训管理-课程审核
+import cA_pass from '@/page/cavalier/cA_pass.vue'//培训管理-课程审核-通过
+import cA_notpass from '@/page/cavalier/cA_notpass.vue'//培训管理-课程审核-未通过
+import cA_pendingAudit from '@/page/cavalier/cA_pendingAudit.vue'//培训管理-课程审核-待审核
+
 import configuration from '@/page/configuration/configuration.vue'//配置设置
 import addregion from '@/page/configuration/addregion.vue'//配置设置-增加区域
 import addmarket from '@/page/configuration/addmarket.vue'//配置设置-增加菜市场
@@ -92,6 +101,40 @@ export default new Router({
       path: '/cTrain',
       name: 'cTrain',
       component: cTrain
+    },
+    {
+      path: '/courseTrain',
+      name: 'courseTrain',
+      component: courseTrain
+    },
+    {
+      path: '/addcourse',
+      name: 'addcourse',
+      component: addcourse
+    },  {
+      path: '/courseinfo',
+      name: 'courseinfo',
+      component: courseinfo
+    },
+    {
+      path: '/cA_pass',
+      name: 'cA_pass',
+      component: cA_pass
+    },
+    {
+      path: '/cA_notpass',
+      name: 'cA_notpass',
+      component: cA_notpass
+    },
+    {
+      path: '/cA_pendingAudit',
+      name: 'cA_pendingAudit',
+      component: cA_pendingAudit
+    },
+    {
+      path: '/courseAudit',
+      name: 'courseAudit',
+      component: courseAudit
     },
     {
       path: '/cUncommitted',

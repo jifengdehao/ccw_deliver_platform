@@ -4,7 +4,7 @@
     <div class="M_toggle">
       <Button icon="arrow-left-b" @click="show=!show"  :class="{'isShow':show}"></Button>
     </div>
-    <Menu theme="dark"  accordion class="M_ul" style="width: 200px;font-size: 16px" @on-select="route" >
+    <Menu theme="dark"  accordion class="M_ul" style="width: 200px;font-size: 16px" @on-select="route" @on-open-change='router'>
       <MenuItem name="home" style="width: 100%; height: 60px; line-height: 50px; font-size: 18px;">首页</MenuItem>
       <Submenu name="order">
         <template slot="title">
@@ -21,32 +21,31 @@
         <MenuItem name="cavalier">骑士管理</MenuItem>
         <MenuItem name="cUncommitted">未提交资料</MenuItem>
         <MenuItem name="cAuditing">骑士审核</MenuItem>
-        <MenuItem name="cTrain">培训管理
-        </MenuItem>
+        <MenuGroup title="培训管理">
+           <MenuItem name="courseTrain">课程培训</MenuItem>
+           <MenuItem name="courseAudit">课程审核</MenuItem>
+        </MenuGroup>
         <MenuItem name="cPersonal">人员管理</MenuItem>
       </Submenu>
       <Submenu name="3">
         <template slot="title">
-          <Icon type="stats-bars"></Icon>
+         <Icon type="ios-gear"></Icon>
           配置设置
         </template>
         <MenuItem name="configuration">配置设置</MenuItem>
         <MenuItem name="3-5">查看</MenuItem>
       </Submenu>
-      <Submenu name="4">
+      <Submenu name="dateCenter">
         <template slot="title">
-          <div name="home" @click="datecenter()" style="display: inline-block"><Icon type="stats-bars"></Icon>
-            数据中心</div>
+         <Icon type="stats-bars"></Icon>
+            数据中心
         </template>
         <MenuItem name="d_peisong">配送员数据</MenuItem>
       </Submenu>
-      <Submenu name="5">
+      <Submenu name="settings">
         <template slot="title">
-          <div @click="settings()"  style="display: inline-block">
-            <Icon type="stats-bars"></Icon>
+            <Icon type="settings"></Icon>
             设置中心
-          </div>
-
         </template>
         <MenuItem name="s_platform">平台用户</MenuItem>
         <MenuItem name="s_rbac">权限管理</MenuItem>
@@ -56,7 +55,7 @@
       </Submenu>
       <Submenu name="6">
         <template slot="title">
-          <Icon type="stats-bars"></Icon>
+          <Icon type="person-stalker"></Icon>
           分销管理
         </template>
         <MenuItem name="d_extend">推广列表</MenuItem>
@@ -86,7 +85,14 @@
           settings(){
             this.$router.push('/settings')
           },
-
+          router(name){
+            if(name=='dateCenter'){
+               this.$router.push('/dateCenter')
+            }else if(name=='settings'){
+            this.$router.push('/settings')
+            }
+           
+          }
         }
     }
 </script>

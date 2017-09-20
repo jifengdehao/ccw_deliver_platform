@@ -39,7 +39,6 @@
       <section class="addmessage_button">
         <Button size="large"style="width: 200px;background-color: #fff;">取消</Button>
         <Button size="large"style="width: 200px;background-color: #fff;">确定</Button>
-
       </section>
     </div>
 </template>

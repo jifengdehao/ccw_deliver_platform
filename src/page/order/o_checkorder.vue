@@ -9,18 +9,7 @@
       <section class="o_checkorder_list">
         <Table border :columns="columns" :data="data"></Table>
       </section>
-      <section class="o_checkorder_message">
-        <div class="fl message"  v-for="item in 4">
-          <h3>用户信息</h3>
-          <p>用户ID： <span>YH45256</span></p>
-          <p>收货人 ： <span>王小伟</span></p>
-          <p>联系方式： <span>18978603456</span></p>
-          <p>收货地址： <span>广东省广州市番禺区桥南街南堤东路836号</span></p>
-          <p>下单时间： <span>15:00</span></p>
-          <p>期待取货： <span>16:00</span></p>
-        </div>
-
-      </section>
+     
     </div>
 </template>
 <script>
@@ -133,22 +122,7 @@
         height: 25px;
       }
     }
-    .o_checkorder_message{
-      padding-top: 10px;
-      text-align: left;
-      .message{
-        width: 25%;
-        h3{
-          font-size: 18px;
-          margin-bottom: 10px;
-        }
-        p{
-          font-size: 14px;
-          padding-right: 20px;
-          box-sizing: border-box;
-        }
-      }
-    }
+
   }
 
 </style>

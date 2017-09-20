@@ -1,7 +1,10 @@
 <template>
-    <div id="c_auditing" class="main">
+    <div id="courseAudit" class="main">
         <main-header>
           <span slot="h3" >骑士审核</span>
+          <li slot="ul" @click="toPendingAudit()"><Button>待审核</Button></li>
+          <li slot="ul" @click="toPass()"><Button>通过</Button></li>
+          <li slot="ul" @click="toNotPass()"><Button>未通过</Button></li>
           <input  placeholder=" 姓名/联系方式/身份证">
           <Icon  type="search" class="O_search_icon"></Icon>
         </main-header>
@@ -11,7 +14,7 @@
       <section class="c_auditing_button">
         <Button type="ghost" size="large" >全选</Button>
         <Button type="ghost" size="large" >通过</Button>
-        <Button type="ghost"  size="large">未通过</Button>
+        <Button type="ghost"  size="large">不通过</Button>
       </section>
     </div>
 </template>
@@ -46,7 +49,6 @@
                   align: 'center',
                   render: (h, params) => {
                     return h('div', [
-
                       h('Button', {
                         props: {
 
@@ -57,7 +59,7 @@
                         },
                         on: {
                           click: () => {
-                            this.show1(params.index)
+                            this.pass(params.index)
                           }
                         }
                       }, '通过'),
@@ -71,24 +73,11 @@
                         },
                         on: {
                           click: () => {
-                            this.show2(params.index)
+                            this.notpass(params.index)
                           }
                         }
                       }, '不通过'),
-                      h('Button', {
-                        props: {
-
-                          size: 'small'
-                        },
-                        style: {
-                          marginRight: '5px'
-                        },
-                        on: {
-                          click: () => {
-                            this.goto(params.index)
-                          }
-                        }
-                      }, '查看'),
+                  
 
                     ]);
                   }
@@ -119,26 +108,32 @@
               ]}
         },
         methods: {
-          goto (index) {
-            this.$router.push('/c_message')
-          },
-          show1 (index) {
+          pass (index) {
             this.$Modal.info({
               title: '用户信息',
               content: `姓名：${this.data1[index].name}<br>  已通过`
             })
           },
-          show2 (index) {
+          notpass (index) {
             this.$Modal.info({
               title: '用户信息',
               content: `姓名：${this.data1[index].name}<br> 未通过`
             })
           },
+          toPendingAudit(){
+            this.$router.push('/cA_pendingAudit')
+          },
+          toPass(){
+            this.$router.push('/cA_pass')
+          },
+           toNotPass(){
+            this.$router.push('/cA_notpass')
+          }
         }
     }
 </script>
 <style lang="less" scoped>
-#c_auditing{
+#courseAudit{
   .c_auditing_button{
     margin-top: 20px;
     text-align: left;
