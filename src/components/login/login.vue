@@ -54,8 +54,8 @@
           let data = {'username':this.username,'password':this.password};
           console.log(data);
           sessionStorage.userinfo = JSON.stringify(data)
-
-          this.$router.push('/'+ 'home');
+              this.$store.commit("showusermane");
+          this.$router.push('/');
         }
 //        this.$router.push('/'+ 'home');
       }

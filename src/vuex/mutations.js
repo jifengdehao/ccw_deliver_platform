@@ -1,5 +1,5 @@
-
-//控制show的布尔值
-function click() {
-  state.show=!show
+export default {
+  showusermane(state) {
+    state.username = JSON.parse(window.sessionStorage.userinfo).username
+  }
 }

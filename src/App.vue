@@ -17,7 +17,7 @@ export default {
   data(){
     return {
       sessionStorage:window.sessionStorage,
-      show:''
+      
     }
   },
 
@@ -25,26 +25,16 @@ export default {
     getCurrentDate() {
       return new Date().toLocaleDateString()
     },
-    //点击跳转到每个页面
-    route:function (name) {
-      this.$router.push('/'+ name);
-    },
-    //点击跳转到数据中心
-    datecenter(){
-      this.$router.push('/dateCenter');
-    },
-    //跳转到设置中心
-    settings(){
-      this.$router.push('/settings')
-    },
+ 
   },
   beforeCreate(){
     //判断是否登录
     if(sessionStorage.length==0){
-    this.$router.push({ path: '/' });
+    this.$router.push({ path: '/Login' });
   }
   },
-  name: 'app'
+  name: 'app',
+ 
 }
 </script>
 

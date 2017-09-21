@@ -53,15 +53,15 @@ import DRP_info from '@/page/DRP/DRP_info.vue'//分销列表
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/Login',
       name: 'Login',
       component: Login
     },
-    // {
-    //   path: '/',
-    //   name: 'home',
-    //   component: home
-    // },
+    {
+      path: '/',
+      name: 'home',
+      component: home
+    },
     {
       path: '/home',
       name: 'home',
