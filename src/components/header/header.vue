@@ -7,9 +7,9 @@
           </div>
           <div class="H_center fl"> 系统消息：2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送</div>
           <div class="layout-ceiling-main">
-            <a href="#"><Icon class="H_icon" type="android-person"></Icon>管理员在：<span>admin</span></a>
+            <a href="#"><Icon class="H_icon" type="android-person"></Icon>管理员：<span>{{userinfo.username}}</span></a>
             <a href="#"><Icon class="H_icon" type="ios-chatboxes-outline"></Icon>消息</a>
-            <a href="#"><Icon  class="H_icon" type="log-out"></Icon>安全退出</a>
+            <a href="/" @click="loginout()"><Icon  class="H_icon" type="log-out" @click="loginout()"></Icon>安全退出</a>
           </div>
         </div>
       </div>
@@ -18,11 +18,17 @@
     export default {
 
         data() {
-            return {}
+            return {
+              userinfo:JSON.parse(sessionStorage.userinfo)
+            }
         },
         methods: {
             getCurrentDate() {
                 return new Date().toLocaleDateString()
+            },
+            loginout(){
+              
+              sessionStorage.removeItem('userinfo')
             }
         }
     }
