@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 const  state = {
     username:'',
+ 
 }
 
 export default new Vuex.Store({

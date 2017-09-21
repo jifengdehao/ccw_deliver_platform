@@ -69,13 +69,22 @@
     export default {
         data() {
             return {
-              show:''
+             show:''
             }
         },
+        // computed:{
+        //   show(){
+        //     this.$store.state.show
+        //   }
+        // },
         methods: {
             getCurrentDate() {
                 return new Date().toLocaleDateString()
             },
+            // toggle(){
+             
+            //   this.$store.commit("show",true)
+            // },
           route:function (name) {
             this.$router.push('/'+ name);
           },
