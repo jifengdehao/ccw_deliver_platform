@@ -11,8 +11,8 @@
           <h3>省区</h3>
         </div>
         <div class="configuration_quyu_content">
-          <span v-for="item in 8" ref="btn">广东
-            <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none" @click="close()"></Button>
+          <span v-for="(item,index) in shengs" :key=index>{{item.name}}
+            <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none" @click="close(index)"></Button>
           </span>
         </div>
       </div>
@@ -21,7 +21,7 @@
           <h3>市区</h3>
         </div>
         <div class="configuration_quyu_content">
-          <span v-for="item in ">广州
+          <span v-for="item in citys">{{item.city}}
             <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none"></Button>
           </span>
         </div>
@@ -53,15 +53,74 @@
 </template>
 <script>
 import mainHeader from '../../components/header/main_header.vue'
+import { shengs, citys, qus } from '../../assets/comfiguration.js'
 export default {
   components: { mainHeader },
   data() {
-    return {}
+    return {
+      shengs: [{
+        name: "广东",
+      },
+      {
+        name: "广西",
+      },
+      {
+        name: "江西",
+      },
+      {
+        name: "湖南",
+      },
+      {
+        name: "贵州",
+      },
+      {
+        name: "福建",
+      },
+      {
+        name: "浙江",
+      },
+      {
+        name: "江苏",
+      },
+      {
+        name: "北京",
+      },
+      ],
+      citys: [{
+        city: "广州",
+      },
+      {
+        city: "深圳",
+      },
+      {
+        city: "东莞",
+      },
+      {
+        city: "佛山",
+      },
+      {
+        city: "惠州",
+      },
+      {
+        city: "珠海",
+      },
+      {
+        city: "中山",
+      },
+      {
+        city: "韶关",
+      },
+      {
+        city: "河源",
+      },
+      ]
+    }
+
   },
   computed: {
     show() {
       return this.$store.state.show
-    }
+    },
   },
   methods: {
     getCurrentDate() {
@@ -74,8 +133,8 @@ export default {
       this.$router.push('/addmarket')
     },
     close(index) {
-      console.log(this.$parent)
-      this.$parent.splice(this)
+      console.log(index)
+      this.shengs.splice(index, 1)
     }
 
   }
