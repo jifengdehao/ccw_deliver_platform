@@ -1,5 +1,5 @@
 <template>
-    <div id="cA_pass" class="main">
+    <div id="cA_pass" class="main" :class="{'isShow':show}">
         <main-header>
           <span slot="h3" >课程审核</span>
           <li slot="ul" @click="toPendingAudit()" ><Button >待审核</Button></li>
@@ -20,6 +20,11 @@ export default {
   data () {
     return {
     };
+  },
+   computed: {
+    show() {
+      return this.$store.state.show
+    }
   },
   methods:{
    toPendingAudit(){

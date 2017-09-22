@@ -2,7 +2,7 @@
   <div id="menu" :class="{'isShow':show}" >
     <Col  :class="{'isShow':show}" class="M_col">
     <div class="M_toggle">
-      <Button icon="arrow-left-b" @click="show=!show"  :class="{'isShow':show}"></Button>
+      <Button icon="arrow-left-b" @click="toggleclick()"  :class="{'isShow':show}"></Button>
     </div>
     <Menu theme="dark"  accordion class="M_ul" style="width: 200px;font-size: 16px" @on-select="route" @on-open-change='router'>
       <MenuItem name="home" style="width: 100%; height: 60px; line-height: 50px; font-size: 18px;">首页</MenuItem>
@@ -69,22 +69,26 @@
     export default {
         data() {
             return {
-             show:''
+            
             }
         },
-        // computed:{
-        //   show(){
-        //     this.$store.state.show
-        //   }
-        // },
+        computed:{
+          show(){
+            return this.$store.state.show
+          }
+        },
         methods: {
             getCurrentDate() {
                 return new Date().toLocaleDateString()
             },
-            // toggle(){
-             
-            //   this.$store.commit("show",true)
-            // },
+            toggleclick(){
+              if(this.toggle){
+                 this.toggle = false
+              }else {
+                this.toggle=true
+              }
+            this.$store.commit('show',this.toggle)
+            },
           route:function (name) {
             this.$router.push('/'+ name);
           },

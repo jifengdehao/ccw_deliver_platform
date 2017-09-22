@@ -1,5 +1,5 @@
 <template>
-    <div id="courseinfo" class="main">
+    <div id="courseinfo" class="main" :class="{'isShow':show}">
         <main-header>
            <span slot="h3">查看课程</span> 
         </main-header>
@@ -19,7 +19,12 @@ export default {
   data () {
     return {
     };
-  }
+  },
+   computed: {
+    show() {
+      return this.$store.state.show
+    }
+  },
 }
 </script>
 <style lang="less" scoped>

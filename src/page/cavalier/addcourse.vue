@@ -1,5 +1,5 @@
 <template>
-    <div id="addcourse" class="main">
+    <div id="addcourse" class="main" :class="{'isShow':show}">
         <main-header>
            <span slot="h3">增加课程</span> 
         </main-header>
@@ -22,7 +22,12 @@ export default {
   data () {
     return {
     };
-  }
+  },
+   computed: {
+    show() {
+      return this.$store.state.show
+    }
+  },
 }
 </script>
 <style lang="less" scoped>

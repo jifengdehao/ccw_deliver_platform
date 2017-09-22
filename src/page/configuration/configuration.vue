@@ -1,5 +1,5 @@
 <template>
-  <div id="configuration" class="main">
+  <div id="configuration" class="main" :class="{'isShow':show}">
     <main-header>
       <span slot="h3">配置设置</span>
       <input placeholder=" 市区/区域/菜市场">
@@ -11,8 +11,8 @@
           <h3>省区</h3>
         </div>
         <div class="configuration_quyu_content">
-          <span v-for="item in 8" ref="btn"  >广东
-            <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none"  @click="close()"></Button>
+          <span v-for="item in 8" ref="btn">广东
+            <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none" @click="close()"></Button>
           </span>
         </div>
       </div>
@@ -58,6 +58,11 @@ export default {
   data() {
     return {}
   },
+  computed: {
+    show() {
+      return this.$store.state.show
+    }
+  },
   methods: {
     getCurrentDate() {
       return new Date().toLocaleDateString()
@@ -68,9 +73,9 @@ export default {
     addmarket() {
       this.$router.push('/addmarket')
     },
-    close(index){
+    close(index) {
       console.log(this.$parent)
-    this.$parent.splice(this)
+      this.$parent.splice(this)
     }
 
   }
