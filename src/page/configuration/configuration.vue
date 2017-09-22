@@ -11,8 +11,8 @@
           <h3>省区</h3>
         </div>
         <div class="configuration_quyu_content">
-          <span v-for="(item,index) in shengs" :key=index>{{item.name}}
-            <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none" @click="close(index)"></Button>
+          <span v-for="(item,index) in shengs" @click="seeThisSheng()"> {{item.name}}
+            <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none" @click="delSheng(index)"></Button>
           </span>
         </div>
       </div>
@@ -21,8 +21,8 @@
           <h3>市区</h3>
         </div>
         <div class="configuration_quyu_content">
-          <span v-for="item in citys">{{item.city}}
-            <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none"></Button>
+          <span v-for="(item,index) in citys"  @click="seeThisCity()">{{item.city}}
+            <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none" @click="delCity(index)"></Button>
           </span>
         </div>
       </div>
@@ -32,8 +32,8 @@
           <Button @click="addregion()" style="width: 60px;" type="ghost" size="small">新增</Button>
         </div>
         <div class="configuration_quyu_content">
-          <span v-for="item in 8">番禺
-            <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none"></Button>
+          <span v-for="(item,index) in qus"  @click="seeThisQu()">{{item.qu}}
+            <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none" @click="delQu(index)"></Button>
           </span>
         </div>
       </div>
@@ -43,7 +43,7 @@
           <Button @click="addmarket()" style="width: 60px;" type="ghost" size="small">新增</Button>
         </div>
         <div class="configuration_quyu_content">
-          <span v-for="item in 8">清河
+          <span v-for="item in 8"  @click="seeThisMarket()">清河
             <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none"></Button>
           </span>
         </div>
@@ -53,11 +53,12 @@
 </template>
 <script>
 import mainHeader from '../../components/header/main_header.vue'
-import { shengs, citys, qus } from '../../assets/comfiguration.js'
+
 export default {
   components: { mainHeader },
   data() {
     return {
+      hide:'',
       shengs: [{
         name: "广东",
       },
@@ -113,6 +114,34 @@ export default {
       {
         city: "河源",
       },
+      ],
+      qus: [{
+        qu: "番禺",
+      },
+      {
+        qu: "越秀",
+      },
+      {
+        qu: "海珠",
+      },
+      {
+        qu: "白云",
+      },
+      {
+        qu: "天河",
+      },
+      {
+        qu: "荔湾",
+      },
+      {
+        qu: "萝岗",
+      },
+      {
+        qu: "黄埔",
+      },
+      {
+        qu: "南沙",
+      },
       ]
     }
 
@@ -132,12 +161,28 @@ export default {
     addmarket() {
       this.$router.push('/addmarket')
     },
-    close(index) {
-      console.log(index)
+    delSheng(index) {
       this.shengs.splice(index, 1)
-    }
-
-  }
+    },
+    delCity(index) {
+      this.citys.splice(index, 1)
+    },
+     delQu(index) {
+      this.qus.splice(index, 1)
+    },
+    seeThisSheng(){
+      this.$router.push('/shengInfo')
+    },
+    seeThisCity(){
+      this.$router.push('/cityInfo')
+    },
+    seeThisQu(){
+      this.$router.push('/quInfo')
+    },
+    seeThisMarket(){
+      this.$router.push('/marketInfo')
+    },
+  },
 }
 </script>
 <style lang="less" scoped>
