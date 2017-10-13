@@ -128,7 +128,7 @@
     </section>
   </div>
 </template>
-<script>
+<script >
 import citySelect from '../../components/changecity/cityselect.vue'
 export default {
   components: {
