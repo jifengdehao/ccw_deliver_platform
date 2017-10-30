@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- <header-top v-show="sessionStorage.length!=0"></header-top>
-    <menu-bar v-show="sessionStorage.length!=0"></menu-bar> -->  
+    <menu-bar v-show="sessionStorage.length!=0"></menu-bar> -->
     <keep-alive>
         <router-view></router-view>
     </keep-alive>
@@ -18,7 +18,7 @@ export default {
   // data(){
   //   return {
   //     sessionStorage:window.sessionStorage,
-      
+
   //   }
   // },
 
@@ -26,7 +26,7 @@ export default {
   //   getCurrentDate() {
   //     return new Date().toLocaleDateString()
   //   },
- 
+
   // },
   // beforeCreate(){
   //   //判断是否登录
@@ -35,11 +35,11 @@ export default {
   // }
   // },
   name: 'app'
- 
+
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" type="text/less">
 // #app {
 //   font-family: 'Avenir', Helvetica, Arial, sans-serif;
 //   -webkit-font-smoothing: antialiased;
@@ -62,6 +62,22 @@ export default {
 //   .main.isShow{
 //     margin-left: 18px;
 //   }
+.clearfix{
+  &:after{
+    display: block;
+    content: ".";
+    height: 0;
+    line-height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+}
+.fl{
+  float: left;
+}
+.fr{
+  float: right;
+}
 #app{
   position: absolute;
   left: 0;

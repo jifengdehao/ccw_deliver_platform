@@ -1,11 +1,10 @@
 <template>
   <div id="home" class="main" :class="{'isShow':show}">
-    <header class="H_header">
-      <div class="fl">
-        <Icon type="ios-home" class="H_icon"></Icon>欢迎回到配送中心</div>
-    </header>
+    <div class="H_header">
+      <Icon type="ios-home" :size="iconSize"></Icon>&nbsp;&nbsp;欢迎回到配送中心
+    </div>
     <!--统计信息-->
-    <section class="H_tj">
+    <div class="H_tj clearfix">
       <div class="fl H_tj_left">首页统计信息</div>
       <div class="fr H_tj_right">
         <ul>
@@ -20,7 +19,7 @@
           </li>
         </ul>
       </div>
-    </section>
+    </div>
     <city-select></city-select>
     <section class="H_statistics  clearfix">
       <ul>
@@ -128,130 +127,123 @@
     </section>
   </div>
 </template>
-<script >
-import citySelect from '../../components/changecity/cityselect.vue'
-export default {
-  components: {
-    citySelect,
-  },
-  data() {
-    return {
+<script>
+  import citySelect from '../../components/changecity/cityselect.vue'
 
-    }
-  },
-  computed: {
-    show() {
-      return this.$store.state.show
-    }
-  },
-  methods: {
-    getCurrentDate() {
-      return new Date().toLocaleDateString()
+  export default {
+    components: {
+      citySelect,
+    },
+    data() {
+      return {
+        iconSize: 24
+      }
+    },
+    computed: {
+      show() {
+        return this.$store.state.show
+      }
+    },
+    methods: {
+      getCurrentDate() {
+        return new Date().toLocaleDateString()
+      }
     }
   }
-}
 </script>
-<style lang="less" scoped>
-#home {
-  font-size: 16px;
-  .H_header {
-    height: 70px;
-    border-bottom: 1px solid #ddd;
+<style lang="less" scoped type="text/less">
+  #home {
     font-size: 16px;
-    padding-top: 15px;
-    .H_icon {
-      display: inline-block;
-      width: 45px;
-      height: 45px;
-      font-size: 30px;
-      line-height: 45px;
+    .H_header {
+      height: 60px;
+      border-bottom: 1px solid #ddd;
+      line-height: 60px;
     }
-  }
-  .H_tj {
-    height: 40px;
-    line-height: 40px;
-    margin-top: 12px;
-    background-color: #999;
-    .H_tj_left {
-      padding-left: 20px;
-      font-size: 16px;
-      color: #fff;
-    }
-    .H_tj_right {
-      li {
-        float: left;
-        margin-left: 20px;
+    .H_tj {
+      height: 40px;
+      line-height: 40px;
+      margin-top: 12px;
+      background-color: #999;
+      .H_tj_left {
+        padding-left: 20px;
+        font-size: 16px;
+        color: #fff;
       }
-    }
-  }
-
-  .H_statistics {
-    .H_message {
-      width: 540px;
-      height: 285px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      float: left;
-      margin-bottom: 30px;
-      padding-top: 15px;
-      padding-left: 20px;
-      padding-right: 20px;
-      &:nth-of-type(odd) {
-        margin-right: 70px;
-      }
-      h3 {
-        float: left;
-        padding-left: 10px;
-      }
-      ;
-      ul {
-        margin-top: 37px;
+      .H_tj_right {
         li {
-          text-align: left;
-          line-height: 35px;
+          float: left;
+          margin-left: 20px;
+        }
+      }
+    }
+
+    .H_statistics {
+      .H_message {
+        width: 540px;
+        height: 285px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        float: left;
+        margin-bottom: 30px;
+        padding-top: 15px;
+        padding-left: 20px;
+        padding-right: 20px;
+        &:nth-of-type(odd) {
+          margin-right: 70px;
+        }
+        h3 {
+          float: left;
           padding-left: 10px;
         }
-      }
-    }
-    .H_statistics_monitor {
-      ul {
-        li {
-          text-align: right;
-          border: none;
-          .H_statistics_monitor_shulian {
-            display: inline-block;
-            width: 200px;
-            height: 33px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            text-align: center;
-            margin: 0 30px;
+      ;
+        ul {
+          margin-top: 37px;
+          li {
+            text-align: left;
+            line-height: 35px;
+            padding-left: 10px;
           }
         }
       }
-    }
-    .H_statistics_kanban {
-      li {
-        float: left;
-        width: 50%;
-        height: 105px;
-        box-sizing: border-box;
-        padding: 10px 20px 0 30px;
-        &:nth-of-type(odd) {
-          border-right: 1px solid #ddd;
+      .H_statistics_monitor {
+        ul {
+          li {
+            text-align: right;
+            border: none;
+            .H_statistics_monitor_shulian {
+              display: inline-block;
+              width: 200px;
+              height: 33px;
+              border: 1px solid #ccc;
+              border-radius: 3px;
+              text-align: center;
+              margin: 0 30px;
+            }
+          }
         }
-        &:nth-of-type(1),
-        &:nth-of-type(2) {
-          border-bottom: 1px solid #ddd;
-        }
-        div {
+      }
+      .H_statistics_kanban {
+        li {
+          float: left;
           width: 50%;
-          p {
-            text-align: center;
+          height: 105px;
+          box-sizing: border-box;
+          padding: 10px 20px 0 30px;
+          &:nth-of-type(odd) {
+            border-right: 1px solid #ddd;
+          }
+          &:nth-of-type(1),
+          &:nth-of-type(2) {
+            border-bottom: 1px solid #ddd;
+          }
+          div {
+            width: 50%;
+            p {
+              text-align: center;
+            }
           }
         }
       }
     }
   }
-}
 </style>

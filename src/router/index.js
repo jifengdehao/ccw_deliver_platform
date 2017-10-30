@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 Vue.use(Router)
 
 import Login from '@/page/login/login' //登录页
@@ -50,7 +51,8 @@ import DRP_info from '@/page/DRP/DRP_info.vue' //分销列表
 import Layout from '@/components/layout/layout'
 
 export default new Router({
-  routes: [{
+  routes: [
+    {
       path: '/login',
       name: 'login',
       component: Login
@@ -64,213 +66,201 @@ export default new Router({
         {
           path: '/home',
           component: home
+        },
+        {
+          path: '/order',
+          component: order,
+          children: [
+            {
+              path: '/o_checkorder',
+              component: o_checkorder
+            }
+          ]
+        },
+        {
+          path: '/cavalier',
+          component: cavalier
+        },
+        {
+          path: '/cAuditing',
+          component: cAuditing
+        },
+        {
+          path: '/c_message',
+          component: c_message
+        },
+        {
+          path: '/cPersonal',
+          component: cPersonal
+        },
+        {
+          path: '/cTrain',
+          component: cTrain
+        },
+        {
+          path: '/courseTrain',
+          component: courseTrain
+        },
+        {
+          path: '/addcourse',
+          name: 'addcourse',
+          component: addcourse
+        }, {
+          path: '/courseinfo',
+          name: 'courseinfo',
+          component: courseinfo
+        },
+        {
+          path: '/cA_pass',
+          name: 'cA_pass',
+          component: cA_pass
+        },
+        {
+          path: '/cA_notpass',
+          name: 'cA_notpass',
+          component: cA_notpass
+        },
+        {
+          path: '/cA_pendingAudit',
+          name: 'cA_pendingAudit',
+          component: cA_pendingAudit
+        },
+        {
+          path: '/courseAudit',
+          name: 'courseAudit',
+          component: courseAudit
+        },
+        {
+          path: '/cUncommitted',
+          name: 'cUncommitted',
+          component: cUncommitted
+        },
+        {
+          path: '/configuration',
+          name: 'configuration',
+          component: configuration
+        },
+        {
+          path: '/addregion',
+          name: 'addregion',
+          component: addregion
+        },
+        {
+          path: '/addmarket',
+          name: 'addmarket',
+          component: addmarket
+        },
+        {
+          path: '/marketInfo',
+          name: 'marketInfo',
+          component: marketInfo
+        },
+        {
+          path: '/cityInfo',
+          name: 'cityInfo',
+          component: cityInfo
+        },
+        {
+          path: '/shengInfo',
+          name: 'shengInfo',
+          component: shengInfo
+        },
+        {
+          path: '/quInfo',
+          name: 'quInfo',
+          component: quInfo
+        },
+        {
+          path: '/d_peisong',
+          name: 'd_peisong',
+          component: d_peisong
+        },
+        {
+          path: '/s_platform',
+          name: 's_platform',
+          component: s_platform
+        },
+        {
+          path: '/settings',
+          name: 'settings',
+          component: settings
+        },
+        {
+          path: '/userinfo',
+          name: 'userinfo',
+          component: userinfo
+        },
+        {
+          path: '/adduser',
+          name: 'adduser',
+          component: adduser
+        },
+        {
+          path: '/s_rbac',
+          name: 's_rbac',
+          component: s_rbac
+        },
+        {
+          path: '/s_rbac_chakan',
+          name: 's_rbac_chakan',
+          component: s_rbac_chakan
+        },
+        {
+          path: '/s_rolelist',
+          name: 's_rolelist',
+          component: s_rolelist
+        },
+        {
+          path: '/addrole',
+          name: 'addrole',
+          component: addrole
+        },
+        {
+          path: '/roleinfo',
+          name: 'roleinfo',
+          component: roleinfo
+        },
+        {
+          path: '/s_operation',
+          name: 's_operation',
+          component: s_operation
+        },
+        {
+          path: '/s_operation_info',
+          name: 's_operation_info',
+          component: s_operation_info
+        },
+        {
+          path: '/s_message',
+          name: 's_message',
+          component: s_message
+        },
+        {
+          path: '/addmessage',
+          name: 'addmessage',
+          component: addmessage
+        },
+        {
+          path: '/d_extend',
+          name: 'd_extend',
+          component: d_extend
+        },
+        {
+          path: '/extendinfo',
+          name: 'extendinfo',
+          component: extendinfo
+        },
+        {
+          path: '/d_list',
+          name: 'd_list',
+          component: d_list
+        },
+        {
+          path: '/DRP_info',
+          name: 'DRP_info',
+          component: DRP_info
         }
       ]
     }
-    // {
-    //   path: '/home',
-    //   name: 'home',
-    //   component: home
-    // },
-    // {
-    //   path: '/order',
-    //   name: 'order',
-    //   component: order
-    // },
-    // {
-    //   path: '/o_checkorder',
-    //   name: 'o_checkorder',
-    //   component: o_checkorder
-    // },
-    // {
-    //   path: '/cavalier',
-    //   name: 'cavalier',
-    //   component: cavalier
-    // },
-    // {
-    //   path: '/cAuditing',
-    //   name: 'cAuditing',
-    //   component: cAuditing
-    // },
-    // {
-    //   path: '/c_message',
-    //   name: 'c_message',
-    //   component: c_message
-    // },
-    // {
-    //   path: '/cPersonal',
-    //   name: 'cPersonal',
-    //   component: cPersonal
-    // },
-    // {
-    //   path: '/cTrain',
-    //   name: 'cTrain',
-    //   component: cTrain
-    // },
-    // {
-    //   path: '/courseTrain',
-    //   name: 'courseTrain',
-    //   component: courseTrain
-    // },
-    // {
-    //   path: '/addcourse',
-    //   name: 'addcourse',
-    //   component: addcourse
-    // }, {
-    //   path: '/courseinfo',
-    //   name: 'courseinfo',
-    //   component: courseinfo
-    // },
-    // {
-    //   path: '/cA_pass',
-    //   name: 'cA_pass',
-    //   component: cA_pass
-    // },
-    // {
-    //   path: '/cA_notpass',
-    //   name: 'cA_notpass',
-    //   component: cA_notpass
-    // },
-    // {
-    //   path: '/cA_pendingAudit',
-    //   name: 'cA_pendingAudit',
-    //   component: cA_pendingAudit
-    // },
-    // {
-    //   path: '/courseAudit',
-    //   name: 'courseAudit',
-    //   component: courseAudit
-    // },
-    // {
-    //   path: '/cUncommitted',
-    //   name: 'cUncommitted',
-    //   component: cUncommitted
-    // },
-    // {
-    //   path: '/configuration',
-    //   name: 'configuration',
-    //   component: configuration
-    // },
-    // {
-    //   path: '/addregion',
-    //   name: 'addregion',
-    //   component: addregion
-    // },
-    // {
-    //   path: '/addmarket',
-    //   name: 'addmarket',
-    //   component: addmarket
-    // },
-    // {
-    //   path: '/marketInfo',
-    //   name: 'marketInfo',
-    //   component: marketInfo
-    // },
-    // {
-    //   path: '/cityInfo',
-    //   name: 'cityInfo',
-    //   component: cityInfo
-    // },
-    // {
-    //   path: '/shengInfo',
-    //   name: 'shengInfo',
-    //   component: shengInfo
-    // },
-    // {
-    //   path: '/quInfo',
-    //   name: 'quInfo',
-    //   component: quInfo
-    // },
-    // {
-    //   path: '/d_peisong',
-    //   name: 'd_peisong',
-    //   component: d_peisong
-    // },
-    // {
-    //   path: '/s_platform',
-    //   name: 's_platform',
-    //   component: s_platform
-    // },
-    // {
-    //   path: '/settings',
-    //   name: 'settings',
-    //   component: settings
-    // },
-    // {
-    //   path: '/userinfo',
-    //   name: 'userinfo',
-    //   component: userinfo
-    // },
-    // {
-    //   path: '/adduser',
-    //   name: 'adduser',
-    //   component: adduser
-    // },
-    // {
-    //   path: '/s_rbac',
-    //   name: 's_rbac',
-    //   component: s_rbac
-    // },
-    // {
-    //   path: '/s_rbac_chakan',
-    //   name: 's_rbac_chakan',
-    //   component: s_rbac_chakan
-    // },
-    // {
-    //   path: '/s_rolelist',
-    //   name: 's_rolelist',
-    //   component: s_rolelist
-    // },
-    // {
-    //   path: '/addrole',
-    //   name: 'addrole',
-    //   component: addrole
-    // },
-    // {
-    //   path: '/roleinfo',
-    //   name: 'roleinfo',
-    //   component: roleinfo
-    // },
-    // {
-    //   path: '/s_operation',
-    //   name: 's_operation',
-    //   component: s_operation
-    // },
-    // {
-    //   path: '/s_operation_info',
-    //   name: 's_operation_info',
-    //   component: s_operation_info
-    // },
-    // {
-    //   path: '/s_message',
-    //   name: 's_message',
-    //   component: s_message
-    // },
-    // {
-    //   path: '/addmessage',
-    //   name: 'addmessage',
-    //   component: addmessage
-    // },
-    // {
-    //   path: '/d_extend',
-    //   name: 'd_extend',
-    //   component: d_extend
-    // },
-    // {
-    //   path: '/extendinfo',
-    //   name: 'extendinfo',
-    //   component: extendinfo
-    // },
-    // {
-    //   path: '/d_list',
-    //   name: 'd_list',
-    //   component: d_list
-    // },
-    // {
-    //   path: '/DRP_info',
-    //   name: 'DRP_info',
-    //   component: DRP_info
-    // },
-
   ]
 })
