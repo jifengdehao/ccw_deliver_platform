@@ -129,7 +129,7 @@
       width: 18px;
       height: 100%;
       background-color: #eee;
-      z-index: 100;
+      z-index: 1000;
       box-sizing: border-box;
       border-right: 1px solid #999;
       button{
