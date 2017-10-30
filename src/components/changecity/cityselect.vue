@@ -135,12 +135,11 @@
     }
   }
 </script>
-<style lang="less" scoped>
+<style lang="less" scoped type="text/less">
   .city-select{
     margin-top: 5px;
     margin-bottom: 30px;
     .selectbar{
-
       margin-right: 119px;
       &:last-child{
         margin-right: 0;
