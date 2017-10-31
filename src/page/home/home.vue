@@ -21,7 +21,7 @@
       </div>
     </div>
     <city-select></city-select>
-    <section class="H_statistics  clearfix">
+    <section class="H_statistics clearfix">
       <ul>
         <!--系统消息-->
         <li class="H_message H_statistics_info">
@@ -136,7 +136,7 @@
     },
     data() {
       return {
-        iconSize: 24
+        iconSize: 22
       }
     },
     computed: {
