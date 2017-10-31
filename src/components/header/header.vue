@@ -13,7 +13,7 @@
       <Col span="3">
           <Icon type="ios-chatboxes-outline" :size="iconSize"></Icon>&nbsp;&nbsp;消息
       </Col>
-      <Col span="3" @click="loginout()">
+      <Col span="3" @click="loginout">
           <Icon type="log-out" :size="iconSize"></Icon>&nbsp;&nbsp;安全退出
       </Col>
     </Row>
