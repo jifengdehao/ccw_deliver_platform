@@ -27,8 +27,6 @@
             <MenuItem name="cavalier">骑士管理</MenuItem>
             <MenuItem name="cUncommitted">未提交资料</MenuItem>
             <MenuItem name="cAuditing">骑士审核</MenuItem>
-            <MenuItem name="courseTrain">课程培训</MenuItem>
-            <MenuItem name="courseAudit">课程审核</MenuItem>
             <MenuItem name="cPersonal">人员管理</MenuItem>
           </Submenu>
           <Submenu name="">
