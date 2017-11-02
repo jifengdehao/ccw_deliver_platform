@@ -2,16 +2,16 @@
   <div id="header">
     <Row>
       <Col span="3">
-      <div class="logo">菜城科技有限公司</div>
+          <div class="logo">菜城科技有限公司</div>
       </Col>
       <Col span="12">
       <div class="message">系统消息：2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送</div>
       </Col>
       <Col span="3">
-      <Icon type="android-person" :size="iconSize"></Icon>&nbsp;&nbsp;管理员：{{username}}
+            <Icon type="android-person" :size="iconSize"></Icon>&nbsp;&nbsp;管理员：{{username}}
       </Col>
       <Col span="3">
-      <Icon type="ios-chatboxes-outline" :size="iconSize"></Icon>&nbsp;&nbsp;消息
+          <Icon type="ios-chatboxes-outline" :size="iconSize"></Icon>&nbsp;&nbsp;消息
       </Col>
       <Col span="3">
       <div @click="logout">

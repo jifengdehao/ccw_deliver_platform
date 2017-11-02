@@ -1,245 +1,401 @@
+/**
+ * @Author: ZengFanlu 
+ * @Date: 2017-10-31 14:27:31 
+ * DeveloperMailbox:   zengfanlu@ccw163.com 
+ * FunctionPoint: 骑士管理 
+ */
+
 <template>
-  <div id="cavalier" class="main" :class="{'isShow':show}">
-    <main-header>
-      <span slot="h3">骑士管理</span>
-      <input type="search" placeholder=" 市场/区域/菜市场">
-      <Icon type="search" class="O_search_icon"></Icon>
-    </main-header>
-    <!--统计信息-->
-    <city-select></city-select>
-    <section class="H_statistics">
-      <ul>
-        <!--系统消息-->
-        <li class="H_message H_statistics_info">
-          <h3>系统消息</h3>
-          <ul>
-            <li class="">2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-              <i class="fr">
-                <Icon type="chevron-right"></Icon>
-              </i>
-            </li>
-            <li class="">2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-              <i>
-                <i class="fr">
-                  <Icon type="chevron-right"></Icon>
-                </i>
-              </i>
-            </li>
-            <li class="">2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-              <i>
-                <i class="fr">
-                  <Icon type="chevron-right"></Icon>
-                </i>
-              </i>
-            </li>
+  <div class="main">
+    <!-- 头部 -->
+    <div class="header">
+      <h2>骑士管理</h2>
+      <div class="header-search">
+        <Input placeholder="请输入..." style="width: 200px"></Input>
+        <Icon type="ios-search icos"></Icon>
+      </div>
+    </div>
+    <!-- 内容部分 -->
+    <div class="content">
+      <div class="content-select">
+        <div class="select">
+          <span>省区</span>
+          <Select style="width:200px" @on-change="changeDate">
+              <Option v-for="item in deployManager" :key="item.id" :value="item.provinceId">{{ item.provinceName }}</Option>
+          </Select>
+        </div>
 
-          </ul>
-        </li>
-        <!--审核概览-->
-        <li class="H_message H_statistics_senhe">
-          <h3>骑士审核</h3>
-          <ul>
-            <li class="" v-for="item in 3">骑士身份信息审核
-              <i class="fr">
-                <span style="margin-right: 30px">未读信息：
-                  <b>88</b>条</span>
-                <Icon type="chevron-right"></Icon>
-              </i>
-            </li>
+        <div class="select">
+          <span>市区</span>
+          <Select style="width:200px" :disabled="showCity" @on-change="changeCityData">
+              <Option v-for="city in cityManager" :key="city.id" :value="city.cityId">{{ city.cityName }}</Option>
+          </Select>
+        </div>
 
-          </ul>
-        </li>
-        <!--实时监控-->
-        <li class="H_message H_statistics_monitor">
-          <h3>实时监控</h3>
-          <ul>
-            <li>
-              <span>需要手工派单</span>
-              <span class="H_statistics_monitor_shulian">50</span>
-              <i>
-                <Icon type="chevron-right"></Icon>
-              </i>
-            </li>
-            <li>
-              <span>新订单</span>
-              <span class="H_statistics_monitor_shulian">50</span>
-              <i>
-                <Icon type="chevron-right"></Icon>
-              </i>
-            </li>
-            <li>
-              <span>已送达订单</span>
-              <span class="H_statistics_monitor_shulian">50</span>
-              <i>
-                <Icon type="chevron-right"></Icon>
-              </i>
-            </li>
-            <li>
-              <span>异常订单</span>
-              <span class="H_statistics_monitor_shulian">50</span>
-              <i>
-                <Icon type="chevron-right"></Icon>
-              </i>
-            </li>
-            <li>
-              <span>骑手上班/休息</span>
-              <span class="H_statistics_monitor_shulian">50</span>
-              <i>
-                <Icon type="chevron-right"></Icon>
-              </i>
-            </li>
-          </ul>
-        </li>
-        <!--数据看板-->
-        <li class="H_message H_statistics_kanban">
-          <h3>数据看板</h3>
-          <ul>
-            <li v-for="item in 4">
-              <div class="fl">
-                <p>订单成长量</p>
-                <p>8765</p>
-              </div>
-              <div class="fr">
-                <p>13%
-                  <Icon type="ios-arrow-thin-up"></Icon>
-                </p>
-                <p>比上周同期</p>
-              </div>
-            </li>
+        <div class="select">
+          <span>区域</span>
+          <Select style="width:200px" :disabled="showArea" @on-change="changeAreaData">
+              <Option v-for="area in areaManager" :key="area.id" :value="area.areaId">{{ area.areaName }}</Option>
+          </Select>
+        </div>
+        <div class="select">
+          <span>菜市场</span>
+          <Select style="width:200px" :disabled="showMarket">
+              <Option v-for="market in marketManager" :key="market.id" :value="market.marketId">{{ market.marketName }}</Option>
+          </Select>
+        </div>
+      </div>
+      <div class="content-main">
+        <div class="main-left">
+          <span class="fz">系统消息</span>
+          <div class="leftcosapn">
+            <p>2018 xxxx市场xxxxc菜市场xxxx暂时暂停配送</p>
+            <Icon type="ios-arrow-right fr col"></Icon>
+          </div>
+        </div>
+        <div class="main-right fr">
+          <span class="fz">审核概览</span>
+          <div class="leftcosapn">
+            <p>2018 xxxx市场xxxxc菜市场xxxx暂时暂停配送</p>
+            <span>未读消息889</span>
+            <Icon type="ios-arrow-right fr col"></Icon>
+          </div>
+        </div>
 
-          </ul>
-        </li>
-      </ul>
-    </section>
+        <div class="main-left mr40">
+          <span class="fz">实时监控</span>
+          <div class="leftcosapn real-time">
+            <p>需要手工派单</p>
+            <span>50</span>
+            <Icon type="ios-arrow-right fr col"></Icon>
+          </div>
+          <div class="leftcosapn real-time">
+            <p>新订单</p>
+            <span>50</span>
+            <Icon type="ios-arrow-right fr col"></Icon>
+          </div>
+          <div class="leftcosapn real-time">
+            <p>已传达订单</p>
+            <span>50</span>
+            <Icon type="ios-arrow-right fr col"></Icon>
+          </div>
+          <div class="leftcosapn real-time">
+            <p>异常订单</p>
+            <span>50</span>
+            <Icon type="ios-arrow-right fr col"></Icon>
+          </div>
+          <div class="leftcosapn real-time">
+            <p>骑手上班/休息</p>
+            <span>50/6</span>
+            <Icon type="ios-arrow-right fr col"></Icon>
+          </div>
+        </div>
+        <div class="main-right fr mr40" style="position: relative;">
+          <div class="br"></div>
+          <span class="fz">数据看板</span>
+          <div class="top pr">
+            <div class="order-up pa">
+              <p>
+                <span>订单成长量</span>
+                <span class="mr20">13%</span>
+                <!-- <Icon type="ios-arrow-thin-up"></Icon> -->
+                <Icon type="ios-arrow-thin-down"></Icon>
+              </p>
+              <p>
+                <span class="fz mr20">8765</span>
+                <span class="mr14">比上周同期</span>
+              </p>
+            </div>
+            <div class="order-overtime par">
+              <p>
+                <span>订单超时率</span>
+                <span class="mr20">13%</span>
+                <!-- <Icon type="ios-arrow-thin-up"></Icon> -->
+                <Icon type="ios-arrow-thin-down"></Icon>
+              </p>
+              <p>
+                <span class="fz mr20">1%</span>
+                <span class="mr14">比上周同期</span>
+              </p>
+            </div>
+          </div>
+          
+          <div class="bottom pr">
+            <div class="abnormal-order pa">
+              <p>
+                <span>异常订单率</span>
+                <span class="mr20">11%</span>
+                <!-- <Icon type="ios-arrow-thin-up"></Icon> -->
+                <Icon type="ios-arrow-thin-down"></Icon>
+              </p>
+              <p>
+                <span class="fz mr20">1%</span>
+                <span class="mr14">比上周同期</span>
+              </p>
+            </div>
+            <div class="rider-effect par">
+              <p>
+                <span>骑手人效</span>
+                <span class="mr20">16%</span>
+                <!-- <Icon type="ios-arrow-thin-up"></Icon> -->
+                <Icon type="ios-arrow-thin-down"></Icon>
+              </p>
+              <p>
+                <span class="fz mr20">32%</span>
+                <span class="mr14">比上周同期</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import citySelect from '../../components/changecity/cityselect.vue'
-import mainHeader from '../../components/header/main_header.vue'
-export default {
+import * as api from '@/api/common'
 
-  components: {
-    citySelect,
-    mainHeader
-  },
+export default {
+  name: 'cavalier',
+  components: {},
   data() {
     return {
-   
+      deployManager: [], // 省区下拉框数据
+      deployIndex: '', // 获取省区ID
+      showCity: true, // 可否点击市区下拉框
+      cityManager: [], // 市区下拉框数据
+      showArea: true, // 可否点击区域下拉框
+      areaManager: [], // 区域下拉框数据
+      showMarket: true, // 可否点击菜市场下拉框
+      marketManager: [] // 菜市场下拉框数据
     }
   },
-  computed: {
-    show() {
-      return this.$store.state.show
-    }
+  created: function() {
+    this.getDeployManager()
   },
   methods: {
-    getCurrentDate() {
-      return new Date().toLocaleDateString()
+    // 获取省区下拉框数据
+    getDeployManager() {
+      api.getDeployManager().then(data => {
+        this.deployManager = data
+      })
+    },
+    // 获取市区下拉框数据
+    changeDate(value) {
+      this.cityManager = ''
+      api.getProvinceIndex(value).then(data => {
+        this.cityManager = data
+      })
+      this.showCity = false
+    },
+    // 获取区域下拉框数据
+    changeCityData(value) {
+      this.areaManager = ''
+      api.getCityManager(value).then(data => {
+        this.areaManager = data
+      })
+      this.showArea = false
+    },
+    // 获取菜市场下拉框数据
+    changeAreaData(value) {
+      this.marketManager = ''
+      api.getAreaMarket(value).then(data => {
+        this.marketManager = data
+      })
+        this.showMarket = false
     }
   }
 }
 </script>
-<style lang="less" scoped>
-#cavalier {
-  font-size: 16px;
-  .H_header {
-    height: 70px;
-    border-bottom: 1px solid #ddd;
-    font-size: 16px;
-    padding-top: 15px;
-    .H_icon {
-      display: inline-block;
-      width: 45px;
-      height: 45px;
-      font-size: 30px;
-      line-height: 45px;
-    }
-  }
-  .H_tj {
-    height: 40px;
-    line-height: 40px;
-    margin-top: 12px;
-    background-color: #999;
-    .H_tj_left {
-      padding-left: 20px;
-      font-size: 16px;
-      color: #fff;
-    }
-    .H_tj_right {
-      li {
-        float: left;
-        margin-left: 20px;
-      }
-    }
-  }
+<style lang="css" scoped>
+.main {
+  width: 100%;
+  height: 100%;
+}
 
-  .H_statistics {
-    .H_message {
-      width: 540px;
-      height: 285px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      float: left;
-      margin-bottom: 60px;
-      padding-top: 15px;
-      padding-left: 20px;
-      padding-right: 20px;
-      &:nth-of-type(odd) {
-        margin-right: 70px;
-      }
-      h3 {
-        float: left;
-        padding-left: 10px;
-      }
-      ;
-      ul {
-        margin-top: 37px;
-        li {
-          text-align: left;
-          line-height: 35px;
-          padding-left: 10px;
-        }
-      }
-    }
-    .H_statistics_monitor {
-      ul {
-        li {
-          text-align: right;
-          border: none;
-          .H_statistics_monitor_shulian {
-            display: inline-block;
-            width: 200px;
-            height: 33px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            text-align: center;
-            margin: 0 30px;
-          }
-        }
-      }
-    }
-    .H_statistics_kanban {
-      li {
-        float: left;
-        width: 50%;
-        height: 105px;
-        box-sizing: border-box;
-        padding: 10px 20px 0 30px;
-        &:nth-of-type(odd) {
-          border-right: 1px solid #ddd;
-        }
-        &:nth-of-type(1),
-        &:nth-of-type(2) {
-          border-bottom: 1px solid #ddd;
-        }
-        div {
-          width: 50%;
-          p {
-            text-align: center;
-          }
-        }
-      }
-    }
-  }
+.main .header {
+  height: 40px;
+  line-height: 40px;
+  background-color: #363e54;
+}
+
+.main .header h2 {
+  float: left;
+  color: #fff;
+  margin-left: 20px;
+}
+
+.main .header .header-search {
+  position: relative;
+  float: right;
+  margin-right: 45px;
+}
+.icos {
+  position: absolute;
+  top: 8px;
+  right: -25px;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.content {
+  margin-top: 20px;
+}
+
+.content-select {
+  height: 40px;
+  margin-left: 100px;
+}
+
+.select {
+  float: left;
+  width: 25%;
+  display: inline-block;
+}
+
+.select span {
+  margin-right: 6px;
+}
+
+.content-main {
+  margin-top: 40px;
+}
+
+.main-left,
+.main-right {
+  width: 48%;
+  float: left;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+.main-left span,
+.main-right span {
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.main-left .leftcosapn,
+.main-right .leftcosapn {
+  position: relative;
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid #dddee1;
+}
+
+.main-left .leftcosapn p,
+.main-right .leftcosapn p {
+  display: inline-block;
+  font-size: 16px;
+  margin-left: 20px;
+}
+
+.main-right .leftcosapn span {
+  width: 100px;
+  height: 40px;
+  position: absolute;
+  top: 0;
+  right: 10%;
+  margin-right: 30px;
+  display: inline-block;
+}
+
+.main-left .real-time {
+  position: relative;
+  border: 0px;
+  line-height: 36px;
+}
+
+.main-left .real-time span {
+  width: 200px;
+  height: 34px;
+  position: absolute;
+  top: 0;
+  left: 40%;
+  margin-left: 20px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.col {
+  margin-right: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 40px;
+  cursor: pointer;
+}
+
+.mr40 {
+  margin-top: 40px;
+}
+
+.fr {
+  float: right;
+}
+
+.top,
+.bottom {
+  width: 100%;
+  height: 100px;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+.bottom {
+  border-bottom: 0;
+}
+.top .order-up,
+.bottom .abnormal-order {
+  width: 50%;
+  height: 100%;
+  display: inline-block;
+  float: left;
+}
+
+.top .order-overtime,
+.bottom .rider-effect {
+  width: 50%;
+  height: 100%;
+  float: right;
+  display: inline-block;
+}
+span {
+  font-size: 12px !important;
+  font-weight: 400 !important;
+}
+
+.mr14 {
+  margin-left: 14px;
+}
+
+.mr20 {
+  margin-left: 20px;
+}
+
+.fz {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+}
+
+.pr {
+  position: relative;
+}
+.pa {
+  position: absolute;
+  top: 30px;
+  left: 0;
+}
+.par {
+  position: absolute;
+  right: 0;
+  top: 30px;
+}
+.br {
+  height: 200px;
+  position: absolute;
+  top: 55px;
+  left: 410px;
+  border-right: 1px solid #ccc;
 }
 </style>
