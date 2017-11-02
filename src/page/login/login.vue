@@ -79,7 +79,8 @@
       handleSubmit(name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
-            this.login(this.formLogin)
+           // this.login(this.formLogin)
+            this.$router.push('/')
           } else {
             this.$Message.error('表单验证失败!')
           }
@@ -120,10 +121,11 @@
       },
       // 登录
       login(params) {
+        console.log(params)
         api.login(params).then((res) => {
           console.log(res)
           if (res) {
-            cookie.setData('userInfo', JSON.stringify(res))
+            // cookie.setData('userInfo', JSON.stringify(res))
             this.$router.push('/')
           }
         })

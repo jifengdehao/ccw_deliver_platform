@@ -33,7 +33,8 @@
     },
     computed: {
       username() {
-        return JSON.parse(cookie.getData('userInfo')).userName
+       // return JSON.parse(cookie.getData('userInfo')).userName
+        return JSON.parse(sessionStorage.getItem('user')).mobileno
       }
     },
     methods: {
