@@ -3,9 +3,11 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import store  from './vuex/store'
+import store from './vuex/store'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
+import * as cookie from '@/data/index'
+
 Vue.use(iView)
 
 /**
@@ -13,14 +15,14 @@ Vue.use(iView)
  */
 router.beforeEach((to, from, next) => {
   let path = to.path.substr(1)
-  let user = window.sessionStorage.getItem('user')
+  let userInfo = cookie.getData('userInfo')
   if (path !== 'login') {
-    if (!user) {
+    if (!userInfo) {
       next('/login')
       return false
     }
   } else {
-    if (user) {
+    if (userInfo) {
       next('/')
       return false
     }
@@ -40,7 +42,7 @@ new Vue({
   store,
   router,
   template: '<App/>',
-  components: { App }
+  components: {App}
 })
 
 

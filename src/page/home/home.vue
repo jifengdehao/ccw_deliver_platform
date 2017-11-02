@@ -1,55 +1,36 @@
 <template>
-  <div id="home" class="main" :class="{'isShow':show}">
-    <div class="H_header">
+  <div id="home">
+    <div class="H-header">
       <Icon type="ios-home" :size="iconSize"></Icon>&nbsp;&nbsp;欢迎回到配送中心
     </div>
     <!--统计信息-->
-    <div class="H_tj clearfix">
-      <div class="fl H_tj_left">首页统计信息</div>
-      <div class="fr H_tj_right">
-        <ul>
-          <li>在线骑手：
-            <span>9人</span>
-          </li>
-          <li>今日订单：
-            <span>200单</span>
-          </li>
-          <li>超时订单：
-            <span>1.02%</span>
-          </li>
-        </ul>
-      </div>
+    <div class="H-tip clearfix">
+      <h4>首页统计信息</h4>
+      <ul class="fr">
+        <li>在线骑手：9人</li>
+        <li>今日订单：200单</li>
+        <li>超时订单：1.02%</li>
+      </ul>
     </div>
-    <city-select></city-select>
+
+
+    <!--
     <section class="H_statistics clearfix">
       <ul>
-        <!--系统消息-->
         <li class="H_message H_statistics_info">
           <h3>系统消息</h3>
           <ul>
             <li class="">2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-              <i class="fr">
-                <Icon type="chevron-right"></Icon>
-              </i>
+              <Icon type="chevron-right" class="fr"></Icon>
             </li>
             <li class="">2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-              <i>
-                <i class="fr">
-                  <Icon type="chevron-right"></Icon>
-                </i>
-              </i>
+              <Icon type="chevron-right" class="fr"></Icon>
             </li>
             <li class="">2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-              <i>
-                <i class="fr">
-                  <Icon type="chevron-right"></Icon>
-                </i>
-              </i>
+              <Icon type="chevron-right" class="fr"></Icon>
             </li>
-
           </ul>
         </li>
-        <!--审核概览-->
         <li class="H_message H_statistics_senhe">
           <h3>骑士审核</h3>
           <ul>
@@ -60,10 +41,8 @@
                 <Icon type="chevron-right"></Icon>
               </i>
             </li>
-
           </ul>
         </li>
-        <!--实时监控-->
         <li class="H_message H_statistics_monitor">
           <h3>实时监控</h3>
           <ul>
@@ -104,7 +83,6 @@
             </li>
           </ul>
         </li>
-        <!--数据看板-->
         <li class="H_message H_statistics_kanban">
           <h3>数据看板</h3>
           <ul>
@@ -120,60 +98,54 @@
                 <p>比上周同期</p>
               </div>
             </li>
-
           </ul>
         </li>
       </ul>
     </section>
+    -->
   </div>
 </template>
 <script>
-  import citySelect from '../../components/changecity/cityselect.vue'
+  import * as api from '@/api/common'
 
   export default {
-    components: {
-      citySelect,
-    },
     data() {
       return {
         iconSize: 22
       }
     },
-    computed: {
-      show() {
-        return this.$store.state.show
-      }
+    computed: {},
+    created() {
     },
-    methods: {
-      getCurrentDate() {
-        return new Date().toLocaleDateString()
-      }
-    }
+    methods: {}
   }
 </script>
 <style lang="less" scoped type="text/less">
   #home {
     font-size: 16px;
-    .H_header {
+    .H-header {
       height: 60px;
       border-bottom: 1px solid #ddd;
       line-height: 60px;
     }
-    .H_tj {
+    .H-tip {
       height: 40px;
       line-height: 40px;
       margin-top: 12px;
       background-color: #999;
-      .H_tj_left {
-        padding-left: 20px;
-        font-size: 16px;
+      padding: 0 20px;
+      & > h4 {
         color: #fff;
+        display: inline-block;
+        font-size: 16px;
       }
-      .H_tj_right {
-        li {
-          float: left;
-          margin-left: 20px;
-        }
+      & > ul {
+        font-size: 0;
+      }
+      & > ul > li {
+        display: inline-block;
+        font-size: 16px;
+        margin-left: 10px;
       }
     }
 
@@ -191,11 +163,6 @@
         &:nth-of-type(odd) {
           margin-right: 70px;
         }
-        h3 {
-          float: left;
-          padding-left: 10px;
-        }
-      ;
         ul {
           margin-top: 37px;
           li {
