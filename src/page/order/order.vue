@@ -1,60 +1,341 @@
 <template>
-  <div id="order" class="main" :class="{'isShow':show}">
+  <div id="order">
     <!--内容头部-->
-    <div>
-      <span slot="h3">订单指派</span>
-      <li slot="ul" v-for="item in 5">
-        <Button>Default</Button>
-      </li>
-      <input type="search" placeholder=" 订单状态/收货人信息/订单号/运单号">
-      <Icon type="search" class="O_search_icon"></Icon>
-    </div>
-    <!--城市选择-->
-    <city-select v-model="cityinfo"></city-select>
-    <!--人员列表-->
-    <section class="O_cava">
-      <ul class="O_cava_name fl textCenter">
-        <li>姓名</li>
-        <li v-for="item in 10">菜城骑士</li>
-      </ul>
-      <div class="O_orderlist fr">
-        <Table border :columns="columns" :data="data"></Table>
+    <div class="top clearfix">
+      <h3 class="fl">订单指派</h3>
+      <div class="search-bar fr">
+        <Input v-model="search" icon="search" placeholder="订单状态/收货人信息/订单号/运单号"
+               style="width: 200px;margin-top: 4px;"></Input>
       </div>
-    </section>
+      <ul>
+        <li></li>
+      </ul>
+      <!--<span slot="h3">订单指派</span>-->
+      <!--<li slot="ul" v-for="item in 5">-->
+      <!--<Button>Default</Button>-->
+      <!--</li>-->
+      <!--<input type="search" placeholder=" 订单状态/收货人信息/订单号/运单号">-->
+      <!--<Icon type="search" class="O_search_icon"></Icon>-->
+    </div>
+    <Tabs value="name1" :animated="false">
+      <TabPane label="新订单" name="name1">
+        <Row style="margin-bottom: 40px">
+          <Col span="6">
+          <h3>省区</h3>
+          <Cascader :data="provinceData" v-model="province" style="width:200px"></Cascader>
+          </Col>
+          <Col span="6">
+          <h3>市区</h3>
+          <Cascader :data="cityData" v-model="city" style="width:200px"></Cascader>
+          </Col>
+          <Col span="6">
+          <h3>区域</h3>
+          <Cascader :data="areaData" v-model="area" style="width:200px"></Cascader>
+          </Col>
+          <Col span="6">
+          <h3>菜市场</h3>
+          <Cascader :data="marketData" v-model="market" style="width:200px"></Cascader>
+          </Col>
+        </Row>
+        <!--内容-->
+        <Row class="O_cava">
+          <Col span="2">
+          <ul class="textCenter O_cava_name">
+            <li>姓名</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+          </ul>
+          </Col>
+          <Col span="21" offset="1">
+          <Table border :columns="columns" :data="data"></Table>
+          </Col>
+        </Row>
+      </TabPane>
+      <TabPane label="重抛池" name="name2">
+        <Row style="margin-bottom: 40px">
+          <Col span="6">
+          <h3>省区</h3>
+          <Cascader :data="provinceData" v-model="province" style="width:200px"></Cascader>
+          </Col>
+          <Col span="6">
+          <h3>市区</h3>
+          <Cascader :data="cityData" v-model="city" style="width:200px"></Cascader>
+          </Col>
+          <Col span="6">
+          <h3>区域</h3>
+          <Cascader :data="areaData" v-model="area" style="width:200px"></Cascader>
+          </Col>
+          <Col span="6">
+          <h3>菜市场</h3>
+          <Cascader :data="marketData" v-model="market" style="width:200px"></Cascader>
+          </Col>
+        </Row>
+        <!--内容-->
+        <Row class="O_cava">
+          <Col span="2">
+          <ul class="textCenter O_cava_name">
+            <li>姓名</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+          </ul>
+          </Col>
+          <Col span="21" offset="1">
+          <Table border :columns="columns" :data="data"></Table>
+          </Col>
+        </Row>
+      </TabPane>
+      <TabPane label="配送中" name="name3">
+        <Row style="margin-bottom: 40px">
+          <Col span="6">
+          <h3>省区</h3>
+          <Cascader :data="provinceData" v-model="province" style="width:200px"></Cascader>
+          </Col>
+          <Col span="6">
+          <h3>市区</h3>
+          <Cascader :data="cityData" v-model="city" style="width:200px"></Cascader>
+          </Col>
+          <Col span="6">
+          <h3>区域</h3>
+          <Cascader :data="areaData" v-model="area" style="width:200px"></Cascader>
+          </Col>
+          <Col span="6">
+          <h3>菜市场</h3>
+          <Cascader :data="marketData" v-model="market" style="width:200px"></Cascader>
+          </Col>
+        </Row>
+        <!--内容-->
+        <Row class="O_cava">
+          <Col span="2">
+          <ul class="textCenter O_cava_name">
+            <li>姓名</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+          </ul>
+          </Col>
+          <Col span="21" offset="1">
+          <Table border :columns="columns" :data="data"></Table>
+          </Col>
+        </Row>
+      </TabPane>
+      <TabPane label="配送完成" name="name4">
+        <Row style="margin-bottom: 40px">
+          <Col span="6">
+          <h3>省区</h3>
+          <Cascader :data="provinceData" v-model="province" style="width:200px"></Cascader>
+          </Col>
+          <Col span="6">
+          <h3>市区</h3>
+          <Cascader :data="cityData" v-model="city" style="width:200px"></Cascader>
+          </Col>
+          <Col span="6">
+          <h3>区域</h3>
+          <Cascader :data="areaData" v-model="area" style="width:200px"></Cascader>
+          </Col>
+          <Col span="6">
+          <h3>菜市场</h3>
+          <Cascader :data="marketData" v-model="market" style="width:200px"></Cascader>
+          </Col>
+        </Row>
+        <!--内容-->
+        <Row class="O_cava">
+          <Col span="2">
+          <ul class="textCenter O_cava_name">
+            <li>姓名</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+          </ul>
+          </Col>
+          <Col span="21" offset="1">
+          <Table border :columns="columns" :data="data"></Table>
+          </Col>
+        </Row>
+      </TabPane>
+      <TabPane label="配送异常" name="name5">
+        <Row style="margin-bottom: 40px">
+          <Col span="6">
+          <h3>省区</h3>
+          <Cascader :data="provinceData" v-model="province" style="width:200px"></Cascader>
+          </Col>
+          <Col span="6">
+          <h3>市区</h3>
+          <Cascader :data="cityData" v-model="city" style="width:200px"></Cascader>
+          </Col>
+          <Col span="6">
+          <h3>区域</h3>
+          <Cascader :data="areaData" v-model="area" style="width:200px"></Cascader>
+          </Col>
+          <Col span="6">
+          <h3>菜市场</h3>
+          <Cascader :data="marketData" v-model="market" style="width:200px"></Cascader>
+          </Col>
+        </Row>
+        <!--内容-->
+        <Row class="O_cava">
+          <Col span="2">
+          <ul class="textCenter O_cava_name">
+            <li>姓名</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+            <li>菜城骑士</li>
+          </ul>
+          </Col>
+          <Col span="21" offset="1">
+          <Table border :columns="columns" :data="data"></Table>
+          </Col>
+        </Row>
+      </TabPane>
+    </Tabs>
+
   </div>
 </template>
 <script type="text/ecmascript-6">
-  import citySelect from '@/components/changecity/cityselect.vue'
 
   export default {
-    components: {
-      citySelect
-    },
     data() {
       return {
-        cityinfo: '',
+        province: [],
+        market: [],
+        area: [],
+        city: [],
+        provinceData: [
+          {
+            value: 'guangdongsheng',
+            label: '广东省'
+          },
+        ],
+        cityData: [
+          {
+            value: 'guangzhou',
+            label: '广州市'
+          }
+        ],
+        areaData: [
+          {
+            value: 'shiqiao',
+            label: '市桥'
+          }
+        ],
+        marketData: [
+          {
+            value: 'm1',
+            label: '菜市场1'
+          }
+        ],
+        search: '',
         columns: [
           {
-            title: '订单列表',
-            key: 'name',
-            render: (h, params) => {
-              return h('div', [
-                h('Icon', {
-                  props: {
-                    type: 'person'
-                  }
-                }),
-                h('strong', params.row.name)
-              ]);
-            }
+            title: '用户编码',
+            key: 'customId',
+            align: 'center'
           },
           {
-            title: '年龄',
-            key: 'age'
+            title: '下单时间',
+            align: 'center',
+            key: 'orderTime'
           },
           {
-            title: '地址',
-            key: 'address'
+            title: '期待时间',
+            align: 'center',
+            key: 'freeTime'
+          },
+          {
+            title: '订单状态',
+            align: 'center',
+            key: 'orderStatus'
+          },
+          {
+            title: '运单编号',
+            align: 'center',
+            key: 'deliverNumber'
           },
           {
             title: '操作',
@@ -73,7 +354,7 @@
                   },
                   on: {
                     click: () => {
-                      this.tocheckout(params.index)
+                      this.$router.push('/order/' + params.index)
                     }
                   }
                 }, '查看'),
@@ -83,66 +364,87 @@
         ],
         data: [
           {
-            name: '王小明',
-            age: 18,
-            address: '北京市朝阳区芍药居'
+            customId: 1,
+            orderTime: '2017-11-03 14:05',
+            freeTime: '2017-11-03 16:05',
+            orderStatus: '新订单',
+            deliverNumber: 'Cp102929'
           },
           {
-            name: '张小刚',
-            age: 25,
-            address: '北京市海淀区西二旗'
+            customId: 2,
+            orderTime: '2017-11-03 14:05',
+            freeTime: '2017-11-03 16:05',
+            orderStatus: '新订单',
+            deliverNumber: 'Cp102929'
           },
           {
-            name: '李小红',
-            age: 30,
-            address: '上海市浦东新区世纪大道'
+            customId: 3,
+            orderTime: '2017-11-03 14:05',
+            freeTime: '2017-11-03 16:05',
+            orderStatus: '新订单',
+            deliverNumber: 'Cp102929'
           },
           {
-            name: '周小伟',
-            age: 26,
-            address: '深圳市南山区深南大道'
+            customId: 4,
+            orderTime: '2017-11-03 14:05',
+            freeTime: '2017-11-03 16:05',
+            orderStatus: '新订单',
+            deliverNumber: 'Cp102929'
+          },
+          {
+            customId: 5,
+            orderTime: '2017-11-03 14:05',
+            freeTime: '2017-11-03 16:05',
+            orderStatus: '新订单',
+            deliverNumber: 'Cp102929'
+          },
+          {
+            customId: 6,
+            orderTime: '2017-11-03 14:05',
+            freeTime: '2017-11-03 16:05',
+            orderStatus: '新订单',
+            deliverNumber: 'Cp102929'
           }
         ]
       }
     },
-    computed: {
-      show() {
-        return this.$store.state.show
-      }
-    },
-    methods: {
-      tocheckout(index) {
-        this.$router.push('/o_checkorder')
-        //            this.$Modal.info({
-        //              title: '用户信息',
-        //              content: `姓名：${this.data[index].name}<br>年龄：${this.data[index].age}<br>地址：${this.data[index].address}`
-        //            })
-      },
-    }
+    computed: {},
+    methods: {}
   }
 </script>
 <style lang="less" scoped type="text/less">
   #order {
+    .top {
+      height: 40px;
+      background-color: #363e54;
+      margin-bottom: 20px;
+      padding: 0 20px;
+      & > h3 {
+        color: #fff;
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+      }
+    }
     .O_cava {
       .O_cava_name {
-        width: 18%;
         border: 1px solid #ccc;
         li {
           width: 100%;
-          height: 30px;
-          line-height: 30px;
+          height: 35px;
+          line-height: 35px;
           border-bottom: 1px solid #ccc;
+          cursor: pointer;
           &:first-child {
             height: 40px;
             line-height: 40px;
             font-weight: 700;
           }
+          &:last-child {
+            border-bottom: none;
+          }
         }
       }
-
-    }
-    .O_orderlist {
-      width: 80%;
     }
   }
 </style>
