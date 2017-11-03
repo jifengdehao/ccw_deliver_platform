@@ -28,9 +28,9 @@ export const itr = (type, url, params) => {
   let arg = qs.stringify(params)
   if (Object.keys(params).length > 0) {
     url =
-      type === 'get' || type === 'delete' || type === 'patch'
-        ? url + '?' + arg
-        : url
+      type === 'get' || type === 'delete' || type === 'patch' ?
+      url + '?' + arg :
+      url
   }
   var userInfo = ac.getData('userInfo')
   var token = ''

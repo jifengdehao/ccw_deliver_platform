@@ -6,6 +6,8 @@ import router from './router'
 import store  from './vuex/store'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
+import AMap from 'vue-amap'
+Vue.use(AMap)
 Vue.use(iView)
 
 /**
@@ -33,6 +35,11 @@ router.afterEach((to, from, next) => {
   window.scrollTo(0, 0)
   iView.LoadingBar.finish()
 })
+// 地图初始化
+AMap.initAMapApiLoader({
+  key: 'e563b2d92da0e671be2ad274eaa35752',
+  plugin: ['Autocomplete', 'PlaceSearch', 'Scale', 'OverView', 'ToolBar', 'MapType', 'PolyEditor', 'CircleEditor','DistrictSearch']
+});
 
 /* eslint-disable no-new */
 new Vue({
