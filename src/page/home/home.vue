@@ -5,7 +5,7 @@
     </div>
     <!--统计信息-->
     <div class="H-tip clearfix">
-      <h4>首页统计信息</h4>
+      <h3>首页统计信息</h3>
       <ul class="fr">
         <li>在线骑手：9人</li>
         <li>今日订单：200单</li>
@@ -249,12 +249,12 @@
       height: 40px;
       line-height: 40px;
       margin-top: 12px;
-      background-color: #999;
+      background-color: #363e54;
       padding: 0 20px;
-      & > h4 {
+      color: #ffffff;
+      & > h3 {
         color: #fff;
         display: inline-block;
-        font-size: 16px;
       }
       & > ul {
         font-size: 0;
@@ -315,70 +315,6 @@
         }
         .item.border-bottom{
           border-bottom: 1px solid #dddddd;
-        }
-      }
-    }
-    .H_statistics {
-      margin-top: 40px;
-      .H_message {
-        width: 540px;
-        height: 285px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        float: left;
-        margin-bottom: 30px;
-        padding-top: 15px;
-        padding-left: 20px;
-        padding-right: 20px;
-        &:nth-of-type(odd) {
-          margin-right: 70px;
-        }
-        ul {
-          margin-top: 37px;
-          li {
-            text-align: left;
-            line-height: 35px;
-            padding-left: 10px;
-          }
-        }
-      }
-      .H_statistics_monitor {
-        ul {
-          li {
-            text-align: right;
-            border: none;
-            .H_statistics_monitor_shulian {
-              display: inline-block;
-              width: 200px;
-              height: 33px;
-              border: 1px solid #ccc;
-              border-radius: 3px;
-              text-align: center;
-              margin: 0 30px;
-            }
-          }
-        }
-      }
-      .H_statistics_kanban {
-        li {
-          float: right;
-          width: 50%;
-          height: 105px;
-          box-sizing: border-box;
-          padding: 10px 20px 0 30px;
-          &:nth-of-type(odd) {
-            border-right: 1px solid #ddd;
-          }
-          &:nth-of-type(1),
-          &:nth-of-type(2) {
-            border-bottom: 1px solid #ddd;
-          }
-          div {
-            width: 50%;
-            p {
-              text-align: center;
-            }
-          }
         }
       }
     }
