@@ -16,21 +16,17 @@ var ax = axios.create({
   baseURL: URI,
   timeout: 30000,
   headers: {
-    'Content-Type': 'application/json;charset=utf-8',
+    // 'Content-Type': 'application/x-www-form-urlencoded',
     TOKEN: ''
   }
 })
-
 export const itr = (type, url, params) => {
   if (typeof params !== 'object') {
     params = {}
   }
   let arg = qs.stringify(params)
   if (Object.keys(params).length > 0) {
-    url =
-      type === 'get' || type === 'delete' || type === 'patch' ?
-      url + '?' + arg :
-      url
+    url = type === 'get' || type === 'delete' ? url + '?' + arg : url
   }
   var userInfo = ac.getData('userInfo')
   var token = ''

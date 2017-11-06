@@ -1,3 +1,10 @@
+/*
+ * @Author: huShangJun 
+ * @Date: 2017-11-06 14:30:01 
+ * DeveloperMailbox:   hsjcc@ccw163.com 
+ * FunctionPoint: 查看省 
+ */
+
 <template>
     <div id='shengInfo'>
         <section class="shengInfoHeader">
@@ -6,41 +13,78 @@
         <section class="shengInfo_map">
             <div class="Breadcrumb">
                 <Breadcrumb separator=">">
-                    <BreadcrumbItem>广东省</BreadcrumbItem>
+                    <BreadcrumbItem>{{provinceName}}</BreadcrumbItem>
                 </Breadcrumb>
             </div>
             <div id="container" class="map">
-              <el-amap vid="amapDemo"  :zoom="12" class="amap-demo" :plugin="plugins">
-                 
-              </el-amap>
             </div>
         </section>
     </div>
 </template>
 <script>
+// import AMap from 'AMap'
 export default {
   components: {},
   name: 'component_name',
   data() {
     return {
-      plugins: [
-        {
-          pName: 'DistrictSearch',
-          events: {
-            init(instance) {
-              console.log(instance)
-            }
-          }
-        }
-      ]
+      // provinceName: ''
     }
   },
   created() {},
   mounted() {
-    // this.search()
+    this.initMap()
   },
   methods: {
-    search() {
+    initMap: function() {
+      var district,
+        map = new AMap.Map('container', {
+          resizeEnable: true,
+          center: [113.4, 39.91], //地图中心点
+          zoom: 10 //地图显示的缩放级别
+        })
+      //加载行政区划插件
+      var adcode = this.adcode.toString()
+      AMap.service('AMap.DistrictSearch', function() {
+        var opts = {
+          subdistrict: 1, //返回下一级行政区
+          extensions: 'all', //返回行政区边界坐标组等具体信息
+          level: 'city' //查询行政级别为 市
+        }
+        //实例化DistrictSearch
+        district = new AMap.DistrictSearch(opts)
+        district.setLevel('city')
+        //行政区查询
+        district.search(adcode, function(status, result) {
+          if (status == 'complete') {
+            var bounds = result.districtList[0].boundaries
+            var polygons = []
+            if (bounds) {
+              for (var i = 0, l = bounds.length; i < l; i++) {
+                //生成行政区划polygon
+                var polygon = new AMap.Polygon({
+                  map: map,
+                  strokeWeight: 1,
+                  path: bounds[i],
+                  fillOpacity: 0.7,
+                  fillColor: '#CCF3FF',
+                  strokeColor: '#CC66CC'
+                })
+                polygons.push(polygon)
+              }
+              map.setFitView() //地图自适应
+            }
+          }
+        })
+      })
+    }
+  },
+  computed: {
+    adcode() {
+      return this.$route.query.provinceId
+    },
+    provinceName() {
+      return this.$route.query.provinceName
     }
   }
 }

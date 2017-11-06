@@ -2,7 +2,7 @@
  * @Author: huShangJun 
  * @Date: 2017-11-01 16:14:20 
  * DeveloperMailbox:   hsjcc@ccw163.com 
- * FunctionPoint: 功能开发点 
+ * FunctionPoint: 查看区域信息 
  */
 
 <template>
@@ -13,9 +13,9 @@
         <section class="quInfo_map">
             <div class="Breadcrumb">
                 <Breadcrumb separator=">">
-                    <BreadcrumbItem>广东省</BreadcrumbItem>
-                    <BreadcrumbItem>广州市</BreadcrumbItem>
-                    <BreadcrumbItem>番禺区</BreadcrumbItem>
+                    <BreadcrumbItem>{{provinceName}}</BreadcrumbItem>
+                    <BreadcrumbItem>{{cityName}}</BreadcrumbItem>
+                    <BreadcrumbItem>{{areaData.areaName}}</BreadcrumbItem>
                 </Breadcrumb>
             </div>
             <div class="map" id="container">
@@ -23,63 +23,77 @@
             </div>
         </section>
         <section class="quInfo_button">
-            <Button size="large" style="width: 200px;">取消</Button>
+            <Button size="large" style="width: 200px;" @click="test">取消</Button>
             <Button size="large" style="width: 200px;">确定</Button>
         </section>
     </div>
 </template>
 <script>
-// import AMap from 'AMap'
-// var map
+import * as api from '@/api/common.js'
+import AMap from 'AMap'
+var map
 export default {
   components: {},
   name: 'component_name',
   data() {
-    return {}
+    return {
+      areaData: {}
+    }
   },
   computed: {
+    areaId() {
+      return this.$route.query.areaId
+    },
+    cityName() {
+      return this.$route.query.cityName
+    },
+    provinceName() {
+      return this.$route.query.provinceName
+    }
+  },
+  created() {
+       api.getQuInfo(this.areaId).then(response => {
+      this.areaData = response
+    })
   },
   mounted() {
-    // this.initMap()
-    // this.showcitymap()
+      let _this = this;
+    setTimeout(function() {
+        _this.initMap()
+    }, 100)
+    
   },
   methods: {
-    // initMap: function() {
-    //   map = new AMap.Map('container', {
-    //     center: [116.397428, 39.90923],
-    //     resizeEnable: true,
-    //     zoom: 12
-    //   })
-    //   AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
-    //     map.addControl(new AMap.ToolBar())
-    //     map.addControl(new AMap.Scale())
-    //   })
-    // },
-    // showcitymap() {
-    //   AMapUI.loadUI(['geo/DistrictExplorer'], function(DistrictExplorer) {
-    //     //创建一个实例
-    //     var districtExplorer = new DistrictExplorer({
-    //       map: map
-    //     })
-    //     var adcode = 440100
-    //     districtExplorer.loadAreaNode(adcode, function(error, areaNode) {
-    //       //更新地图视野
-    //       map.setBounds(areaNode.getBounds(), null, null, true)
-    //       //清除已有的绘制内容
-    //       districtExplorer.clearFeaturePolygons()
-    //       //绘制父区域
-    //       districtExplorer.renderParentFeature(areaNode, {
-    //         cursor: 'default',
-    //         bubble: true,
-    //         strokeColor: 'black', //线颜色
-    //         strokeOpacity: 1, //线透明度
-    //         strokeWeight: 1, //线宽
-    //         fillColor: null, //填充色
-    //         fillOpacity: 0.35 //填充透明度
-    //       })
-    //     })
-    //   })
-    // }
+    initMap(areaData) {
+        console.log(this.areaData)
+      map = new AMap.Map('container', {
+        center: [116.397428, 39.90923],
+        resizeEnable: true,
+        zoom: 12
+      })
+      var bounds = areaData
+      AMap.service('AMap.Polygon', function() {
+        var polygons = []
+        if (bounds) {
+          for (var i = 0, l = bounds.length; i < l; i++) {
+            //生成行政区划polygon
+            var polygon = new AMap.Polygon({
+              map: map,
+              strokeWeight: 1,
+              path: bounds[i],
+              fillOpacity: 0.7,
+              fillColor: '#CCF3FF',
+              strokeColor: '#CC66CC'
+            })
+            polygons.push(polygon)
+          }
+          map.setFitView() //地图自适应
+        }
+      })
+    },
+    test() {
+      
+    }
   }
 }
 </script>

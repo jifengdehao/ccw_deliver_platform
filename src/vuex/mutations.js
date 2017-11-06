@@ -2,7 +2,10 @@ export default {
   showusermane(state) {
     state.username = JSON.parse(window.sessionStorage.userinfo).username
   },
-  show(state,toggle){
-    state.show = toggle
+  adcode(state,code){
+    state.adcode = code
+  },
+  provinceName(state,provinceName){
+    state.provinceName = provinceName
   }
 }

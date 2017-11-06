@@ -2,24 +2,38 @@
   <div>
      <!-- 头部 -->
     <div class="header">
-      <h2>骑士管理</h2>
+      <h2>未提交资料</h2>
       <div class="header-search">
-        <Button>导出</Button>
+        <Button @click="exportModal=true">导出</Button>
       </div>
     </div>
-
-    <div><Table stripe border :columns="columns1" :data="data1"></Table></div>
+    <!-- table -->
+    <div><Table stripe :columns="columns1" :data="DeliverManager"></Table></div>
+    <!-- 导出数据Modal -->
+    <Modal v-model="exportModal" width="300">
+      <div class="vm-textCenter">
+        <DatePicker type="date" v-model="startTime" placeholder="选择日期" style="width: 100%"></DatePicker>
+        <div class="mtb10">到</div>
+        <DatePicker type="date" v-model="endTime" placeholder="选择日期" style="width: 100%"></DatePicker>
+      </div>
+      <div slot="footer">
+        <Button type="primary" long @click="getExportData()">确定</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
+import * as api from '@/api/common'
 export default {
   components: {},
   data() {
     return {
+      pageSize: 10, // 每页显示记录数
+      pageNumber: 1, // 当前页码
       columns1: [
         {
           title: '序号',
-          key: 'ID',
+          type: 'index',
           width: '110',
           align: 'center'
         },
@@ -51,7 +65,8 @@ export default {
                   },
                   on: {
                     click: () => {
-                      console.log(params)
+                      // 删某一个未提交资料骑士
+                      api.deleteUnverified(params.row.psDeliverApplyId).then(data => {})
                     }
                   }
                 }, '删除')
@@ -59,18 +74,37 @@ export default {
           }
         }
       ],
-      data1: [
-        {
-          ID: '1',
-          psDeliverApplyId: '00999',
-          mobileno: '1123456',
-          registerDt: '134567'
-        }
-      ]
+      DeliverManager: [], // 列表数据
+      exportModal: false, // 模态框显影
+      startTime: '', // 获取导出开始时间
+      endTime: '', // 获取导出结束时间
     }
   },
-  computed: {},
-  methods: {}
+  created: function () {
+    this.getDeliverManager() // 初始化数据
+  },
+  methods: {
+    // 获取列表数据
+    getDeliverManager(){
+      let params = {
+        pageSize: this.pageSize,
+        pageNumber: this.pageNumber
+      }
+      api.getDeliverManager(params).then(data => {
+         this.DeliverManager = data.records
+      })
+    },
+    // 导出数据
+    getExportData() {
+      let parmas = {
+        beginTime: this.startTime,
+        endTime: this.endTime
+      }
+      api.exportUnverified(parmas).then(data => {
+        console.log(data, 'data')
+      })
+    }
+  }
 }
 </script>
 <style lang="css" scoped>
@@ -91,5 +125,10 @@ export default {
 .header-search {
   float: right;
   margin-right: 20px;
+}
+
+.mtb10 {
+  text-align: center;
+  margin: 7px 0;
 }
 </style>

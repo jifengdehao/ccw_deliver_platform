@@ -7,7 +7,7 @@
         <div class="close-menu" @click="toggleClick()">
           <Icon type="navicon-round" :size="iconSize"></Icon>
         </div>
-        <Menu theme="dark" @on-select="route" width="auto">
+        <Menu theme="dark" @on-select="route" width="auto" :active-name="activeName">
           <MenuItem name="home">
             <Icon type="home" :size="iconSize"></Icon>
             <span class="layout-text">首页</span>
@@ -27,8 +27,6 @@
             <MenuItem name="cavalier">骑士管理</MenuItem>
             <MenuItem name="cUncommitted">未提交资料</MenuItem>
             <MenuItem name="cAuditing">骑士审核</MenuItem>
-            <MenuItem name="courseTrain">课程培训</MenuItem>
-            <MenuItem name="courseAudit">课程审核</MenuItem>
             <MenuItem name="cPersonal">人员管理</MenuItem>
           </Submenu>
           <Submenu name="">
@@ -68,7 +66,7 @@
         </Menu>
         </Col>
         <Col :span="spanRight" style="overflow-y: scroll;padding: 40px;">
-          <router-view></router-view>
+        <router-view></router-view>
         </Col>
       </Row>
     </div>
@@ -89,6 +87,9 @@
     computed: {
       iconSize() {
         return this.spanLeft === 3 ? 14 : 24
+      },
+      activeName() {
+        return this.$route.path.split('/')[1]
       }
     },
     methods: {
@@ -126,7 +127,7 @@
       right: 0;
       bottom: 0;
     }
-    .layout-hide-text{
+    .layout-hide-text {
       .layout-text,
       .ivu-menu-item-group-title {
         display: none;

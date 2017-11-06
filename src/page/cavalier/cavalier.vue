@@ -1,3 +1,10 @@
+/**
+ * @Author: ZengFanlu 
+ * @Date: 2017-10-31 14:27:31 
+ * DeveloperMailbox:   zengfanlu@ccw163.com 
+ * FunctionPoint: 骑士管理 
+ */
+
 <template>
   <div class="main">
     <!-- 头部 -->
@@ -13,28 +20,28 @@
       <div class="content-select">
         <div class="select">
           <span>省区</span>
-          <Select style="width:200px">
-              <Option></Option>
+          <Select style="width:200px" @on-change="changeDate">
+              <Option v-for="item in deployManager" :key="item.id" :value="item.provinceId">{{ item.provinceName }}</Option>
           </Select>
         </div>
 
         <div class="select">
           <span>市区</span>
-          <Select style="width:200px" :disabled = "true">
-              <Option></Option>
+          <Select style="width:200px" :disabled="showCity" @on-change="changeCityData">
+              <Option v-for="city in cityManager" :key="city.id" :value="city.cityId">{{ city.cityName }}</Option>
           </Select>
         </div>
 
         <div class="select">
           <span>区域</span>
-          <Select style="width:200px">
-              <Option></Option>
+          <Select style="width:200px" :disabled="showArea" @on-change="changeAreaData">
+              <Option v-for="area in areaManager" :key="area.id" :value="area.areaId">{{ area.areaName }}</Option>
           </Select>
         </div>
         <div class="select">
           <span>菜市场</span>
-          <Select style="width:200px">
-              <Option></Option>
+          <Select style="width:200px" :disabled="showMarket">
+              <Option v-for="market in marketManager" :key="market.id" :value="market.marketId">{{ market.marketName }}</Option>
           </Select>
         </div>
       </div>
@@ -146,15 +153,56 @@
   </div>
 </template>
 <script>
+import * as api from '@/api/common'
+
 export default {
+  name: 'cavalier',
   components: {},
   data() {
-    return {}
+    return {
+      deployManager: [], // 省区下拉框数据
+      deployIndex: '', // 获取省区ID
+      showCity: true, // 可否点击市区下拉框
+      cityManager: [], // 市区下拉框数据
+      showArea: true, // 可否点击区域下拉框
+      areaManager: [], // 区域下拉框数据
+      showMarket: true, // 可否点击菜市场下拉框
+      marketManager: [] // 菜市场下拉框数据
+    }
   },
-  computed: {},
+  created: function() {
+    this.getDeployManager()
+  },
   methods: {
-    getCurrentDate() {
-      return new Date().toLocaleDateString()
+    // 获取省区下拉框数据
+    getDeployManager() {
+      api.getDeployManager().then(data => {
+        this.deployManager = data
+      })
+    },
+    // 获取市区下拉框数据
+    changeDate(value) {
+      this.cityManager = ''
+      api.getProvinceIndex(value).then(data => {
+        this.cityManager = data
+      })
+      this.showCity = false
+    },
+    // 获取区域下拉框数据
+    changeCityData(value) {
+      this.areaManager = ''
+      api.getCityManager(value).then(data => {
+        this.areaManager = data
+      })
+      this.showArea = false
+    },
+    // 获取菜市场下拉框数据
+    changeAreaData(value) {
+      this.marketManager = ''
+      api.getAreaMarket(value).then(data => {
+        this.marketManager = data
+      })
+        this.showMarket = false
     }
   }
 }

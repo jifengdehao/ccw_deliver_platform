@@ -12,7 +12,6 @@ import cAuditing from '@/page/cavalier/c_auditing.vue' //骑士审核
 import c_message from '@/page/cavalier/c_message.vue' //查看骑士信息
 import cPersonal from '@/page/cavalier/c_personal.vue' //骑士-人员管理
 import cTrain from '@/page/cavalier/c_train.vue' //培训管理
-import courseTrain from '@/page/cavalier/courseTrain.vue' //培训管理-课程管理
 import addcourse from '@/page/cavalier/addcourse.vue' //培训管理-课程管理-增加
 import courseinfo from '@/page/cavalier/courseinfo.vue' //培训管理-课程管理=查看
 
@@ -96,10 +95,6 @@ export default new Router({
         {
           path: '/cTrain',
           component: cTrain
-        },
-        {
-          path: '/courseTrain',
-          component: courseTrain
         },
         {
           path: '/addcourse',
