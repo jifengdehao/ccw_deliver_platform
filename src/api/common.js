@@ -8,7 +8,10 @@ import * as ax from './instrance'
 
 // 上传地址
 export const uploadUrl = ax.uploadUrl
-
+/**
+ * author: zhangwenlong
+ * @param params
+ */
 // 用户登录，获取验证码，首页 退出登录 start
 
 export const login = (params) => {

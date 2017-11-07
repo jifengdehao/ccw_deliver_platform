@@ -114,23 +114,23 @@
         <h3>数据看板</h3>
         <div class="H-card-data clearfix">
           <div class="item border-right border-bottom">
-            <p>订单成长量&nbsp;&nbsp;&nbsp;8765</p>
-            <p>比上周同期&nbsp;&nbsp;&nbsp;13%&nbsp;&nbsp;&nbsp;<Icon type="arrow-up-c"></Icon>
+            <p>订单成长量&nbsp;&nbsp;&nbsp;{{data.orderCount}}</p>
+            <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.orderCountRate}}&nbsp;&nbsp;&nbsp;<Icon :type="this.data.orderCountRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'" v-if="this.data.orderCountRateImage"></Icon>
             </p>
           </div>
           <div class="item border-bottom">
-            <p>订单超时率&nbsp;&nbsp;&nbsp;1%</p>
-            <p>比上周同期&nbsp;&nbsp;&nbsp;10%&nbsp;&nbsp;&nbsp;<Icon type="arrow-up-c"></Icon>
+            <p>订单超时率&nbsp;&nbsp;&nbsp;{{data.orderOuttime}}</p>
+            <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.orderOuttimeRate}}&nbsp;&nbsp;&nbsp;<Icon :type="this.data.orderOuttimeRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'" v-if="this.data.orderOuttimeRateImage"></Icon>
             </p>
           </div>
           <div class="item border-right">
-            <p>异常订单率&nbsp;&nbsp;&nbsp;11%</p>
-            <p>比上周同期&nbsp;&nbsp;&nbsp;1%&nbsp;&nbsp;&nbsp;<Icon type="arrow-up-c"></Icon>
+            <p>异常订单率&nbsp;&nbsp;&nbsp;{{data.orderAbnormal}}</p>
+            <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.orderAbnormalRate}}&nbsp;&nbsp;&nbsp;<Icon :type="this.data.orderAbnormalRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'" v-if="this.data.orderAbnormalRateImage"></Icon>
             </p>
           </div>
           <div class="item">
-            <p>骑士人手&nbsp;&nbsp;&nbsp;32</p>
-            <p>比上周同期&nbsp;&nbsp;&nbsp;16%&nbsp;&nbsp;&nbsp;<Icon type="arrow-up-c"></Icon>
+            <p>骑士人手&nbsp;&nbsp;&nbsp;{{data.deliverorder}}</p>
+            <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.deliverOrderRate}}&nbsp;&nbsp;&nbsp;<Icon :type="this.data.deliverOrderRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'" v-if="this.data.deliverOrderRateImage"></Icon>
             </p>
           </div>
         </div>
@@ -150,6 +150,7 @@
         sysMsg: [], // 系统消息
         knight: {}, // 骑士审核
         monitoring: {}, //实时监控
+        data: {}, // 数据看板
         provinceData: [], // 省或直轄市数据集
         province: '', // 省或直轄市
         city: '', // 市
@@ -163,7 +164,6 @@
         showMarket: true  // 是否允许选择市场  true ===>不允许 false 允许
       }
     },
-    computed: {},
     created() {
       this.getProvinceData()
     },
@@ -231,6 +231,7 @@
             this.statistics = res.head
             this.knight = res.depliverData
             this.monitoring = res.monitor
+            this.data = res.orderDataBlack
           }
         })
       }
