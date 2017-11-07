@@ -38,7 +38,7 @@ export const getIndeData = (params) => {
  export const getDeployManager = () => {
    return ax.g('/deployManager/index')
  }
- 
+
  // 骑士管理 获取相关市区 /deployManager/province/
  export const getProvinceIndex = (id) => {
    return ax.g(`/deployManager/province/${id}`)
