@@ -6,8 +6,7 @@
  */
 let config = {
   // apiDomain:'/api',
-  // apiDomain: 'http://192.168.0.158:8094',
-  apiDomain: 'http://192.168.0.54:8094',
+  apiDomain: 'http://192.168.0.128:8094',
   imgUpload: ''
 }
 export default config

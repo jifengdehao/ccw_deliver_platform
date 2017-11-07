@@ -71,13 +71,11 @@ export default new Router({
         },
         {
           path: '/order',
-          component: order,
-          children: [
-            {
-              path: '/o_checkorder',
-              component: o_checkorder
-            }
-          ]
+          component: order
+        },
+        {
+          path:'/order/:id',
+          component: o_checkorder
         },
         {
           path: '/cavalier',

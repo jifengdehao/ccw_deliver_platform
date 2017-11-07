@@ -19,6 +19,6 @@ export const delData = (key) => {
 }
 
 export const userInfo = () => {
-  let info = getData('userInfo')
-  return JSON.parse(info)
+  let user = getData('userInfo')
+  return JSON.parse(user)
 }

@@ -7,7 +7,7 @@
         <div class="close-menu" @click="toggleClick()">
           <Icon type="navicon-round" :size="iconSize"></Icon>
         </div>
-        <Menu theme="dark" @on-select="route" width="auto">
+        <Menu theme="dark" @on-select="route" width="auto" :active-name="activeName">
           <MenuItem name="home">
             <Icon type="home" :size="iconSize"></Icon>
             <span class="layout-text">首页</span>
@@ -73,7 +73,7 @@
         </Menu>
         </Col>
         <Col :span="spanRight" style="overflow-y: scroll;padding: 40px;">
-          <router-view></router-view>
+        <router-view></router-view>
         </Col>
       </Row>
     </div>
@@ -94,6 +94,9 @@
     computed: {
       iconSize() {
         return this.spanLeft === 3 ? 14 : 24
+      },
+      activeName() {
+        return this.$route.path.split('/')[1]
       }
     },
     methods: {
@@ -131,7 +134,7 @@
       right: 0;
       bottom: 0;
     }
-    .layout-hide-text{
+    .layout-hide-text {
       .layout-text,
       .ivu-menu-item-group-title {
         display: none;

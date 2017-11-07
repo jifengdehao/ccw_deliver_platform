@@ -1,6 +1,6 @@
 <template>
   <div class="city-select clearfix">
-    <div class="fl selectbar">
+    <div class="selectbar">
       <p class="title">省区</p>
       <select v-model="selectedProvince" name="province">
         <option v-for="(item, index) in provinces"
@@ -10,7 +10,7 @@
         </option>
       </select>
     </div>
-    <div class="fl selectbar">
+    <div class="selectbar">
       <p class="title">市区</p>
       <select v-model="selectedCity" name="city">
         <option
@@ -20,7 +20,7 @@
         </option>
       </select>
     </div>
-    <div class="fl selectbar">
+    <div class="selectbar">
       <p class="title" >区域</p>
       <select v-model="selectedBlock" name="block">
         <option
@@ -30,7 +30,7 @@
         </option>
       </select>
     </div>
-   <div class="fl selectbar">
+   <div class="selectbar">
      <p class="title">菜市场</p>
      <select v-model="selectedBlock" name="block">
        <option
@@ -139,8 +139,10 @@
   .city-select{
     margin-top: 5px;
     margin-bottom: 30px;
+    width: 100%;
     .selectbar{
-      margin-right: 119px;
+      width: 25%;
+      float: left;
       &:last-child{
         margin-right: 0;
       }
@@ -156,9 +158,5 @@
         font-size: 14px;
       }
     }
-
   }
-
-
-
 </style>
