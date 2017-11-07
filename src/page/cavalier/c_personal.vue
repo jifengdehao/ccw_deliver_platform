@@ -1,47 +1,93 @@
 <template>
-  <div class="main" :class="{'isShow':show}">
-    <main-header>
-      <span slot="h3">配送人员</span>
-      <input placeholder=" 姓名/联系方式/身份证号">
-      <Icon type="search" class="O_search_icon"></Icon>
-    </main-header>
-    <section>
-      <div class="clearfix" style="margin-bottom: 10px">
-        <Button type="ghost" size="large" @click="exportData(1)" class="fr"> 导出</Button>
+  <div>
+    <!-- 头部 -->
+    <div class="header">
+      <h2>配送人员</h2>
+      <div class="header-search">
+        <Input placeholder="姓名/联系方式/身份证号" style="width: 200px" v-model="searchData"></Input>
+        <Icon type="ios-search icos" @click.native="onSearch"></Icon>
+      </div>
+    </div>
+
+    <div>
+      <div class="clearfix" style="margin-bottom: 10px" v-if="deliverListData && deliverListData.length > 0">
+        <Button type="ghost" size="large" @click="showExportModal" class="fr"> 导出</Button>
       </div>
 
-      <Table border :columns="columns7" :data="data6"></Table>
-    </section>
+      <Table border :columns="columns7" :data="deliverListData" style="margin-bottom: 20px"></Table>
+      <Page v-if="deliverListData && deliverListData.length > 0" :current="params.pageNumber" :total="total" style="float: right"></Page>
+
+       <!-- 导出数据Modal -->
+      <Modal v-model="exportModal" width="300">
+        <div class="vm-textCenter">
+          <DatePicker type="date" v-model="startTime" placeholder="选择日期" style="width: 100%"></DatePicker>
+          <div class="mtb10">到</div>
+          <DatePicker type="date" v-model="endTime" placeholder="选择日期" style="width: 100%"></DatePicker>
+        </div>
+        <div slot="footer">
+          <Button type="primary" long @click="getExportData()">确定</Button>
+        </div>
+      </Modal>
+
+      <!-- Moadl 弹框 -->
+      <Modal
+          v-model="showModal"
+          title="提醒"
+          @on-ok="ok"
+          @on-cancel="cancel">
+          <p style="text-align: center">是否确认冻结此用户？</p>
+      </Modal>
+
+    </div>
   </div>
 </template>
 <script>
-import mainHeader from '../../components/header/main_header.vue'
+import * as api from '@/api/common'
 export default {
-  components: { mainHeader },
+  components: { },
   data() {
     return {
+      params: {
+        pageSize: 10,
+        pageNumber: 1,
+        condition: ''
+      }, // 列表请求数据 
+      searchData: '', // 搜索数据
+      total: '', // 总条数
+      exportModal: false, // 隐藏导出弹框
+      psDeliverId: '', // 保存冻结ID/ 查看ID
+      startTime: '', // 导出开始时间
+      endTime: '', // 导出结束时间
+      showModal: false, // 隐藏冻结弹框
       columns7: [
         {
+          title: '序号',
+          type: 'index'
+        },
+        {
+          title: '用户ID',
+          key: 'psEmpno'
+        },
+        {
           title: '姓名',
-          key: 'name',
+          key: 'name'
+        },
+        {
+          title: '联系方式',
+          key: 'mobileno'
+        },
+        {
+          title: '所属菜市场',
+          key: 'psDeliverMarket',
           render: (h, params) => {
             return h('div', [
-              h('Icon', {
-                props: {
-                  type: 'person'
-                }
-              }),
-              h('strong', params.row.name)
-            ]);
+              h('span', params.row.psDeliverMarket.marketName)
+            ])
           }
         },
         {
-          title: '年龄',
-          key: 'age'
-        },
-        {
-          title: '地址',
-          key: 'address'
+          title: '工作状态',
+          key: 'personStatusStr'
         },
         {
           title: '操作',
@@ -60,7 +106,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.toCmessage(params.index)
+                    this.$router.push('/infoDateil/?id=' + params.row.psDeliverId)
                   }
                 }
               }, '查看'),
@@ -71,7 +117,8 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.remove(params.index)
+                    this.showModal = true
+                    this.psDeliverId = params.row.psDeliverId
                   }
                 }
               }, '冻结')
@@ -79,48 +126,87 @@ export default {
           }
         }
       ],
-      data6: [
-        {
-          name: '王小明',
-          age: 18,
-          address: '北京市朝阳区芍药居'
-        },
-        {
-          name: '张小刚',
-          age: 25,
-          address: '北京市海淀区西二旗'
-        },
-        {
-          name: '李小红',
-          age: 30,
-          address: '上海市浦东新区世纪大道'
-        },
-        {
-          name: '周小伟',
-          age: 26,
-          address: '深圳市南山区深南大道'
-        }
-      ]
+      deliverListData: []
     }
   },
-  computed: {
-    show() {
-      return this.$store.state.show
-    }
+  created () {
+    this.getDeliverList() // 初始化数据
   },
   methods: {
-    toCmessage(index) {
-      this.$router.push('/c_message')
-    },
-    remove(index) {
-      this.$Modal.info({
-        title: '用户信息',
-        content: `此用户已冻结`
+    // 获取初始化列表数据
+    getDeliverList() {
+      api.getDeliverList(this.params).then(res => {
+        this.deliverListData = res.records
+        this.total = res.total
       })
-    }
+    },
+    // 搜索请求
+    onSearch(){
+      this.params.pageNumber = 1
+      this.params.condition = this.searchData
+      this.getDeliverList()
+      this.searchData = ''
+    },
+    // 显示导出框
+    showExportModal() {
+      this.exportModal = true
+      this.endTime = ''
+      this.startTime = ''
+    },
+    // 导出数据
+    getExportData(){
+      let params = {
+        beginTime: this.startTime,
+        endTime: this.endTime
+      }
+      api.getDeliverPoi(params).then(data => { // 导出数据
+        window.open(data)
+      })
+      this.exportModal = false
+    },
+    // 确定冻结用户
+    ok() {
+      console.log(this.psDeliverId)
+      api.getDeliverId(this.psDeliverId).then(obj => {
+        if (obj === true) {
+          this.getDeliverList() // 初始化数据
+        }
+      })
+    },
+    cancel(){}
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="css" scoped>
+.header {
+  height: 40px;
+  line-height: 40px;
+  margin-bottom: 40px;
+  background-color: #363e54;
+}
 
+.header h2 {
+  float: left;
+  color: #fff;
+  margin-left: 20px;
+}
+
+.header .header-search {
+  position: relative;
+  float: right;
+  margin-right: 45px;
+}
+
+.icos {
+  position: absolute;
+  top: 8px;
+  right: -25px;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.mtb10 {
+  text-align: center;
+}
 </style>

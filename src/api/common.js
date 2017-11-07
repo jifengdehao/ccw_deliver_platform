@@ -54,6 +54,11 @@ export const getIndeData = (params) => {
    return ax.g(`/deployManager/areaMarket/${id}`)
  }
 
+ // 骑士管理 获取表单数据/User/index
+ export const getUserIndex = (params) => {
+   return ax.g('/User/index', params)
+ }
+
  // 未提交资料/deliverManager/unverified
  export const getDeliverManager = (params) => {
    return ax.g('/deliverManager/unverified', params)
@@ -73,3 +78,58 @@ export const getIndeData = (params) => {
  export const getAuditManager = (params) => {
    return ax.g('/deliverManager/audit', params)
  }
+
+ // 骑士审核通过/不通过/deliverManager/audit
+ export const getDeliverAudit = (params) => {
+   return ax.u('/deliverManager/audit', params)
+ }
+
+ // 骑士审核查看基本信息/deliverManager/audit/
+ export const getSeeDeliver = (ID) => {
+   return ax.g(`/deliverManager/audit/${ID}`)
+ }
+
+ // 配送人员列表数据GET /deliverManager/deliver
+ export const getDeliverList = (params) => {
+   return ax.g('/deliverManager/deliver', params)
+ }
+
+ // 配送人员导出数据/deliverManager/deliver/POI
+ export const getDeliverPoi = (params) => {
+   return ax.g('/deliverManager/deliver/POI', params)
+ }
+
+ // 配送人员冻结用户PUT /deliverManager/deliver/{deliverId}
+ export const getDeliverId = (id) => {
+   return ax.u(`/deliverManager/deliver/${id}`)
+ }
+
+ // 配送人员查看用户/deliverManager/deliver/
+ export const getDeliverInfo = (id) => {
+   return ax.g(`/deliverManager/deliver/${id}`)
+ }
+
+ /**
+  * @author Zeng FanLu
+  * components 财务对账
+  */
+
+  // 财务对账 查看列表/financial/financialShow
+  export const getFinanceList = (params) => {
+    return ax.g('/financial/financialShow', params)
+  }
+
+  // 财务对账 导出列表信息/financial/financialShow/POI
+  export const getFinanceListExport = (params) => {
+    return ax.g('/financial/financialShow/POI', params)
+  }
+
+  // 财务对账 导出快递员个人信息/financial/psDeliverOrderShow/POI
+  export const getFinanceOrderExport = (params) => {
+    return ax.g('/financial/psDeliverOrderShow/POI', params)
+  }
+
+  // 财务对账 查看快递员个人列表/financial/psDeliverOrderShow
+  export const getFinanceOrderList = (params) => {
+    return ax.g('/financial/psDeliverOrderShow', params)
+  }

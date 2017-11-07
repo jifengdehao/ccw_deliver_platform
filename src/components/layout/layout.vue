@@ -63,6 +63,13 @@
             <MenuItem name="d_extend">推广列表</MenuItem>
             <MenuItem name="d_list">分销列表</MenuItem>
           </Submenu>
+          <Submenu name="">
+            <template slot="title">
+              <Icon type="person-stalker" :size="iconSize"></Icon>
+              <span class="layout-text">财务对账</span>
+            </template>
+            <MenuItem name="finance">财务对账</MenuItem>
+          </Submenu>
         </Menu>
         </Col>
         <Col :span="spanRight" style="overflow-y: scroll;padding: 40px;">

@@ -1,63 +1,89 @@
+
 <template>
-  <div id="c_message" class="main" :class="{'isShow':show}">
-    <main-header>
-      <span slot="h3">查看</span>
-    </main-header>
+  <div id="c_message">
     <section class="c_message_info">
       <div style="width: 50%;" class="fl">
         <p>
           <span>用户ID：</span>
-          <span></span>
+          <span>{{ seeMessager.psDeliverApplyId }}</span>
         </p>
         <p>
           <span>姓名：</span>
-          <span></span>
+          <span>{{ seeMessager.name }}</span>
         </p>
         <p>
           <span>性别：</span>
-          <span></span>
+          <span>{{ sexData }}</span>
         </p>
         <p>
           <span>学历：</span>
-          <span></span>
+          <span>{{ educationData }}</span>
         </p>
         <p>
           <span>联系方式：</span>
-          <span></span>
+          <span>{{ seeMessager.mobileno }}</span>
         </p>
         <p>
           <span>出生年月：</span>
-          <span></span>
+          <span>{{ seeMessager.birthday }}</span>
         </p>
         <p>
           <span>身份证号：</span>
-          <span></span>
+          <span>{{ seeMessager.identityCard }}</span>
         </p>
         <p>
-          <span>身份证正反面：</span><img src="" alt=""> <img src="" alt=""></p>
+          <span>身份证正反面：</span><img :src="PositiveImg"> <img :src="negativeImg"></p>
       </div>
 
       <p class="fr">
-        <span>健康证:</span> <img src="" alt=""></p>
+        <span>健康证:</span> <img :src="HealthImg"></p>
     </section>
   </div>
 </template>
 <script>
-import mainHeader from '../../components/header/main_header.vue'
+import * as api from '@/api/common'
 export default {
-  components: { mainHeader },
+  components: {},
   data() {
-    return {}
-  },
-  computed: {
-    show() {
-      return this.$store.state.show
+    return {
+      id: (() => {
+        return this.$route.query.ID
+      })(),
+      seeMessager: [], // 保存数据
+      PositiveImg: '', // 正面身份证
+      negativeImg: '', // 反面身份证
+      HealthImg: '', // 健康证
+      picUserImg: [], // 保存图片
+      sexData: '', // 性别过滤
+      educationData: '' // 学历过滤
     }
   },
-  methods: {
-    getCurrentDate() {
-      return new Date().toLocaleDateString()
-    }
+  created: function() {
+    api.getSeeDeliver(this.id).then(data => { // 初始化数据
+      this.seeMessager = data
+      switch (data.sex) {
+        case 1: this.sexData = '男'; break
+        case 0: this.sexData = '女'; 
+      }
+      switch (data.education) {
+        case 1: this.educationData = '本科'; break
+        case 2: this.educationData = '专科'; break
+        case 3: this.educationData = '中专'; break
+        case 4: this.educationData = '高中';
+      }
+      data.pictureList.forEach((item) => { // 初始化图片判断
+        switch (item.picType) {
+          case 0:
+            this.PositiveImg = item.picUrl
+            break
+          case 1:
+            this.negativeImg = item.picUrl
+            break
+          case 2:
+            this.HealthImg = item.picUrl
+        }
+      })
+    })
   }
 }
 </script>
@@ -74,19 +100,14 @@ export default {
         display: inline-block;
         width: 125px;
         height: 30px;
-        border: 1px solid #222;
         border-radius: 3px;
         line-height: 30px;
         vertical-align: middle;
-        &:nth-of-type(1) {
-          border: none;
-        }
       }
       img {
         display: block;
         width: 360px;
         height: 172px;
-        background-color: #aab0b9;
         margin-bottom: 5px;
       }
     }
