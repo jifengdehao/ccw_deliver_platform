@@ -41,102 +41,112 @@
       </Select>
       </Col>
     </Row>
-    <Row style="margin-top: 40px;" :gutter="100">
-      <Col span="12">
-      <Card class="H-card" dis-hover>
-        <h3>系统消息</h3>
-        <ul v-if="sysMsg.length>0">
-          <li v-for="(item,index) in sysMsg" :key="index">
-            {{item.createdAt}}&nbsp;&nbsp;{{item.title}}
-            <Icon type="chevron-right"></Icon>
-          </li>
-        </ul>
-      </Card>
-      </Col>
-      <Col span="12">
-      <Card class="H-card" dis-hover>
-        <h3>审核概览</h3>
-        <ul v-if="knight">
-          <li>
-            骑士身份信息审核
-            <span class="fr">{{knight.identityExam}}</span>
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            骑士首次培训审核
-            <span class="fr">{{knight.firstTrainExam}}</span>
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            骑士星级培训审核
-            <span class="fr">{{knight.starTrainExam}}</span>
-            <Icon type="chevron-right"></Icon>
-          </li>
-        </ul>
-      </Card>
-      </Col>
-    </Row>
-    <Row style="margin-top: 40px;" :gutter="100">
-      <Col span="12">
-      <Card class="H-card" dis-hover>
-        <h3>实时监控</h3>
-        <ul v-if="monitoring">
-          <li>
-            需要手工派单
-            <span class="H-card-border">{{monitoring.needExpressOrder}}</span>
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            新订单
-            <span class="H-card-border">{{monitoring.newOrder}}</span>
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            已送达订单
-            <span class="H-card-border">{{monitoring.reachedOrder}}</span>
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            异常订单
-            <span class="H-card-border">{{monitoring.needExpressOrder}}</span>
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            骑手上班/休息
-            <span class="H-card-border">{{monitoring.deliverOnlineAndRest}}</span>
-            <Icon type="chevron-right"></Icon>
-          </li>
-        </ul>
-      </Card>
-      </Col>
-      <Col span="12">
-      <Card class="H-card" dis-hover>
-        <h3>数据看板</h3>
-        <div class="H-card-data clearfix">
-          <div class="item border-right border-bottom">
-            <p>订单成长量&nbsp;&nbsp;&nbsp;{{data.orderCount}}</p>
-            <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.orderCountRate}}&nbsp;&nbsp;&nbsp;<Icon :type="this.data.orderCountRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'" v-if="this.data.orderCountRateImage"></Icon>
-            </p>
+    <div v-show="indexData">
+      <Row style="margin-top: 40px;" :gutter="100">
+        <Col span="12">
+        <Card class="H-card" dis-hover>
+          <h3>系统消息</h3>
+          <ul v-if="sysMsg.length>0">
+            <li v-for="(item,index) in sysMsg" :key="index">
+              {{item.createdAt}}&nbsp;&nbsp;{{item.title}}
+              <Icon type="chevron-right"></Icon>
+            </li>
+          </ul>
+        </Card>
+        </Col>
+        <Col span="12">
+        <Card class="H-card" dis-hover>
+          <h3>审核概览</h3>
+          <ul v-if="knight">
+            <li>
+              骑士身份信息审核
+              <span class="fr">{{knight.identityExam}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+            <li>
+              骑士首次培训审核
+              <span class="fr">{{knight.firstTrainExam}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+            <li>
+              骑士星级培训审核
+              <span class="fr">{{knight.starTrainExam}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+          </ul>
+        </Card>
+        </Col>
+      </Row>
+      <Row style="margin-top: 40px;" :gutter="100">
+        <Col span="12">
+        <Card class="H-card" dis-hover>
+          <h3>实时监控</h3>
+          <ul v-if="monitoring">
+            <li>
+              需要手工派单
+              <span class="H-card-border">{{monitoring.needExpressOrder}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+            <li>
+              新订单
+              <span class="H-card-border">{{monitoring.newOrder}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+            <li>
+              已送达订单
+              <span class="H-card-border">{{monitoring.reachedOrder}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+            <li>
+              异常订单
+              <span class="H-card-border">{{monitoring.needExpressOrder}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+            <li>
+              骑手上班/休息
+              <span class="H-card-border">{{monitoring.deliverOnlineAndRest}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+          </ul>
+        </Card>
+        </Col>
+        <Col span="12">
+        <Card class="H-card" dis-hover>
+          <h3>数据看板</h3>
+          <div class="H-card-data clearfix">
+            <div class="item border-right border-bottom">
+              <p>订单成长量&nbsp;&nbsp;&nbsp;{{data.orderCount}}</p>
+              <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.orderCountRate}}&nbsp;&nbsp;&nbsp;<Icon
+                :type="this.data.orderCountRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'"
+                v-if="this.data.orderCountRateImage"></Icon>
+              </p>
+            </div>
+            <div class="item border-bottom">
+              <p>订单超时率&nbsp;&nbsp;&nbsp;{{data.orderOuttime}}</p>
+              <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.orderOuttimeRate}}&nbsp;&nbsp;&nbsp;<Icon
+                :type="this.data.orderOuttimeRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'"
+                v-if="this.data.orderOuttimeRateImage"></Icon>
+              </p>
+            </div>
+            <div class="item border-right">
+              <p>异常订单率&nbsp;&nbsp;&nbsp;{{data.orderAbnormal}}</p>
+              <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.orderAbnormalRate}}&nbsp;&nbsp;&nbsp;<Icon
+                :type="this.data.orderAbnormalRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'"
+                v-if="this.data.orderAbnormalRateImage"></Icon>
+              </p>
+            </div>
+            <div class="item">
+              <p>骑士人手&nbsp;&nbsp;&nbsp;{{data.deliverorder}}</p>
+              <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.deliverOrderRate}}&nbsp;&nbsp;&nbsp;<Icon
+                :type="this.data.deliverOrderRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'"
+                v-if="this.data.deliverOrderRateImage"></Icon>
+              </p>
+            </div>
           </div>
-          <div class="item border-bottom">
-            <p>订单超时率&nbsp;&nbsp;&nbsp;{{data.orderOuttime}}</p>
-            <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.orderOuttimeRate}}&nbsp;&nbsp;&nbsp;<Icon :type="this.data.orderOuttimeRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'" v-if="this.data.orderOuttimeRateImage"></Icon>
-            </p>
-          </div>
-          <div class="item border-right">
-            <p>异常订单率&nbsp;&nbsp;&nbsp;{{data.orderAbnormal}}</p>
-            <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.orderAbnormalRate}}&nbsp;&nbsp;&nbsp;<Icon :type="this.data.orderAbnormalRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'" v-if="this.data.orderAbnormalRateImage"></Icon>
-            </p>
-          </div>
-          <div class="item">
-            <p>骑士人手&nbsp;&nbsp;&nbsp;{{data.deliverorder}}</p>
-            <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.deliverOrderRate}}&nbsp;&nbsp;&nbsp;<Icon :type="this.data.deliverOrderRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'" v-if="this.data.deliverOrderRateImage"></Icon>
-            </p>
-          </div>
-        </div>
-      </Card>
-      </Col>
-    </Row>
+        </Card>
+        </Col>
+      </Row>
+    </div>
   </div>
 </template>
 <script>
@@ -146,6 +156,7 @@
   export default {
     data() {
       return {
+        indexData: false,// 首页展示数据
         statistics: {},// 首页统计信息
         sysMsg: [], // 系统消息
         knight: {}, // 骑士审核
@@ -224,6 +235,7 @@
         api.getIndeData(params).then((res) => {
           console.log(res)
           if (res) {
+            this.indexData = true
             this.sysMsg = (res.custSysMsgList).map((item, index) => {
               item.createdAt = time.formatDateTime(item.createdAt)
               return item
