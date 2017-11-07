@@ -11,8 +11,8 @@
     <div class="header">
       <h2>骑士管理</h2>
       <div class="header-search">
-        <Input placeholder="请输入..." style="width: 200px"></Input>
-        <Icon type="ios-search icos"></Icon>
+        <!-- <Input placeholder="请输入..." style="width: 200px"></Input>
+        <Icon type="ios-search icos" @click="onSearch"></Icon> -->
       </div>
     </div>
     <!-- 内容部分 -->
@@ -40,112 +40,131 @@
         </div>
         <div class="select">
           <span>菜市场</span>
-          <Select style="width:200px" :disabled="showMarket">
+          <Select style="width:200px" :disabled="showMarket" @on-change="changeMarkData">
               <Option v-for="market in marketManager" :key="market.id" :value="market.marketId">{{ market.marketName }}</Option>
           </Select>
         </div>
       </div>
       <div class="content-main">
-        <div class="main-left">
-          <span class="fz">系统消息</span>
-          <div class="leftcosapn">
-            <p>2018 xxxx市场xxxxc菜市场xxxx暂时暂停配送</p>
-            <Icon type="ios-arrow-right fr col"></Icon>
-          </div>
-        </div>
-        <div class="main-right fr">
-          <span class="fz">审核概览</span>
-          <div class="leftcosapn">
-            <p>2018 xxxx市场xxxxc菜市场xxxx暂时暂停配送</p>
-            <span>未读消息889</span>
-            <Icon type="ios-arrow-right fr col"></Icon>
-          </div>
+        <div v-if="custSysMsgList.custSysMsgList && custSysMsgList.custSysMsgList.length > 0">
+          <h2>系统消息</h2>
+          <ul>
+            <li v-for="list in custSysMsgList.custSysMsgList" :key="list.id">
+              <span>{{ list.title }}</span>
+              <Icon type="ios-arrow-right fr icon"></Icon>
+            </li>
+          </ul>
         </div>
 
-        <div class="main-left mr40">
-          <span class="fz">实时监控</span>
-          <div class="leftcosapn real-time">
-            <p>需要手工派单</p>
-            <span>50</span>
-            <Icon type="ios-arrow-right fr col"></Icon>
-          </div>
-          <div class="leftcosapn real-time">
-            <p>新订单</p>
-            <span>50</span>
-            <Icon type="ios-arrow-right fr col"></Icon>
-          </div>
-          <div class="leftcosapn real-time">
-            <p>已传达订单</p>
-            <span>50</span>
-            <Icon type="ios-arrow-right fr col"></Icon>
-          </div>
-          <div class="leftcosapn real-time">
-            <p>异常订单</p>
-            <span>50</span>
-            <Icon type="ios-arrow-right fr col"></Icon>
-          </div>
-          <div class="leftcosapn real-time">
-            <p>骑手上班/休息</p>
-            <span>50/6</span>
-            <Icon type="ios-arrow-right fr col"></Icon>
-          </div>
+        <div class="fr" v-if="custSysMsgList.depliverData && custSysMsgList.depliverData != null">
+          <h2>审核概览</h2>
+          <ul>
+            <li>
+              <span>骑手身份信息审核</span>
+              <span>{{ custSysMsgList.depliverData.identityExam }}</span>
+              <Icon type="ios-arrow-right fr icon"></Icon>
+            </li>
+            <li>
+              <span>骑手首次培训审核</span>
+              <span>{{ custSysMsgList.depliverData.firstTrainExam }}</span>
+              <Icon type="ios-arrow-right fr icon"></Icon>
+            </li>
+            <li>
+              <span>骑手星级培训审核</span>
+              <span>{{ custSysMsgList.depliverData.starTrainExam }}</span>
+              <Icon type="ios-arrow-right fr icon"></Icon>
+            </li>
+          </ul>
         </div>
-        <div class="main-right fr mr40" style="position: relative;">
-          <div class="br"></div>
-          <span class="fz">数据看板</span>
-          <div class="top pr">
-            <div class="order-up pa">
-              <p>
-                <span>订单成长量</span>
-                <span class="mr20">13%</span>
-                <!-- <Icon type="ios-arrow-thin-up"></Icon> -->
-                <Icon type="ios-arrow-thin-down"></Icon>
-              </p>
-              <p>
-                <span class="fz mr20">8765</span>
-                <span class="mr14">比上周同期</span>
-              </p>
-            </div>
-            <div class="order-overtime par">
-              <p>
-                <span>订单超时率</span>
-                <span class="mr20">13%</span>
-                <!-- <Icon type="ios-arrow-thin-up"></Icon> -->
-                <Icon type="ios-arrow-thin-down"></Icon>
-              </p>
-              <p>
-                <span class="fz mr20">1%</span>
-                <span class="mr14">比上周同期</span>
-              </p>
-            </div>
-          </div>
-          
-          <div class="bottom pr">
-            <div class="abnormal-order pa">
-              <p>
-                <span>异常订单率</span>
-                <span class="mr20">11%</span>
-                <!-- <Icon type="ios-arrow-thin-up"></Icon> -->
-                <Icon type="ios-arrow-thin-down"></Icon>
-              </p>
-              <p>
-                <span class="fz mr20">1%</span>
-                <span class="mr14">比上周同期</span>
-              </p>
-            </div>
-            <div class="rider-effect par">
-              <p>
-                <span>骑手人效</span>
-                <span class="mr20">16%</span>
-                <!-- <Icon type="ios-arrow-thin-up"></Icon> -->
-                <Icon type="ios-arrow-thin-down"></Icon>
-              </p>
-              <p>
-                <span class="fz mr20">32%</span>
-                <span class="mr14">比上周同期</span>
-              </p>
-            </div>
-          </div>
+
+        <div v-if="custSysMsgList.monitor">
+          <h2>实时监控</h2>
+          <ul>
+            <li>
+              <span>需要手工派单</span>
+              <span class="spanB">{{ custSysMsgList.monitor.needExpressOrder }}</span>
+              <Icon type="ios-arrow-right fr icon"></Icon>
+            </li>
+            <li>
+              <span>新订单</span>
+              <span class="spanB">{{ custSysMsgList.monitor.newOrder }}</span>
+              <Icon type="ios-arrow-right fr icon"></Icon>
+            </li>
+            <li>
+              <span>已传送订单</span>
+              <span class="spanB">{{ custSysMsgList.monitor.reachedOrder }}</span>
+              <Icon type="ios-arrow-right fr icon"></Icon>
+            </li>
+            <li>
+              <span>异常订单</span>
+              <span class="spanB">{{ custSysMsgList.monitor.exceptionOrder }}</span>
+              <Icon type="ios-arrow-right fr icon"></Icon>
+            </li>
+            <li>
+              <span>骑手上班/x休息</span>
+              <span  class="spanB">{{ custSysMsgList.monitor.deliverOnlineAndRest }}</span>
+              <Icon type="ios-arrow-right fr icon"></Icon>
+            </li>
+          </ul>
+        </div>
+
+        <div class="fr data-kanban" v-if="custSysMsgList.orderDataBlack">
+          <h2>数据看板</h2>
+          <ul>
+            <li>
+              <div>
+                <p>
+                  <span>订单成长量</span>
+                  <span>{{ custSysMsgList.orderDataBlack.orderCountRate }}</span>
+                  <Icon type="ios-arrow-thin-up color color1"></Icon>
+                </p>
+                <p>
+                  <span>{{ custSysMsgList.orderDataBlack.orderCount }}</span>
+                  <span>比上周同期</span>
+                </p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <p>
+                  <span>订单超时率</span>
+                  <span>{{ custSysMsgList.orderDataBlack.orderOuttimeRate }}</span>
+                  <Icon type="ios-arrow-thin-up color color1"></Icon>
+                </p>
+                <p>
+                  <span>{{ custSysMsgList.orderDataBlack.orderOuttime }}</span>
+                  <span>比上周同期</span>
+                </p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <p>
+                  <span>异常订单率</span>
+                  <span>{{ custSysMsgList.orderDataBlack.orderAbnormalRate }}</span>
+                  <Icon type="ios-arrow-thin-up color color1"></Icon>
+                </p>
+                <p>
+                  <span>{{ custSysMsgList.orderDataBlack.orderAbnormal }}</span>
+                  <span>比上周同期</span>
+                </p>
+              </div>
+            </li>
+            <li>
+             <div>
+                <p>
+                  <span>骑手人效</span>
+                  <span>{{ custSysMsgList.orderDataBlack.deliverOrderRate }}</span>
+                  <!-- <Icon type="ios-arrow-thin-up"></Icon> -->
+                  <Icon type="ios-arrow-thin-down color"></Icon>
+                </p>
+                <p>
+                  <span>{{ custSysMsgList.orderDataBlack.deliverorder }}</span>
+                  <span>比上周同期</span>
+                </p>
+             </div>
+            </li>
+          </ul>
         </div>
 
       </div>
@@ -160,6 +179,7 @@ export default {
   components: {},
   data() {
     return {
+      shouMain: false, // 隐藏主体
       deployManager: [], // 省区下拉框数据
       deployIndex: '', // 获取省区ID
       showCity: true, // 可否点击市区下拉框
@@ -167,7 +187,9 @@ export default {
       showArea: true, // 可否点击区域下拉框
       areaManager: [], // 区域下拉框数据
       showMarket: true, // 可否点击菜市场下拉框
-      marketManager: [] // 菜市场下拉框数据
+      marketManager: [], // 菜市场下拉框数据
+      userId: '', // 获取菜市场ID
+      custSysMsgList: [], // 获取系统消息数据
     }
   },
   created: function() {
@@ -183,27 +205,47 @@ export default {
     // 获取市区下拉框数据
     changeDate(value) {
       this.cityManager = ''
-      api.getProvinceIndex(value).then(data => {
-        this.cityManager = data
-      })
+      if (value && value != '') {
+         api.getProvinceIndex(value).then(data => {
+            this.cityManager = data
+          })
+      }
       this.showCity = false
     },
     // 获取区域下拉框数据
     changeCityData(value) {
       this.areaManager = ''
-      api.getCityManager(value).then(data => {
-        this.areaManager = data
-      })
+      if (value && value != '') {
+        api.getCityManager(value).then(data => {
+          this.areaManager = data
+        })
+      }
       this.showArea = false
     },
     // 获取菜市场下拉框数据
     changeAreaData(value) {
       this.marketManager = ''
-      api.getAreaMarket(value).then(data => {
-        this.marketManager = data
-      })
+      if (value && value != '') {
+        api.getAreaMarket(value).then(data => {
+          this.marketManager = data
+        })
+      }
         this.showMarket = false
-    }
+    },
+    // 获取菜市场下拉框数据
+    changeMarkData(value) {
+      this.userId = {
+        marketId: value
+      }
+     if (this.userId && this.userId != null) {
+        api.getUserIndex(this.userId).then(res => {
+          this.custSysMsgList = res // 系统消息
+          console.log(res)
+        })
+     } else {
+       this.custSysMsgList = []
+     }
+    },
   }
 }
 </script>
@@ -258,144 +300,100 @@ export default {
   margin-right: 6px;
 }
 
+/* 主体部分 */
 .content-main {
-  margin-top: 40px;
-}
-
-.main-left,
-.main-right {
-  width: 48%;
-  float: left;
-  padding: 20px;
-  border: 1px solid #ccc;
-}
-
-.main-left span,
-.main-right span {
-  margin-bottom: 10px;
-  display: inline-block;
-}
-
-.main-left .leftcosapn,
-.main-right .leftcosapn {
-  position: relative;
-  height: 40px;
-  line-height: 40px;
-  border-bottom: 1px solid #dddee1;
-}
-
-.main-left .leftcosapn p,
-.main-right .leftcosapn p {
-  display: inline-block;
-  font-size: 16px;
-  margin-left: 20px;
-}
-
-.main-right .leftcosapn span {
-  width: 100px;
-  height: 40px;
-  position: absolute;
-  top: 0;
-  right: 10%;
-  margin-right: 30px;
-  display: inline-block;
-}
-
-.main-left .real-time {
-  position: relative;
-  border: 0px;
-  line-height: 36px;
-}
-
-.main-left .real-time span {
-  width: 200px;
-  height: 34px;
-  position: absolute;
-  top: 0;
-  left: 40%;
-  margin-left: 20px;
-  text-align: center;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.col {
-  margin-right: 10px;
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 40px;
-  cursor: pointer;
-}
-
-.mr40 {
+  width: 100%;
   margin-top: 40px;
 }
 
 .fr {
-  float: right;
+  float: right !important;
 }
 
-.top,
-.bottom {
-  width: 100%;
-  height: 100px;
+.icon {
+  font-size: 22px;
+}
+.content-main >  div {
+  width: 49%;
+  float: left;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+}
+
+.spanB {
+  width: 200px;
+  height: 28px;
+  display: inline-block;
   text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.content-main > div h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.content-main  > div ul > li {
+  height: 31px;
+  line-height: 33px;
+}
+
+.content-main > div ul > li > span:nth-child(1){
+  margin-left: 10px;
+  width: 100px;
+  display: inline-block;
+}
+
+.content-main > div ul > li > span:nth-child(2) {
+  margin-left: 274px;
+} 
+
+.content-main > div.data-kanban {
+  padding-bottom: 0;
+}
+
+.content-main > div.data-kanban ul > li{
+  float: left;
+  width: 50%;
+  height: 105px;
+  text-align: center; 
+  display: inline-block;
+}
+.content-main > div.data-kanban ul > li:nth-child(1),
+.content-main > div.data-kanban ul > li:nth-child(2) {
   border-bottom: 1px solid #ccc;
 }
-.bottom {
-  border-bottom: 0;
-}
-.top .order-up,
-.bottom .abnormal-order {
-  width: 50%;
-  height: 100%;
-  display: inline-block;
-  float: left;
-}
 
-.top .order-overtime,
-.bottom .rider-effect {
-  width: 50%;
-  height: 100%;
-  float: right;
-  display: inline-block;
-}
-span {
-  font-size: 12px !important;
-  font-weight: 400 !important;
-}
-
-.mr14 {
-  margin-left: 14px;
-}
-
-.mr20 {
-  margin-left: 20px;
-}
-
-.fz {
-  font-size: 18px !important;
-  font-weight: 600 !important;
-}
-
-.pr {
-  position: relative;
-}
-.pa {
-  position: absolute;
-  top: 30px;
-  left: 0;
-}
-.par {
-  position: absolute;
-  right: 0;
-  top: 30px;
-}
-.br {
-  height: 200px;
-  position: absolute;
-  top: 55px;
-  left: 410px;
+.content-main > div.data-kanban ul > li:nth-child(1), 
+.content-main > div.data-kanban ul > li:nth-child(3) {
   border-right: 1px solid #ccc;
+}
+
+.content-main > div.data-kanban ul > li > div {
+  padding-top: 20px;
+  box-sizing: border-box;
+}
+
+.content-main > div.data-kanban ul > li > div > p:nth-child(1) > span:nth-child(1) {
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.content-main > div.data-kanban ul > li > div > p:nth-child(2) > span:nth-child(1) {
+  font-size: 22px;
+  margin-right: 20px;
+  margin-left: 46px;
+}
+
+.color {
+  font-size: 16px;
+  color: green;
+}
+
+.color1 {
+  color: red !important;
 }
 </style>
