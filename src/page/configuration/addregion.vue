@@ -1,3 +1,10 @@
+/*
+ * @Author: huShangJun 
+ * @Date: 2017-11-08 14:04:57 
+ * DeveloperMailbox:   hsjcc@ccw163.com 
+ * FunctionPoint: 增加区域
+ */
+
 <template>
   <div id="addregion" >
     <section class="addregionHeader">
@@ -52,6 +59,10 @@ export default {
           center: [113.4, 39.91], //地图中心点
           zoom: 10 //地图显示的缩放级别
         })
+      AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
+        map.addControl(new AMap.ToolBar())
+        map.addControl(new AMap.Scale())
+      })
       // 获取到上级行政区域地图
       //加载行政区划插件
       var adcode = this.adcode.toString()
@@ -88,13 +99,13 @@ export default {
         })
       })
       // 加载鼠标工具
-      AMap.service('AMap.MouseTool',(response => {
+      AMap.service('AMap.MouseTool', response => {
         var mouseTool = new AMap.MouseTool(map) //在地图中添加MouseTool插件
         var drawPolygon = mouseTool.polygon() //用鼠标工具画多边形
-        AMap.event.addListener(mouseTool, 'draw', (e => {
+        AMap.event.addListener(mouseTool, 'draw', e => {
           this.quPath = e.obj.getPath()
-        }))
-      }))
+        })
+      })
     },
     // 添加
     addQu() {
@@ -104,7 +115,7 @@ export default {
         areaCoordinate: this.path
       }
       api.addQu(params).then(response => {
-        this.$Message.success('添加成功');
+        this.$Message.success('添加成功')
       })
     }
   },
@@ -118,9 +129,9 @@ export default {
     provinceName() {
       return this.$route.query.provinceName
     },
-    path(){
+    path() {
       return this.quPath.map(item => {
-         return [item.lng,item.lat]
+        return [item.lng, item.lat]
       })
     }
   }

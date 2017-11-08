@@ -1,3 +1,10 @@
+/*
+ * @Author: huShangJun 
+ * @Date: 2017-11-08 14:04:00 
+ * DeveloperMailbox:   hsjcc@ccw163.com 
+ * FunctionPoint: 查看菜市场
+ */
+
 <template>
   <div id="marketInfo" class="clearfix">
     <section class="addmarketHeader">
@@ -5,96 +12,115 @@
     </section>
     <section class="addmarket_breadcrumb">
       <Breadcrumb separator=">">
-        <BreadcrumbItem>广东省</BreadcrumbItem>
-        <BreadcrumbItem>广州市</BreadcrumbItem>
-        <BreadcrumbItem href="/addregion">区域1</BreadcrumbItem>
-        <BreadcrumbItem>菜市场</BreadcrumbItem>
+        <BreadcrumbItem>{{provinceName}}</BreadcrumbItem>
+        <BreadcrumbItem>{{cityName}}</BreadcrumbItem>
+        <BreadcrumbItem>{{areaName}}</BreadcrumbItem>
+        <BreadcrumbItem>{{marketName}}</BreadcrumbItem>
       </Breadcrumb>
     </section>
+    <!-- 地图内容 -->
     <section class="addmarket_map" id="container">
-      <h1>地图</h1>
+      
     </section>
+    <!-- 菜市场信息 -->
     <section class="addmarket_marketinfo">
       <h2>菜市场信息</h2>
-      <Form :model="formItem" label-position="left" inline>
+      <Form v-model="marketData"  inline>
         <FormItem >
             <span>菜市场名称：</span>
-            <Input v-model="formItem.input1" style="width:160px"></Input>
+            <Input v-model="marketData.marketName"  style="width:160px"></Input>
             <span>菜市场电话：</span>
-            <Input v-model="formItem.input2" style="width:160px"></Input>
-            <span>经纬度：</span>            
-            <Button style="width:160px">设置</Button> <br>
-            <span>配送区域：</span>
-            <Button style="width:160px">设置</Button>
+            <Input v-model="marketData.mobileno"  style="width:160px"></Input>
             <span>配送时间段：</span>
-            <TimePicker type="timerange" placement="bottom-end" placeholder="选择时间" style="width: 160px"></TimePicker>
-            <span>绑定小区：</span>
-            <Input v-model="formItem.input2" style="width:160px"></Input> <br>
+            <TimePicker v-model="marketData.beginTime"  type="timerange" placement="bottom-end" placeholder="选择时间" style="width: 160px"></TimePicker>
+            <br>
+            <span>绑定小区：</span>            
+            <Input v-model="marketData.districtId" style="width:160px"></Input> 
              <span>自提点：</span>
-            <Input v-model="formItem.input1" style="width:160px"></Input>
+            <Input v-model="marketData.selfPickAddress"  style="width:160px"></Input>
             <span>菜市场地址：</span>
-            <Input v-model="formItem.input2" style="width:160px"></Input>
+            <Input v-model="marketData.address" style="width:160px"></Input>
         </FormItem>
     </Form>
     </section>
     <section class="addmarket_button">
       <Button type="ghost" size="large" style="width: 150px">取消</Button>
-      <Button type="ghost" size="large" style="width: 150px">保存</Button>
+      <Button type="ghost" size="large" style="width: 150px" @click="modifyMarket">保存</Button>
     </section>
   </div>
 </template>
 <script>
-// import AMap from 'AMap'
-// var map
+import * as api from '@/api/common.js'
+import AMap from 'AMap'
 export default {
   components: {},
   data() {
     return {
-      formItem: {}
+      marketData: {},
+      marketName: '',
+      current: 0,
+      marketPath: []
     }
   },
-  computed: {},
-  mounted () {
-    //   this.initMap()
-    //   this.showcitymap()
+  computed: {
+    marketId() {
+      return this.$route.query.marketId
+    },
+    areaName() {
+      return this.$route.query.areaName
+    },
+    cityName() {
+      return this.$route.query.cityName
+    },
+    provinceName() {
+      return this.$route.query.provinceName
+    }
+  },
+  created() {
+    this.getQuInfo()
   },
   methods: {
-    // initMap: function() {
-    //   map = new AMap.Map('container', {
-    //     center: [116.397428, 39.90923],
-    //     resizeEnable: true,
-    //     zoom: 12
-    //   })
-    //   AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
-    //     map.addControl(new AMap.ToolBar())
-    //     map.addControl(new AMap.Scale())
-    //   })
-    // },
-    // showcitymap() {
-    //   AMapUI.loadUI(['geo/DistrictExplorer'], function(DistrictExplorer) {
-    //     //创建一个实例
-    //     var districtExplorer = new DistrictExplorer({
-    //       map: map
-    //     })
-    //     var adcode = 440100
-    //     districtExplorer.loadAreaNode(adcode, function(error, areaNode) {
-    //       //更新地图视野
-    //       map.setBounds(areaNode.getBounds(), null, null, true)
-    //       //清除已有的绘制内容
-    //       districtExplorer.clearFeaturePolygons()
-    //       //绘制父区域
-    //       districtExplorer.renderParentFeature(areaNode, {
-    //         cursor: 'default',
-    //         bubble: true,
-    //         strokeColor: 'black', //线颜色
-    //         strokeOpacity: 1, //线透明度
-    //         strokeWeight: 1, //线宽
-    //         fillColor: null, //填充色
-    //         fillOpacity: 0.35 //填充透明度
-    //       })
-    //     })
-    //   })
-    // }
+    getQuInfo() {
+      api.getMarketInfo(this.marketId).then(response => {
+        this.marketData = response
+        this.marketName = response.marketName
+        this.init()
+      })
+    },
+    init() {
+      var map = new AMap.Map('container', {
+        resizeEnable: true,
+        zoom: 12
+      })
+      AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
+        map.addControl(new AMap.ToolBar())
+        map.addControl(new AMap.Scale())
+      })
+      var editor = {}
+      editor._polygon = (() => {
+        var arr = this.marketData.areaCoordinate
+        return new AMap.Polygon({
+          map: map,
+          path: JSON.parse(arr),
+          strokeColor: '#0000ff',
+          strokeOpacity: 1,
+          strokeWeight: 1,
+          fillColor: '#f5deb3',
+          fillOpacity: 0.5
+        })
+      })()
+      map.setFitView() //地图自适应
+    },
+    // 修改菜市场信息
+    modifyMarket() {
+      let params = {
+        marketId: this.marketId,
+        marketinfo: this.marketData
+      }
+      api.addMarket(params).then(response => {
+        this.$Message.info('修改菜市场成功')
+      })
+    }
   }
 }
 </script>
@@ -126,7 +152,10 @@ export default {
   }
   .addmarket_marketinfo {
     margin: 0 auto;
-    h2{
+    form {
+      text-align: center;
+    }
+    h2 {
       text-align: center;
       line-height: 40px;
     }
@@ -140,8 +169,8 @@ export default {
   }
   .addmarket_button {
     width: 100%;
-    position: absolute;
-    bottom: 30px;
+    // position: absolute;
+    // bottom: 30px;
     text-align: center;
   }
 }

@@ -45,9 +45,9 @@
         </div>
         <ul class="configuration_quyu_content" v-for="(item,index) in qus" :key="index">
           <li>
-            <span @click="showMarket(item.areaId)"> {{item.areaName}}</span>
+            <span @click="showMarket(item.areaId,item.areaName)"> {{item.areaName}}</span>
             <Button type="ghost" size="small" class="fr" style="color: red;border: none;" @click="delQu(index)">删除</Button>
-            <Button type="info" size="small" class="fr" style="border: none;" @click="seeThisQu(item.areaId)">查看</Button>            
+            <Button type="info" size="small" class="fr" style="border: none;" @click="seeThisQu(item.areaId,item.areaName)">查看</Button>            
           </li>
         </ul>
       </div>
@@ -61,7 +61,7 @@
           <li>
             <span> {{item.marketName}}</span>
             <Button type="ghost" size="small" class="fr" style="color: red;border: none" @click="delMarket(index)">删除</Button>
-            <Button type="info" size="small" class="fr" style="border: none" @click="seeThisMarket()">查看</Button>
+            <Button type="info" size="small" class="fr" style="border: none" @click="seeThisMarket(item.marketId)">查看</Button>
           </li>
         </ul>
       </div>
@@ -79,7 +79,9 @@ export default {
       showMarkets: false,
       provinceName:'',
       cityName: '',
+      areaName: '',
       cityId: '',
+      areaId: '',
       hide: '',
       shengs: [],
       citys: [],
@@ -98,7 +100,7 @@ export default {
       this.$router.push('/addregion?provinceName=' + this.provinceName + '&cityName=' + this.cityName + '&cityId=' + this.cityId)
     },
     addmarket() {
-      this.$router.push('/addmarket')
+      this.$router.push('/addmarket?provinceName=' + this.provinceName + '&cityName=' + this.cityName + '&areaId=' + this.areaId)
     },
     // 删除
     delQu(index) {
@@ -125,11 +127,11 @@ export default {
       this.$router.push('/cityInfo?cityName=' + cityName + '&provinceName=' + this.provinceName + '&cityId=' + cityId)      
     },
     seeThisQu(areaId) {
-      console.log(areaId)
+      this.areaId = areaId
       this.$router.push('/quInfo?areaId=' + areaId + '&provinceName=' + this.provinceName + '&cityName=' + this.cityName)
     },
-    seeThisMarket() {
-      this.$router.push('/marketInfo')
+    seeThisMarket(marketId) {
+      this.$router.push('/marketInfo?marketId=' + marketId + '&provinceName=' + this.provinceName + '&cityName=' + this.cityName + '&areaName=' + this.areaName)
     },
     // 获取下级列表
     showCity(provinceId,provinceName) {
@@ -147,7 +149,9 @@ export default {
       })
       this.showQus = true
     },
-    showMarket(areaId) {
+    showMarket(areaId,areaName) {
+      this.areaId = areaId
+      this.areaName = areaName
       api.getMarkets(areaId).then(response => {
         this.markets = response
       })

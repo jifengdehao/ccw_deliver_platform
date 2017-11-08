@@ -63,6 +63,10 @@ export default {
           center: [113.4, 39.91], //地图中心点
           zoom: 10 //地图显示的缩放级别
         })
+      AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
+        map.addControl(new AMap.ToolBar())
+        map.addControl(new AMap.Scale())
+      })
       //加载行政区划插件
       var adcode = this.adcode.toString()
       AMap.service('AMap.DistrictSearch', function() {

@@ -23,15 +23,14 @@
             </div>
         </section>
         <section class="quInfo_button">
-            <Button size="large" style="width: 200px;" @click="test">取消</Button>
-            <Button size="large" style="width: 200px;">确定</Button>
+            <Button size="large" style="width: 200px;" >取消</Button>
+            <Button size="large" style="width: 200px;" @click="test">确定</Button>
         </section>
     </div>
 </template>
 <script>
 import * as api from '@/api/common.js'
 import AMap from 'AMap'
-var map
 export default {
   components: {},
   name: 'component_name',
@@ -50,49 +49,47 @@ export default {
     provinceName() {
       return this.$route.query.provinceName
     }
-  },
-  created() {
-       api.getQuInfo(this.areaId).then(response => {
-      this.areaData = response
-    })
-  },
-  mounted() {
-      let _this = this;
-    setTimeout(function() {
-        _this.initMap()
-    }, 100)
     
   },
+  created() {
+    this.getQuInfo()
+  },
+  beforeUpdate() {
+    this.init()
+  },
   methods: {
-    initMap(areaData) {
-        console.log(this.areaData)
-      map = new AMap.Map('container', {
-        center: [116.397428, 39.90923],
+    getQuInfo() {
+      api.getQuInfo(this.areaId).then(response => {
+        this.areaData = response
+      })
+    },
+    init: function() {
+      var map = new AMap.Map('container', {
         resizeEnable: true,
         zoom: 12
       })
-      var bounds = areaData
-      AMap.service('AMap.Polygon', function() {
-        var polygons = []
-        if (bounds) {
-          for (var i = 0, l = bounds.length; i < l; i++) {
-            //生成行政区划polygon
-            var polygon = new AMap.Polygon({
-              map: map,
-              strokeWeight: 1,
-              path: bounds[i],
-              fillOpacity: 0.7,
-              fillColor: '#CCF3FF',
-              strokeColor: '#CC66CC'
-            })
-            polygons.push(polygon)
-          }
-          map.setFitView() //地图自适应
-        }
+       AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
+        map.addControl(new AMap.ToolBar())
+        map.addControl(new AMap.Scale())
       })
+      var editor = {}
+      editor._polygon = (() => {
+        var arr = JSON.parse(this.areaData.areaCoordinate)
+        return new AMap.Polygon({
+          map: map,
+          path: arr,
+          strokeColor: '#0000ff',
+          strokeOpacity: 1,
+          strokeWeight: 1,
+          fillColor: '#f5deb3',
+          fillOpacity: 0.5
+        })
+       
+      })() 
+      map.setFitView() //地图自适应
     },
     test() {
-      
+      console.log(this.areaData.areaCoordinate)
     }
   }
 }
@@ -126,8 +123,6 @@ export default {
   .quInfo_button {
     text-align: center;
     width: 100%;
-    position: absolute;
-    bottom: 30px;
   }
 }
 </style>

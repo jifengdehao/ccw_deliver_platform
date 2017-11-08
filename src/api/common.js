@@ -75,8 +75,8 @@ export const addQu = ( params) => {
   return ax.p(`/deployManager/area`, params)
 }
 // 修改或新增Market
-export const addMarket = (marketId, params) => {
-  return ax.p(`/deployManager/market/${marketId}`, params)
+export const addMarket = (params) => {
+  return ax.p(`/deployManager/market`, params)
 }
 // 配置设置  end   *******************************************************
 /**
