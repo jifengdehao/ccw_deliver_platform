@@ -1,3 +1,10 @@
+/*
+ * @Author: ZengFanlu 
+ * @Date: 2017-11-06 15:09:27 
+ * DeveloperMailbox:   zengfanlu@ccw163.com 
+ * FunctionPoint: 骑士管理 未提交资料 
+ */
+
 <template>
   <div>
      <!-- 头部 -->
@@ -20,6 +27,8 @@
         <Button type="primary" long @click="getExportData()">确定</Button>
       </div>
     </Modal>
+
+    <div v-if="DeliverManager && DeliverManager.length > 0" class="page"><Page :total="total" :current="pageNumber" @on-change="changePage"></Page></div>
   </div>
 </template>
 <script>
@@ -78,6 +87,7 @@ export default {
       exportModal: false, // 模态框显影
       startTime: '', // 获取导出开始时间
       endTime: '', // 获取导出结束时间
+      total: '', // 总页数
     }
   },
   created: function () {
@@ -92,6 +102,7 @@ export default {
       }
       api.getDeliverManager(params).then(data => {
          this.DeliverManager = data.records
+         this.total = data.total
       })
     },
     // 导出数据
@@ -103,6 +114,11 @@ export default {
       api.exportUnverified(parmas).then(data => {
         console.log(data, 'data')
       })
+    },
+    // 点击分页发生变化
+    changePage(page) {
+      this.params.pageNumber = page
+      this.getFinanceList()
     }
   }
 }
@@ -130,5 +146,10 @@ export default {
 .mtb10 {
   text-align: center;
   margin: 7px 0;
+}
+
+.page {
+  margin-top: 20px;
+  float: right;
 }
 </style>
