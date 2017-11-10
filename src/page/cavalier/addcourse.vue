@@ -1,5 +1,5 @@
 <template>
-    <div id="addcourse" class="main" :class="{'isShow':show}">
+    <div id="addcourse">
         <main-header>
             <span slot="h3">增加课程</span>
         </main-header>
@@ -16,10 +16,10 @@
     </div>
 </template>
 <script>
-import mainHeader from '../../components/header/main_header.vue'
+
 export default {
     components: {
-        mainHeader
+        
     },
     name: "component_name",
     data() {

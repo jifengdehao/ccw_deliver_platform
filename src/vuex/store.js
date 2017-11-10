@@ -6,7 +6,8 @@ Vue.use(Vuex)
 
 const  state = {
     username:'',
-    show:false
+    adcode: '',
+    provinceName: ''
 }
 
 export default new Vuex.Store({

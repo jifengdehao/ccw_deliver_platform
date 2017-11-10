@@ -4,338 +4,196 @@
     <div class="top clearfix">
       <h3 class="fl">订单指派</h3>
       <div class="search-bar fr">
-        <Input v-model="search" icon="search" placeholder="订单状态/收货人信息/订单号/运单号"
-               style="width: 200px;margin-top: 4px;"></Input>
+        <Input v-model="expressId"
+               icon="search"
+               placeholder="订单状态/收货人信息/订单号/运单号"
+               style="width: 200px;margin-top: 4px;" @on-click="search"></Input>
       </div>
-      <ul>
-        <li></li>
-      </ul>
-      <!--<span slot="h3">订单指派</span>-->
-      <!--<li slot="ul" v-for="item in 5">-->
-      <!--<Button>Default</Button>-->
-      <!--</li>-->
-      <!--<input type="search" placeholder=" 订单状态/收货人信息/订单号/运单号">-->
-      <!--<Icon type="search" class="O_search_icon"></Icon>-->
     </div>
-    <Tabs value="name1" :animated="false">
-      <TabPane label="新订单" name="name1">
-        <Row style="margin-bottom: 40px">
-          <Col span="6">
-          <h3>省区</h3>
-          <Cascader :data="provinceData" v-model="province" style="width:200px"></Cascader>
-          </Col>
-          <Col span="6">
-          <h3>市区</h3>
-          <Cascader :data="cityData" v-model="city" style="width:200px"></Cascader>
-          </Col>
-          <Col span="6">
-          <h3>区域</h3>
-          <Cascader :data="areaData" v-model="area" style="width:200px"></Cascader>
-          </Col>
-          <Col span="6">
-          <h3>菜市场</h3>
-          <Cascader :data="marketData" v-model="market" style="width:200px"></Cascader>
-          </Col>
-        </Row>
-        <!--内容-->
-        <Row class="O_cava">
+    <Row style="margin-bottom: 20px;">
+      <Col span="6">
+      <h3>省区</h3>
+      <Select v-model="province" clearable style="width:200px" @on-change="changeProvince">
+        <Option v-for="(item,index) in provinceData" :value="item.provinceId" :key="item.provinceId">{{
+          item.provinceName}}
+        </Option>
+      </Select>
+      </Col>
+      <Col span="6">
+      <h3>市区</h3>
+      <Select v-model="city" style="width:200px" clearable :disabled="showCity" @on-change="changeCity">
+        <Option v-for="item in cityData" :value="item.cityId" :key="item.cityId">{{ item.cityName }}</Option>
+      </Select>
+      </Col>
+      <Col span="6">
+      <h3>区域</h3>
+      <Select v-model="area" style="width:200px" clearable :disabled="showArea" @on-change="changeArea">
+        <Option v-for="item in areaData" :value="item.areaId" :key="item.areaId">{{ item.areaName }}</Option>
+      </Select>
+      </Col>
+      <Col span="6">
+      <h3>菜市场</h3>
+      <Select v-model="market" style="width:200px" clearable :disabled="showMarket" @on-change="changeMarket">
+        <Option v-for="item in marketData" :value="item.marketId" :key="item.marketId">{{ item.marketName }}
+        </Option>
+      </Select>
+      </Col>
+    </Row>
+    <Tabs value="0" :animated="false" @on-click="selectTab" style="min-height: 600px;">
+      <TabPane label="新订单" name="0">
+        <Row class="O_cava" v-show="showResult">
           <Col span="2">
-          <ul class="textCenter O_cava_name">
+          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
             <li>姓名</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
+            <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
+                :class="{active:item.psDeliverId === deliverId} ">
+              {{item.name}}
+            </li>
           </ul>
           </Col>
           <Col span="21" offset="1">
           <Table border :columns="columns" :data="data"></Table>
+          <Page
+            :total="tableTotal"
+            :current="pageNumber"
+            :page-size="pageSize"
+            @on-change="changePage"
+            show-total
+            class="fr"
+            style="margin-top: 20px;"
+          ></Page>
           </Col>
         </Row>
       </TabPane>
-      <TabPane label="重抛池" name="name2">
-        <Row style="margin-bottom: 40px">
-          <Col span="6">
-          <h3>省区</h3>
-          <Cascader :data="provinceData" v-model="province" style="width:200px"></Cascader>
-          </Col>
-          <Col span="6">
-          <h3>市区</h3>
-          <Cascader :data="cityData" v-model="city" style="width:200px"></Cascader>
-          </Col>
-          <Col span="6">
-          <h3>区域</h3>
-          <Cascader :data="areaData" v-model="area" style="width:200px"></Cascader>
-          </Col>
-          <Col span="6">
-          <h3>菜市场</h3>
-          <Cascader :data="marketData" v-model="market" style="width:200px"></Cascader>
-          </Col>
-        </Row>
-        <!--内容-->
-        <Row class="O_cava">
+      <!--<TabPane label="重抛池" name="1">-->
+      <!--</TabPane>-->
+      <TabPane label="配送中" name="1">
+        <Row class="O_cava" v-show="showResult">
           <Col span="2">
-          <ul class="textCenter O_cava_name">
+          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
             <li>姓名</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
+            <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
+                :class="{active:item.psDeliverId === deliverId} ">
+              {{item.name}}
+            </li>
           </ul>
           </Col>
           <Col span="21" offset="1">
           <Table border :columns="columns" :data="data"></Table>
+          <Page
+            :total="tableTotal"
+            :current="pageNumber"
+            :page-size="pageSize"
+            @on-change="changePage"
+            show-total
+            class="fr"
+            style="margin-top: 20px;"
+          ></Page>
           </Col>
         </Row>
       </TabPane>
-      <TabPane label="配送中" name="name3">
-        <Row style="margin-bottom: 40px">
-          <Col span="6">
-          <h3>省区</h3>
-          <Cascader :data="provinceData" v-model="province" style="width:200px"></Cascader>
-          </Col>
-          <Col span="6">
-          <h3>市区</h3>
-          <Cascader :data="cityData" v-model="city" style="width:200px"></Cascader>
-          </Col>
-          <Col span="6">
-          <h3>区域</h3>
-          <Cascader :data="areaData" v-model="area" style="width:200px"></Cascader>
-          </Col>
-          <Col span="6">
-          <h3>菜市场</h3>
-          <Cascader :data="marketData" v-model="market" style="width:200px"></Cascader>
-          </Col>
-        </Row>
-        <!--内容-->
-        <Row class="O_cava">
+      <TabPane label="配送完成" name="2">
+        <Row class="O_cava" v-show="showResult">
           <Col span="2">
-          <ul class="textCenter O_cava_name">
+          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
             <li>姓名</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
+            <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
+                :class="{active:item.psDeliverId === deliverId} ">
+              {{item.name}}
+            </li>
           </ul>
           </Col>
           <Col span="21" offset="1">
           <Table border :columns="columns" :data="data"></Table>
+          <Page
+            :total="tableTotal"
+            :current="pageNumber"
+            :page-size="pageSize"
+            @on-change="changePage"
+            show-total
+            class="fr"
+            style="margin-top: 20px;"
+          ></Page>
           </Col>
         </Row>
       </TabPane>
-      <TabPane label="配送完成" name="name4">
-        <Row style="margin-bottom: 40px">
-          <Col span="6">
-          <h3>省区</h3>
-          <Cascader :data="provinceData" v-model="province" style="width:200px"></Cascader>
-          </Col>
-          <Col span="6">
-          <h3>市区</h3>
-          <Cascader :data="cityData" v-model="city" style="width:200px"></Cascader>
-          </Col>
-          <Col span="6">
-          <h3>区域</h3>
-          <Cascader :data="areaData" v-model="area" style="width:200px"></Cascader>
-          </Col>
-          <Col span="6">
-          <h3>菜市场</h3>
-          <Cascader :data="marketData" v-model="market" style="width:200px"></Cascader>
-          </Col>
-        </Row>
-        <!--内容-->
-        <Row class="O_cava">
+      <TabPane label="配送异常" name="3">
+        <Row class="O_cava" v-show="showResult">
           <Col span="2">
-          <ul class="textCenter O_cava_name">
+          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
             <li>姓名</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
+            <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
+                :class="{active:item.psDeliverId === deliverId} ">
+              {{item.name}}
+            </li>
           </ul>
           </Col>
           <Col span="21" offset="1">
           <Table border :columns="columns" :data="data"></Table>
-          </Col>
-        </Row>
-      </TabPane>
-      <TabPane label="配送异常" name="name5">
-        <Row style="margin-bottom: 40px">
-          <Col span="6">
-          <h3>省区</h3>
-          <Cascader :data="provinceData" v-model="province" style="width:200px"></Cascader>
-          </Col>
-          <Col span="6">
-          <h3>市区</h3>
-          <Cascader :data="cityData" v-model="city" style="width:200px"></Cascader>
-          </Col>
-          <Col span="6">
-          <h3>区域</h3>
-          <Cascader :data="areaData" v-model="area" style="width:200px"></Cascader>
-          </Col>
-          <Col span="6">
-          <h3>菜市场</h3>
-          <Cascader :data="marketData" v-model="market" style="width:200px"></Cascader>
-          </Col>
-        </Row>
-        <!--内容-->
-        <Row class="O_cava">
-          <Col span="2">
-          <ul class="textCenter O_cava_name">
-            <li>姓名</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-            <li>菜城骑士</li>
-          </ul>
-          </Col>
-          <Col span="21" offset="1">
-          <Table border :columns="columns" :data="data"></Table>
+          <Page
+            :total="tableTotal"
+            :current="pageNumber"
+            :page-size="pageSize"
+            @on-change="changePage"
+            show-total
+            class="fr"
+            style="margin-top: 20px;"
+          ></Page>
           </Col>
         </Row>
       </TabPane>
     </Tabs>
-
   </div>
 </template>
 <script type="text/ecmascript-6">
+  import * as api from '@/api/common'
+  import * as time from '@/until/time'
 
   export default {
     data() {
       return {
-        province: [],
-        market: [],
-        area: [],
-        city: [],
-        provinceData: [
-          {
-            value: 'guangdongsheng',
-            label: '广东省'
-          },
-        ],
-        cityData: [
-          {
-            value: 'guangzhou',
-            label: '广州市'
-          }
-        ],
-        areaData: [
-          {
-            value: 'shiqiao',
-            label: '市桥'
-          }
-        ],
-        marketData: [
-          {
-            value: 'm1',
-            label: '菜市场1'
-          }
-        ],
-        search: '',
+        provinceData: [], // 省或直轄市数据集
+        province: '', // 省或直轄市
+        city: '', // 市
+        cityData: [], // 市数据集
+        showCity: true, // 是否允许选择城市 true ===>不允许 false 允许
+        areaData: [], // 区域数据集
+        area: '', // 区域
+        showArea: true, // 是否允许选择区域  true ===>不允许 false 允许
+        market: '', // 市场
+        marketData: [], // 市场数据集
+        showMarket: true,  // 是否允许选择市场  true ===>不允许 false 允许
         columns: [
           {
-            title: '用户编码',
+            title: '用户名',
             key: 'customId',
             align: 'center'
           },
           {
             title: '下单时间',
             align: 'center',
-            key: 'orderTime'
+            key: 'submitTime',
+            render: (h, params) => {
+              return time.formatDateTime(params.row.submitTime)
+            }
           },
           {
-            title: '期待时间',
+            title: '期待取货',
             align: 'center',
-            key: 'freeTime'
+            key: 'endTime',
+            render: (h, params) => {
+              return time.formatDateTime(params.row.endTime)
+            }
           },
           {
             title: '订单状态',
             align: 'center',
-            key: 'orderStatus'
+            key: 'status'
           },
           {
             title: '运单编号',
             align: 'center',
-            key: 'deliverNumber'
+            key: 'expressId'
           },
           {
             title: '操作',
@@ -354,7 +212,7 @@
                   },
                   on: {
                     click: () => {
-                      this.$router.push('/order/' + params.index)
+                      this.$router.push('/order/' + params.row.orderId)
                     }
                   }
                 }, '查看'),
@@ -362,54 +220,113 @@
             }
           }
         ],
-        data: [
-          {
-            customId: 1,
-            orderTime: '2017-11-03 14:05',
-            freeTime: '2017-11-03 16:05',
-            orderStatus: '新订单',
-            deliverNumber: 'Cp102929'
-          },
-          {
-            customId: 2,
-            orderTime: '2017-11-03 14:05',
-            freeTime: '2017-11-03 16:05',
-            orderStatus: '新订单',
-            deliverNumber: 'Cp102929'
-          },
-          {
-            customId: 3,
-            orderTime: '2017-11-03 14:05',
-            freeTime: '2017-11-03 16:05',
-            orderStatus: '新订单',
-            deliverNumber: 'Cp102929'
-          },
-          {
-            customId: 4,
-            orderTime: '2017-11-03 14:05',
-            freeTime: '2017-11-03 16:05',
-            orderStatus: '新订单',
-            deliverNumber: 'Cp102929'
-          },
-          {
-            customId: 5,
-            orderTime: '2017-11-03 14:05',
-            freeTime: '2017-11-03 16:05',
-            orderStatus: '新订单',
-            deliverNumber: 'Cp102929'
-          },
-          {
-            customId: 6,
-            orderTime: '2017-11-03 14:05',
-            freeTime: '2017-11-03 16:05',
-            orderStatus: '新订单',
-            deliverNumber: 'Cp102929'
-          }
-        ]
+        data: [],
+        expressId: '', // 搜索
+        deliverId: '',// 配送员Id
+        pageSize: 20, //默认表格一页数据
+        pageNumber: 1,  // 默认第一页
+        tableTotal: 0,  // 表格数据总数
+        state: '0', // 状态
+        deliverData: [], //配送员数据
+        showResult: false // 数据展示
       }
     },
-    computed: {},
-    methods: {}
+    created() {
+      this.getProvinceData()
+    },
+    methods: {
+      // 获取省市数据
+      getProvinceData() {
+        api.getDeployManager().then((res) => {
+          if (res) {
+            this.provinceData = res
+          }
+        })
+      },
+      // 选择城市或省
+      changeProvince() {
+        this.getCityData(this.province)
+      },
+      // 获取市的数据
+      getCityData(proId) {
+        api.getProvinceIndex(proId).then((res) => {
+          if (res) {
+            this.showCity = false
+            this.cityData = res
+          }
+        })
+      },
+      // 选择城市
+      changeCity() {
+        this.getAreaData(this.city)
+      },
+      // 获取区域的数据
+      getAreaData(areaId) {
+        api.getCityManager(areaId).then((res) => {
+          if (res) {
+            this.showArea = false
+            this.areaData = res
+          }
+        })
+      },
+      // 选择区域
+      changeArea() {
+        this.getMarketData(this.area)
+      },
+      // 获取菜市场数据
+      getMarketData(areaId) {
+        api.getAreaMarket(areaId).then((res) => {
+          if (res) {
+            this.showMarket = false
+            this.marketData = res
+          }
+        })
+      },
+      // 选择菜市场
+      changeMarket() {
+        let params = {
+          marketId: this.market,
+          pageSize: this.pageSize,
+          pageNumber: this.pageNumber,
+          psDeliverId: this.deliverId,
+          expressId: this.expressId,
+          state: this.state
+        }
+        console.log(params)
+        if (params.marketId) {
+          api.getOrderData(params).then((res) => {
+            console.log(res)
+            if (res) {
+              this.showResult = true
+              this.data = res.expressPage.records
+              this.tableTotal = res.expressPage.total
+              this.deliverData = res.deliverList
+            }
+          })
+        }
+      },
+      // 分页
+      changePage(index) {
+        this.pageNumber = index
+        this.changeMarket()
+      },
+      // 切换
+      selectTab(name) {
+        this.state = name
+        this.pageNumber = 1
+        this.changeMarket()
+      },
+      // 选择配送员
+      getDeliver(key) {
+        console.log(key)
+        this.deliverId = key
+        this.changeMarket()
+      },
+      // 搜索
+      search() {
+        this.changeMarket()
+      }
+    }
   }
 </script>
 <style lang="less" scoped type="text/less">
@@ -427,6 +344,7 @@
       }
     }
     .O_cava {
+      margin-top: 40px;
       .O_cava_name {
         border: 1px solid #ccc;
         li {
@@ -442,6 +360,10 @@
           }
           &:last-child {
             border-bottom: none;
+          }
+          &.active {
+            background-color: #495062;
+            color: #ffffff;
           }
         }
       }
