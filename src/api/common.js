@@ -11,19 +11,19 @@ export const uploadUrl = ax.uploadUrl
 
 // 用户登录，获取验证码，首页 退出登录 start
 
-export const login = (params) => {
+export const login = params => {
   return ax.p('/User/login', params)
 }
 
-export const getCode = (params) => {
+export const getCode = params => {
   return ax.g('/User/phoneCode', params)
 }
 
-export const logout = (params) => {
+export const logout = params => {
   return ax.g('/User/logout', params)
 }
 
-export const getIndeData = (params) => {
+export const getIndeData = params => {
   return ax.g('/User/index', params)
 }
 
@@ -34,42 +34,150 @@ export const getIndeData = (params) => {
  * components: 骑士管理
  */
 
- // 骑士管理 获取相关省区/deployManager/index
- export const getDeployManager = () => {
-   return ax.g('/deployManager/index')
- }
- 
- // 骑士管理 获取相关市区 /deployManager/province/
- export const getProvinceIndex = (id) => {
-   return ax.g(`/deployManager/province/${id}`)
- }
+// 骑士管理 获取相关省区/deployManager/index
+export const getDeployManager = () => {
+  return ax.g('/deployManager/index')
+}
 
- // 骑士管理 获取相关区域/deployManager/city/
- export const getCityManager = (id) => {
-   return ax.g(`/deployManager/city/${id}`)
- }
+// 骑士管理 获取相关市区 /deployManager/province/
+export const getProvinceIndex = id => {
+  return ax.g(`/deployManager/province/${id}`)
+}
 
- // 骑士管理 获取相关菜市场/deployManager/areaMarket/
- export const getAreaMarket = (id) => {
-   return ax.g(`/deployManager/areaMarket/${id}`)
- }
+// 骑士管理 获取相关区域/deployManager/city/
+export const getCityManager = id => {
+  return ax.g(`/deployManager/city/${id}`)
+}
 
- // 未提交资料/deliverManager/unverified
- export const getDeliverManager = (params) => {
-   return ax.g('/deliverManager/unverified', params)
- }
+// 骑士管理 获取相关菜市场/deployManager/areaMarket/
+export const getAreaMarket = id => {
+  return ax.g(`/deployManager/areaMarket/${id}`)
+}
 
- // 删除未提交资料/deliverManager/unverified/
- export const deleteUnverified = (id) => {
-   return ax.d(`/deliverManager/unverified/${id}`)
- }
+// 未提交资料/deliverManager/unverified
+export const getDeliverManager = params => {
+  return ax.g('/deliverManager/unverified', params)
+}
 
- // 导出未提交资料数据/deliverManager/unverified/POI
- export const exportUnverified = (params) => {
-   return ax.g('/deliverManager/unverified/POI', params)
- }
+// 删除未提交资料/deliverManager/unverified/
+export const deleteUnverified = id => {
+  return ax.d(`/deliverManager/unverified/${id}`)
+}
 
- // 骑士审核列表数据/deliverManager/audit
- export const getAuditManager = (params) => {
-   return ax.g('/deliverManager/audit', params)
- }
+// 导出未提交资料数据/deliverManager/unverified/POI
+export const exportUnverified = params => {
+  return ax.g('/deliverManager/unverified/POI', params)
+}
+
+// 骑士审核列表数据/deliverManager/audit
+export const getAuditManager = params => {
+  return ax.g('/deliverManager/audit', params)
+}
+
+/**
+  * @description 设置模块相关功能点
+  * @author Create By WuFengliang
+  */
+
+/**
+ * 获取平台用户列表
+ */
+export const getUsersList = params => {
+  return ax.g(`/settingCentre/user`, params)
+}
+
+/**
+ * 删除用户
+ */
+export const deleteUser = params => {
+  return ax.d(`/settingCentre/user/${params.psUserId}`)
+}
+
+/**
+ * 查看用户
+ */
+export const lookUser = params => {
+  return ax.g(`/settingCentre/user/${params.psUserId}`)
+}
+
+/**
+ * 更新 或 添加 平台用户信息
+ */
+export const addOrPutUserInfo = params => {
+  return ax.p(`/settingCentre/user`, params)
+}
+
+/**
+ * 获取角色列表
+ */
+export const getRoleList = params => {
+  return ax.g(`/settingCentre/Auth/role`, params)
+}
+
+/**
+ * 获取指定角色信息
+ */
+export const getRoleInfo = params => {
+  return ax.g(`/settingCentre/Auth/getRole`, params)
+}
+
+/**
+ * 获取操作日志
+ */
+export const getOperationLog = params => {
+  return ax.g(`/settingCentre/log`, params)
+}
+
+/**
+ * 导出操作日志
+ */
+export const downLoadLog = params => {
+  return ax.g(`/settingCentre/log/poi`, params)
+}
+
+/**
+ * 查询消息列表(非管理员)
+ */
+export const getAccountMsgList = params => {
+  return ax.g(`/settingCentre/info`, params)
+}
+
+/**
+ * 查询消息列表(管理员)
+ */
+export const getManageMsgList = params => {
+  return ax.g(`/settingCentre/info/Manager`, params)
+}
+
+/**
+ * 删除单个信息
+ */
+export const delSingleInfo = params => {
+  return ax.d(`/settingCentre/info/${params.smMssageId}`)
+}
+
+/**
+ * 查询单个信息
+ */
+export const getSingleInfo = params => {
+  return ax.g(`/settingCentre/info/${params.smMssageId}`)
+}
+
+/**
+ * 添加消息信息
+ */
+export const addSingleInfo = params => {
+  return ax.p(`/settingCentre/info`, params)
+}
+
+/**
+ * 更新单个消息
+ */
+export const putSingleInfo = params => {
+  return ax.u(`/settingCentre/info/${params.smMssageId}`)
+}
+
+/**
+  * @description 设置模块相关功能点
+  * @author Create By WuFengliang
+  */

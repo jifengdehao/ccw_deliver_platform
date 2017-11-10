@@ -54,6 +54,7 @@
             <MenuItem name="s_rolelist">角色列表</MenuItem>
             <MenuItem name="s_operation">操作日志</MenuItem>
             <MenuItem name="s_message">消息管理</MenuItem>
+            <MenuItem name="setting_message">消息</MenuItem>
           </Submenu>
           <Submenu name="">
             <template slot="title">
@@ -73,96 +74,95 @@
   </div>
 </template>
 <script type='text/ecmascript-6'>
-  import mHeader from '@/components/header/header'
-  import mMenu from '@/components/menu/menu'
+import mHeader from '@/components/header/header'
+import mMenu from '@/components/menu/menu'
 
-  export default {
-    name: 'layout',
-    data() {
-      return {
-        spanLeft: 3,
-        spanRight: 21
-      }
-    },
-    computed: {
-      iconSize() {
-        return this.spanLeft === 3 ? 14 : 24
-      },
-      activeName() {
-        return this.$route.path.split('/')[1]
-      }
-    },
-    methods: {
-      toggleClick() {
-        if (this.spanLeft === 3) {
-          this.spanLeft = 1
-          this.spanRight = 23
-        } else {
-          this.spanLeft = 3
-          this.spanRight = 21
-        }
-      },
-      route(name) {
-        console.log(name)
-        this.$router.push('/' + name);
-      }
-    },
-    components: {
-      mHeader,
-      mMenu
+export default {
+  name: 'layout',
+  data() {
+    return {
+      spanLeft: 3,
+      spanRight: 21
     }
+  },
+  computed: {
+    iconSize() {
+      return this.spanLeft === 3 ? 14 : 24
+    },
+    activeName() {
+      return this.$route.path.split('/')[1]
+    }
+  },
+  methods: {
+    toggleClick() {
+      if (this.spanLeft === 3) {
+        this.spanLeft = 1
+        this.spanRight = 23
+      } else {
+        this.spanLeft = 3
+        this.spanRight = 21
+      }
+    },
+    route(name) {
+      console.log(name)
+      this.$router.push('/' + name)
+    }
+  },
+  components: {
+    mHeader,
+    mMenu
   }
+}
 </script>
 <style lang="less" scoped type="text/less">
-  #layout {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
+#layout {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 
-    .layout-content {
-      position: absolute;
-      top: 60px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-    .layout-hide-text {
-      .layout-text,
-      .ivu-menu-item-group-title {
-        display: none;
-      }
-    }
-    .ivu-menu-item,
-    .ivu-menu-submenu {
-      text-align: center;
-    }
-
-    .ivu-menu-item {
-      padding: 14px 24px !important;
-    }
-
-    .ivu-menu-item > i,
-    .ivu-menu-submenu-title > i {
-      margin-right: 0;
-    }
-
-    .sidebar {
-      background: #363e4f;
-    }
-
-    .ivu-col {
-      transition: width .2s ease-in-out;
-    }
-
-    .close-menu {
-      padding: 14px 24px;
-      width: 100%;
-      text-align: center;
-      color: #fff;
-      cursor: pointer;
-      background: #495060;
-    }
-
+  .layout-content {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
+  .layout-hide-text {
+    .layout-text,
+    .ivu-menu-item-group-title {
+      display: none;
+    }
+  }
+  .ivu-menu-item,
+  .ivu-menu-submenu {
+    text-align: center;
+  }
+
+  .ivu-menu-item {
+    padding: 14px 24px !important;
+  }
+
+  .ivu-menu-item > i,
+  .ivu-menu-submenu-title > i {
+    margin-right: 0;
+  }
+
+  .sidebar {
+    background: #363e4f;
+  }
+
+  .ivu-col {
+    transition: width 0.2s ease-in-out;
+  }
+
+  .close-menu {
+    padding: 14px 24px;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+    background: #495060;
+  }
+}
 </style>
