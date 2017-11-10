@@ -7,7 +7,6 @@ import store from './vuex/store'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 import * as cookie from '@/data/index'
-
 Vue.use(iView)
 
 /**
@@ -36,14 +35,13 @@ router.afterEach((to, from, next) => {
   window.scrollTo(0, 0)
   iView.LoadingBar.finish()
 })
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   store,
   router,
   template: '<App/>',
-  components: {App}
+  components: {
+    App
+  }
 })
-
-

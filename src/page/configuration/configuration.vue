@@ -1,194 +1,180 @@
+/*
+ * @Author: huShangJun 
+ * @Date: 2017-10-31 10:18:20 
+ * DeveloperMailbox:   hsjcc@ccw163.com 
+ * FunctionPoint: 配置设置 
+ */
+
 <template>
-  <div id="configuration" class="main" :class="{'isShow':show}">
-    <main-header>
+  <div id="configuration">
+    <!-- 内容头部 -->
+    <section class="configurationHeader">
       <span slot="h3">配置设置</span>
-      <input placeholder=" 市区/区域/菜市场">
-      <Icon type="search" class="O_search_icon"></Icon>
-    </main-header>
+    </section>
+    <!-- 显示地址内容 -->
     <section class="clearfix">
+      <!-- 省区 -->
       <div class="configuration_quyu clearfix">
         <div class="configuration_quyu_title clearfix">
           <h3>省区</h3>
         </div>
-        <div class="configuration_quyu_content">
-          <span v-for="(item,index) in shengs" @click="seeThisSheng()"> {{item.name}}
-            <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none" @click="delSheng(index)"></Button>
-          </span>
-        </div>
+        <ul class="configuration_quyu_content" v-for="(item,index) in shengs" :key="index">
+          <li >
+            <span @click="showCity(item.provinceId,item.provinceName)"> {{item.provinceName}}</span>
+            <Button type="info" size="small" class="fr" style="border: none" @click="seeThisSheng(item.provinceId,item.provinceName)">查看</Button>
+          </li>
+        </ul>
       </div>
-      <div class="configuration_quyu">
+      <!-- 市区 -->
+      <div class="configuration_quyu clearfix" v-if="showCitys">
         <div class="configuration_quyu_title clearfix">
           <h3>市区</h3>
         </div>
-        <div class="configuration_quyu_content">
-          <span v-for="(item,index) in citys"  @click="seeThisCity()">{{item.city}}
-            <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none" @click="delCity(index)"></Button>
-          </span>
-        </div>
+        <ul class="configuration_quyu_content" v-for="(item,index) in citys" :key="index">
+          <li>
+            <span @click="showQu(item.cityId,item.cityName)"> {{item.cityName}}</span>
+            <Button type="info" size="small" class="fr" style="border: none" @click="seeThisCity(item.cityId,item.cityName)">查看</Button>            
+          </li>
+        </ul>
       </div>
-      <div class="configuration_quyu">
+      <!-- 大区 -->
+      <div class="configuration_quyu clearfix" v-if="showQus">
         <div class="configuration_quyu_title clearfix">
           <h3>区域</h3>
           <Button @click="addregion()" style="width: 60px;" type="ghost" size="small">新增</Button>
         </div>
-        <div class="configuration_quyu_content">
-          <span v-for="(item,index) in qus"  @click="seeThisQu()">{{item.qu}}
-            <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none" @click="delQu(index)"></Button>
-          </span>
-        </div>
+        <ul class="configuration_quyu_content" v-for="(item,index) in qus" :key="index">
+          <li>
+            <span @click="showMarket(item.areaId,item.areaName)"> {{item.areaName}}</span>
+            <Button type="ghost" size="small" class="fr" style="color: red;border: none;" @click="delQu(index)">删除</Button>
+            <Button type="info" size="small" class="fr" style="border: none;" @click="seeThisQu(item.areaId,item.areaName)">查看</Button>            
+          </li>
+        </ul>
       </div>
-      <div class="configuration_quyu">
+      <!-- 菜市场 -->
+      <div class="configuration_quyu clearfix" v-if="showMarkets">
         <div class="configuration_quyu_title clearfix">
           <h3>菜市场</h3>
           <Button @click="addmarket()" style="width: 60px;" type="ghost" size="small">新增</Button>
         </div>
-        <div class="configuration_quyu_content">
-          <span v-for="item in 8"  @click="seeThisMarket()">清河
-            <Button type="ghost" icon="close-round" size="small" class="fr" style="color: red;border: none"></Button>
-          </span>
-        </div>
+        <ul class="configuration_quyu_content" v-for="(item,index) in markets" :key="index">
+          <li>
+            <span> {{item.marketName}}</span>
+            <Button type="ghost" size="small" class="fr" style="color: red;border: none" @click="delMarket(index)">删除</Button>
+            <Button type="info" size="small" class="fr" style="border: none" @click="seeThisMarket(item.marketId)">查看</Button>
+          </li>
+        </ul>
       </div>
     </section>
   </div>
 </template>
 <script>
-import mainHeader from '../../components/header/main_header.vue'
-
+import * as api from '@/api/common.js'
 export default {
-  components: { mainHeader },
+  components: {},
   data() {
     return {
-      hide:'',
-      shengs: [{
-        name: "广东",
-      },
-      {
-        name: "广西",
-      },
-      {
-        name: "江西",
-      },
-      {
-        name: "湖南",
-      },
-      {
-        name: "贵州",
-      },
-      {
-        name: "福建",
-      },
-      {
-        name: "浙江",
-      },
-      {
-        name: "江苏",
-      },
-      {
-        name: "北京",
-      },
-      ],
-      citys: [{
-        city: "广州",
-      },
-      {
-        city: "深圳",
-      },
-      {
-        city: "东莞",
-      },
-      {
-        city: "佛山",
-      },
-      {
-        city: "惠州",
-      },
-      {
-        city: "珠海",
-      },
-      {
-        city: "中山",
-      },
-      {
-        city: "韶关",
-      },
-      {
-        city: "河源",
-      },
-      ],
-      qus: [{
-        qu: "番禺",
-      },
-      {
-        qu: "越秀",
-      },
-      {
-        qu: "海珠",
-      },
-      {
-        qu: "白云",
-      },
-      {
-        qu: "天河",
-      },
-      {
-        qu: "荔湾",
-      },
-      {
-        qu: "萝岗",
-      },
-      {
-        qu: "黄埔",
-      },
-      {
-        qu: "南沙",
-      },
-      ]
+      showCitys: false,
+      showQus: false,
+      showMarkets: false,
+      provinceName:'',
+      cityName: '',
+      areaName: '',
+      cityId: '',
+      areaId: '',
+      hide: '',
+      shengs: [],
+      citys: [],
+      qus: [],
+      markets: []
     }
-
   },
-  computed: {
-    show() {
-      return this.$store.state.show
-    },
+  created() {
+    api.getShengs().then(response => {
+      this.shengs = response
+    })
   },
   methods: {
-    getCurrentDate() {
-      return new Date().toLocaleDateString()
-    },
+    // 新增 区  菜市场
     addregion() {
-      this.$router.push('/addregion')
+      this.$router.push('/addregion?provinceName=' + this.provinceName + '&cityName=' + this.cityName + '&cityId=' + this.cityId)
     },
     addmarket() {
-      this.$router.push('/addmarket')
+      this.$router.push('/addmarket?provinceName=' + this.provinceName + '&cityName=' + this.cityName + '&areaId=' + this.areaId)
     },
-    delSheng(index) {
-      this.shengs.splice(index, 1)
+    // 删除
+    delQu(index) {
+      let id = this.qus[index].areaId
+      api.delQu(id).then(response => {
+         this.$Message.success('删除成功');
+        this.qus.splice(index, 1)
+      })
     },
-    delCity(index) {
-      this.citys.splice(index, 1)
+    delMarket(index) {
+      let id = this.markets[index].marketId
+      api.delMarket(id).then(response => {
+         this.$Message.success('添加成功');
+        this.markets.splice(index, 1)
+      })
     },
-     delQu(index) {
-      this.qus.splice(index, 1)
+    // 查看
+    seeThisSheng(provinceId, provinceName) {
+      
+      this.$router.push('/shengInfo?provinceName=' + provinceName + '&provinceId=' + provinceId)
     },
-    seeThisSheng(){
-      this.$router.push('/shengInfo')
+    seeThisCity(cityId, cityName) {
+      
+      this.$router.push('/cityInfo?cityName=' + cityName + '&provinceName=' + this.provinceName + '&cityId=' + cityId)      
     },
-    seeThisCity(){
-      this.$router.push('/cityInfo')
+    seeThisQu(areaId) {
+      this.areaId = areaId
+      this.$router.push('/quInfo?areaId=' + areaId + '&provinceName=' + this.provinceName + '&cityName=' + this.cityName)
     },
-    seeThisQu(){
-      this.$router.push('/quInfo')
+    seeThisMarket(marketId) {
+      this.$router.push('/marketInfo?marketId=' + marketId + '&provinceName=' + this.provinceName + '&cityName=' + this.cityName + '&areaName=' + this.areaName)
     },
-    seeThisMarket(){
-      this.$router.push('/marketInfo')
+    // 获取下级列表
+    showCity(provinceId,provinceName) {
+      this.provinceName = provinceName
+      api.getCitys(provinceId).then(response => {
+        this.citys = response
+      })
+      this.showCitys = true
     },
+    showQu(cityId,cityName) {
+      this.cityName = cityName
+      this.cityId = cityId
+      api.getQus(cityId).then(response => {
+        this.qus = response
+      })
+      this.showQus = true
+    },
+    showMarket(areaId,areaName) {
+      this.areaId = areaId
+      this.areaName = areaName
+      api.getMarkets(areaId).then(response => {
+        this.markets = response
+      })
+      this.showMarkets = true
+    }
   },
+  computed: {}
 }
 </script>
 <style lang="less" scoped>
 #configuration {
+  .configurationHeader {
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: 30px;
+    background-color: #999;
+    span {
+      margin-left: 10px;
+      font-size: 18px;
+      color: #fff;
+    }
+  }
   .configuration_quyu {
-
     border: 1px solid #aaa;
     text-align: left;
     border-radius: 5px;
@@ -203,15 +189,21 @@ export default {
         margin-right: 10px;
       }
     }
-    span {
-      display: inline-block;
-      border: 1px solid #bbb;
-      border-radius: 5px;
-      width: 80px;
+    li {
+      width: 190px;
       height: 25px;
       line-height: 25px;
-      margin: 10px 50px 0 50px;
-      padding-left: 5px;
+      margin: 10px 5px 0 5px;
+      float: left;
+      span {
+        display: inline-block;
+        width: 110px;
+        height: 25px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+        overflow: auto;
+      }
     }
   }
 }

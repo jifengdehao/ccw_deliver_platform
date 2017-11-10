@@ -65,6 +65,56 @@ export const putDeliver = (orderId, params) => {
 // author: zhangwenlong end
 
 
+// 配置设置   胡上军   start  ********************************************************
+// 获取目前有菜市场的省份列表
+export const getShengs = () => {
+  return ax.g('/deployManager/indexAll')
+}
+// 获取市级列表
+export const getCitys = (provinceId) => {
+  return ax.g(`/deployManager/provinceAll/${provinceId}`)
+}
+// 获取大区列表
+export const getQus = (cityId) => {
+  return ax.g(`/deployManager/city/${cityId}`)
+}
+// 获取菜市场列表
+export const getMarkets = (areaId) => {
+  return ax.g(`/deployManager/areaMarket/${areaId}`)
+}
+// 查询城市详情
+export const getCityInfo = (cityId) => {
+  return ax.g(`/deployManager/cityInfo/${cityId}`)
+}
+// 查询区域详情
+export const getQuInfo = (areaId) => {
+  return ax.g(`/deployManager/area/${areaId}`)
+}
+// 查询菜市场信息
+export const getMarketInfo = (marketId) => {
+  return ax.g(`/deployManager/market/${marketId}`)
+}
+// 删除区域信息
+export const delQu = (areaId) => {
+  return ax.d(`/deployManager/area/${areaId}`)
+}
+// 删除菜市场
+export const delMarket = (marketId) => {
+  return ax.d(`/deployManager/market/${marketId}`)
+}
+// 修改城市详情
+export const modfiyCityMessage = ( params) => {
+  return ax.p(`/deployManager/city`, params)
+}
+// 修改或新增区域
+export const addQu = ( params) => {
+  return ax.p(`/deployManager/area`, params)
+}
+// 修改或新增Market
+export const addMarket = (params) => {
+  return ax.p(`/deployManager/market`, params)
+}
+// 配置设置  end   *******************************************************
 /**
  * @author: Zeng FanLu
  * components: 骑士管理
