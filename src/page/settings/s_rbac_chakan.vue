@@ -1,33 +1,42 @@
+/*
+ * @Author: WuFengliang 
+ * @Date: 2017-11-03 15:49:25 
+ * DeveloperMailbox:   wufengliang@ccw163.com 
+ * FunctionPoint: 权限管理查看 
+ */
 <template>
-  <div id="s_rbac_chakan" class="main" :class="{'isShow':show}">
-    <main-header>
-      <span slot="h3">权限管理</span>
-    </main-header>
-    <section class="s_rbac_chakan_shuju">
-      <ul>
-        <li>
-          <p v-for="item in 5">
-            <span>用户ID:</span>
-            <span>Ca1234</span>
-          </p>
-        </li>
-        <li>
-          <p v-for="item in 5">
-            <span>用户ID:</span>
-            <span>Ca1234</span>
-          </p>
-        </li>
-      </ul>
-    </section>
+  <div>
+    <div class="header">
+      <h2>权限管理</h2>
+    </div>
+    <div v-if="data">
+      <ul class="fl first">
+      <li><span>用户ID:</span>{{data.user.psUserId}}</li>
+      <li><span>性别:</span>{{data.user.sex}}</li>
+      <li><span>邮箱地址:</span>{{data.user.email}}</li>
+      <li><span>所属菜市场:</span>{{data.marketName}}</li>
+      <li><span>姓名:</span>{{data.user.userName}}</li>
+    </ul>
+    <ul class="fl">
+      <li><span>联系方式:</span>{{data.user.mobileno}}</li>
+      <li><span>角色名称:</span>{{data.user.role}}</li>
+      <li><span>所属省区:</span>{{data.user.provinceId}}</li>
+      <li><span>所属市区:</span>{{data.user.cityId}}</li>
+      <li><span>所属区域:</span>{{data.user.areaName}}</li>
+    </ul>
+    </div>
   </div>
 </template>
 <script>
-import mainHeader from '../../components/header/main_header.vue'
+import * as http from '@/api/common'
 export default {
-  components: { mainHeader },
+  name: 'authDetailLook',
   data() {
     return {
-
+      data: null, //  数据集合
+      params: {
+        psUserId: null
+      }
     }
   },
   computed: {
@@ -35,39 +44,54 @@ export default {
       return this.$store.state.show
     }
   },
+  created() {
+    this.getUserInfoData()
+  },
   methods: {
-    getCurrentDate() {
-      return new Date().toLocaleDateString()
-    },
-
+    //  获取用户信息
+    getUserInfoData() {
+      this.params.psUserId = this.$route.query.psUserId
+      http.lookUser(this.params).then(data => {
+        this.data = data
+        console.log(data)
+      })
+    }
   }
 }
 </script>
-<style lang="less" scoped>
-#s_rbac_chakan {
-  .s_rbac_chakan_shuju {
-    li {
-      width: 33%;
-      float: left;
-      p {
-        font-size: 16px;
-        text-align: left;
-        vertical-align: middle;
-        margin: 10px 0;
-        span {
-          display: inline-block;
-          width: 125px;
-          height: 30px;
+<style lang="css" scoped>
+.header {
+  height: 40px;
+  line-height: 40px;
+  background-color: #363e54;
+}
 
-          border-radius: 3px;
-          line-height: 30px;
-          vertical-align: middle;
-          &:nth-of-type(1) {
-            border: none;
-          }
-        }
-      }
-    }
-  }
+.header h2 {
+  float: left;
+  color: #fff;
+  margin-left: 20px;
+}
+
+ul {
+  overflow: hidden;
+  margin: 20px auto;
+}
+
+ul.first {
+  margin: 20px 250px 20px 150px;
+}
+
+ul > li {
+  line-height: 40px;
+}
+
+p.btn-p {
+  clear: both;
+  text-align: center;
+  margin: 40px auto;
+}
+
+p.btn-p button {
+  margin: 0 20px;
 }
 </style>

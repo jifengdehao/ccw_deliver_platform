@@ -219,3 +219,112 @@ export const getFinanceOrderExport = (params) => {
 export const getFinanceOrderList = (params) => {
   return ax.g('/financial/psDeliverOrderShow', params)
 }
+
+
+/**
+  * @description 设置模块相关功能点
+  * @author Create By WuFengliang
+  */
+
+/**
+ * 获取平台用户列表
+ */
+export const getUsersList = params => {
+  return ax.g(`/settingCentre/user`, params)
+}
+
+/**
+ * 删除用户
+ */
+export const deleteUser = params => {
+  return ax.d(`/settingCentre/user/${params.psUserId}`)
+}
+
+/**
+ * 查看用户
+ */
+export const lookUser = params => {
+  return ax.g(`/settingCentre/user/${params.psUserId}`)
+}
+
+/**
+ * 更新 或 添加 平台用户信息
+ */
+export const addOrPutUserInfo = params => {
+  return ax.p(`/settingCentre/user`, params)
+}
+
+/**
+ * 获取角色列表
+ */
+export const getRoleList = params => {
+  return ax.g(`/settingCentre/Auth/role`, params)
+}
+
+/**
+ * 获取指定角色信息
+ */
+export const getRoleInfo = params => {
+  return ax.g(`/settingCentre/Auth/getRole`, params)
+}
+
+/**
+ * 获取操作日志
+ */
+export const getOperationLog = params => {
+  return ax.g(`/settingCentre/log`, params)
+}
+
+/**
+ * 导出操作日志
+ */
+export const downLoadLog = params => {
+  return ax.g(`/settingCentre/log/poi`, params)
+}
+
+/**
+ * 查询消息列表(非管理员)
+ */
+export const getAccountMsgList = params => {
+  return ax.g(`/settingCentre/info`, params)
+}
+
+/**
+ * 查询消息列表(管理员)
+ */
+export const getManageMsgList = params => {
+  return ax.g(`/settingCentre/info/Manager`, params)
+}
+
+/**
+ * 删除单个信息
+ */
+export const delSingleInfo = params => {
+  return ax.d(`/settingCentre/info/${params.smMssageId}`)
+}
+
+/**
+ * 查询单个信息
+ */
+export const getSingleInfo = params => {
+  return ax.g(`/settingCentre/info/${params.smMssageId}`)
+}
+
+/**
+ * 添加消息信息
+ */
+export const addSingleInfo = params => {
+  return ax.p(`/settingCentre/info`, params)
+}
+
+/**
+ * 更新单个消息
+ */
+export const putSingleInfo = params => {
+  return ax.u(`/settingCentre/info/${params.smMssageId}`)
+}
+
+/**
+  * @description 设置模块相关功能点
+  * @author Create By WuFengliang
+  */

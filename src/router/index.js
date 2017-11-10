@@ -44,6 +44,8 @@ import s_operation from '@/page/settings/s_operation.vue' //设置-操作日志
 import s_operation_info from '@/page/settings/s_operation_info.vue' //设置-操作日志-查看日志信息
 import s_message from '@/page/settings/s_message.vue' //设置-消息管理
 import addmessage from '@/page/settings/addmessage.vue' //设置-消息管理-新增消息
+import settingMessage from '@/page/settings/settingMessage' //设置-消息
+import settingMessageDetail from '@/page/settings/settingMessageDetail' //设置-消息-详情
 import d_extend from '@/page/DRP/d_extend.vue' //推广列表
 import d_list from '@/page/DRP/d_list.vue' //分销列表
 import extendinfo from '@/page/DRP/extendinfo.vue' //分销列表
@@ -105,7 +107,8 @@ export default new Router({
           path: '/addcourse',
           name: 'addcourse',
           component: addcourse
-        }, {
+        },
+        {
           path: '/courseinfo',
           name: 'courseinfo',
           component: courseinfo
@@ -231,14 +234,29 @@ export default new Router({
           component: s_operation_info
         },
         {
+          path: '/setting_message',
+          name: 'setting_message',
+          component: settingMessage
+        },
+        {
+          path: '/setting_message/:smMssageId',
+          name: 'settingMessageDetail',
+          component: settingMessageDetail
+        },
+        {
           path: '/s_message',
           name: 's_message',
           component: s_message
         },
         {
-          path: '/addmessage',
-          name: 'addmessage',
+          path: '/s_message/edit/:smMssageId',
+          name: 'editMessage',
           component: addmessage
+        },
+        {
+          path:'/s_message/addMessage',
+          name:'addMessage',
+          component:addmessage
         },
         {
           path: '/d_extend',
