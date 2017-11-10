@@ -5,236 +5,249 @@
     </div>
     <!--统计信息-->
     <div class="H-tip clearfix">
-      <h4>首页统计信息</h4>
+      <h3>首页统计信息</h3>
       <ul class="fr">
-        <li>在线骑手：9人</li>
-        <li>今日订单：200单</li>
-        <li>超时订单：1.02%</li>
+        <li>在线骑手：{{statistics.onlineDeliver}}</li>
+        <li>今日订单：{{statistics.todayOrderCount}}</li>
+        <li>超时订单：{{statistics.outTimeorderRate}}</li>
       </ul>
     </div>
     <Row style="margin-top: 20px;">
       <Col span="6">
       <h3>省区</h3>
-      <!--<Select v-model="province" style="width:200px" clearable>-->
-      <!--<Option v-for="item in provinceData" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
-      <!--</Select>-->
-      <Cascader :data="provinceData" v-model="province" style="width:200px"></Cascader>
+      <Select v-model="province" clearable @on-change="changeProvince" style="width:200px">
+        <Option v-for="(item,index) in provinceData" :value="item.provinceId" :key="item.provinceId">{{
+          item.provinceName}}
+        </Option>
+      </Select>
+      <!--<Cascader :data="provinceData" v-model="province" style="width:200px"></Cascader>-->
       </Col>
       <Col span="6">
       <h3>市区</h3>
-      <!--<Select v-model="city" style="width:200px" clearable>-->
-      <!--<Option v-for="item in cityData" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
-      <!--</Select>-->
-      <Cascader :data="cityData" v-model="city" style="width:200px"></Cascader>
+      <Select v-model="city" style="width:200px" clearable :disabled="showCity" @on-change="changeCity">
+        <Option v-for="item in cityData" :value="item.cityId" :key="item.cityId">{{ item.cityName }}</Option>
+      </Select>
       </Col>
       <Col span="6">
       <h3>区域</h3>
-      <!--<Select v-model="area" style="width:200px" clearable>-->
-      <!--<Option v-for="item in areaData" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
-      <!--</Select>-->
-      <Cascader :data="areaData" v-model="area" style="width:200px"></Cascader>
+      <Select v-model="area" style="width:200px" clearable :disabled="showArea" @on-change="changeArea">
+        <Option v-for="item in areaData" :value="item.areaId" :key="item.areaId">{{ item.areaName }}</Option>
+      </Select>
       </Col>
       <Col span="6">
       <h3>菜市场</h3>
-      <!--<Select v-model="market" style="width:200px" clearable>-->
-      <!--<Option v-for="item in marketData" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
-      <!--</Select>-->
-      <Cascader :data="marketData" v-model="market" style="width:200px"></Cascader>
+      <Select v-model="market" style="width:200px" clearable :disabled="showMarket" @on-change="changeMarket">
+        <Option v-for="item in marketData" :value="item.marketId" :key="item.marketId">{{ item.marketName }}</Option>
+      </Select>
       </Col>
     </Row>
-    <Row style="margin-top: 40px;">
-      <Col span="8">
-      <Card class="H-card" dis-hover>
-        <h3>系统消息</h3>
-        <ul>
-          <li>
-            2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送
-            <Icon type="chevron-right"></Icon>
-          </li>
-        </ul>
-      </Card>
-      </Col>
-      <Col span="8" offset="2">
-      <Card class="H-card" dis-hover>
-        <h3>骑士审核</h3>
-        <ul>
-          <li>
-            骑士身份信息审核
-            <span class="fr">未读信息：88条</span>
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            骑士身份信息审核
-            <span class="fr">未读信息：88条</span>
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            骑士身份信息审核
-            <span class="fr">未读信息：88条</span>
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            骑士身份信息审核
-            <span class="fr">未读信息：88条</span>
-            <Icon type="chevron-right"></Icon>
-          </li>
-          <li>
-            骑士身份信息审核
-            <span class="fr">未读信息：88条</span>
-            <Icon type="chevron-right"></Icon>
-          </li>
-        </ul>
-      </Card>
-      </Col>
-    </Row>
-
-    <Row style="margin-top: 40px;">
-      <Col span="8">
-         <Card class="H-card" dis-hover>
-           <h3>实时监控</h3>
-           <ul>
-             <li>
-               需要手工派单
-               <span class="H-card-border">50</span>
-               <Icon type="chevron-right"></Icon>
-             </li>
-             <li>
-               新订单
-               <span class="H-card-border">50</span>
-               <Icon type="chevron-right"></Icon>
-             </li>
-             <li>
-               已送达订单
-               <span class="H-card-border">50</span>
-               <Icon type="chevron-right"></Icon>
-             </li>
-             <li>
-               异常订单
-               <span class="H-card-border">50</span>
-               <Icon type="chevron-right"></Icon>
-             </li>
-             <li>
-               骑手上班/休息
-               <span class="H-card-border">50</span>
-               <Icon type="chevron-right"></Icon>
-             </li>
-           </ul>
-         </Card>
-      </Col>
-      <Col span="8" offset="2">
+    <div v-show="indexData">
+      <Row style="margin-top: 40px;" :gutter="100">
+        <Col span="12">
+        <Card class="H-card" dis-hover>
+          <h3>系统消息</h3>
+          <ul v-if="sysMsg.length>0">
+            <li v-for="(item,index) in sysMsg" :key="index">
+              {{item.createdAt}}&nbsp;&nbsp;{{item.title}}
+              <Icon type="chevron-right"></Icon>
+            </li>
+          </ul>
+        </Card>
+        </Col>
+        <Col span="12">
+        <Card class="H-card" dis-hover>
+          <h3>审核概览</h3>
+          <ul v-if="knight">
+            <li>
+              骑士身份信息审核
+              <span class="fr">{{knight.identityExam}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+            <li>
+              骑士首次培训审核
+              <span class="fr">{{knight.firstTrainExam}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+            <li>
+              骑士星级培训审核
+              <span class="fr">{{knight.starTrainExam}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+          </ul>
+        </Card>
+        </Col>
+      </Row>
+      <Row style="margin-top: 40px;" :gutter="100">
+        <Col span="12">
+        <Card class="H-card" dis-hover>
+          <h3>实时监控</h3>
+          <ul v-if="monitoring">
+            <li>
+              需要手工派单
+              <span class="H-card-border">{{monitoring.needExpressOrder}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+            <li>
+              新订单
+              <span class="H-card-border">{{monitoring.newOrder}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+            <li>
+              已送达订单
+              <span class="H-card-border">{{monitoring.reachedOrder}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+            <li>
+              异常订单
+              <span class="H-card-border">{{monitoring.needExpressOrder}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+            <li>
+              骑手上班/休息
+              <span class="H-card-border">{{monitoring.deliverOnlineAndRest}}</span>
+              <Icon type="chevron-right"></Icon>
+            </li>
+          </ul>
+        </Card>
+        </Col>
+        <Col span="12">
         <Card class="H-card" dis-hover>
           <h3>数据看板</h3>
           <div class="H-card-data clearfix">
             <div class="item border-right border-bottom">
-              <p>订单成长量&nbsp;&nbsp;&nbsp;8765</p>
-              <p>比上周同期&nbsp;&nbsp;&nbsp;13%&nbsp;&nbsp;&nbsp;<Icon type="arrow-up-c"></Icon></p>
+              <p>订单成长量&nbsp;&nbsp;&nbsp;{{data.orderCount}}</p>
+              <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.orderCountRate}}&nbsp;&nbsp;&nbsp;<Icon
+                :type="this.data.orderCountRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'"
+                v-if="this.data.orderCountRateImage"></Icon>
+              </p>
             </div>
             <div class="item border-bottom">
-              <p>订单超时率&nbsp;&nbsp;&nbsp;1%</p>
-              <p>比上周同期&nbsp;&nbsp;&nbsp;10%&nbsp;&nbsp;&nbsp;<Icon type="arrow-up-c"></Icon></p>
+              <p>订单超时率&nbsp;&nbsp;&nbsp;{{data.orderOuttime}}</p>
+              <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.orderOuttimeRate}}&nbsp;&nbsp;&nbsp;<Icon
+                :type="this.data.orderOuttimeRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'"
+                v-if="this.data.orderOuttimeRateImage"></Icon>
+              </p>
             </div>
             <div class="item border-right">
-              <p>异常订单率&nbsp;&nbsp;&nbsp;11%</p>
-              <p>比上周同期&nbsp;&nbsp;&nbsp;1%&nbsp;&nbsp;&nbsp;<Icon type="arrow-up-c"></Icon></p>
+              <p>异常订单率&nbsp;&nbsp;&nbsp;{{data.orderAbnormal}}</p>
+              <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.orderAbnormalRate}}&nbsp;&nbsp;&nbsp;<Icon
+                :type="this.data.orderAbnormalRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'"
+                v-if="this.data.orderAbnormalRateImage"></Icon>
+              </p>
             </div>
             <div class="item">
-              <p>骑士人手&nbsp;&nbsp;&nbsp;32</p>
-              <p>比上周同期&nbsp;&nbsp;&nbsp;16%&nbsp;&nbsp;&nbsp;<Icon type="arrow-up-c"></Icon></p>
+              <p>骑士人手&nbsp;&nbsp;&nbsp;{{data.deliverorder}}</p>
+              <p>比上周同期&nbsp;&nbsp;&nbsp;{{data.deliverOrderRate}}&nbsp;&nbsp;&nbsp;<Icon
+                :type="this.data.deliverOrderRateImage === 1 ? 'arrow-up-c' : 'arrow-down-c'"
+                v-if="this.data.deliverOrderRateImage"></Icon>
+              </p>
             </div>
           </div>
         </Card>
-      </Col>
-    </Row>
+        </Col>
+      </Row>
+    </div>
   </div>
 </template>
 <script>
   import * as api from '@/api/common'
+  import * as time from '@/until/time'
 
   export default {
     data() {
       return {
-        province: [],
-        market: [],
-        area: [],
-        city: [],
-        provinceData: [
-          {
-            value: 'guangdongsheng',
-            label: '广东省'
-          },
-        ],
-        cityData: [
-          {
-            value: 'guangzhou',
-            label: '广州市'
-          }
-        ],
-        areaData: [
-          {
-            value: 'shiqiao',
-            label: '市桥'
-          }
-        ],
-        marketData: [
-          {
-            value: 'm1',
-            label: '菜市场1'
-          }
-        ]
+        indexData: false,// 首页展示数据
+        statistics: {},// 首页统计信息
+        sysMsg: [], // 系统消息
+        knight: {}, // 骑士审核
+        monitoring: {}, //实时监控
+        data: {}, // 数据看板
+        provinceData: [], // 省或直轄市数据集
+        province: '', // 省或直轄市
+        city: '', // 市
+        cityData: [], // 市数据集
+        showCity: true, // 是否允许选择城市 true ===>不允许 false 允许
+        areaData: [], // 区域数据集
+        area: '', // 区域
+        showArea: true, // 是否允许选择区域  true ===>不允许 false 允许
+        market: '', // 市场
+        marketData: [], // 市场数据集
+        showMarket: true  // 是否允许选择市场  true ===>不允许 false 允许
       }
     },
-    computed: {},
     created() {
+      this.getProvinceData()
     },
-    methods: {}
+    methods: {
+      // 获取省市数据
+      getProvinceData() {
+        api.getDeployManager().then((res) => {
+          if (res) {
+            this.provinceData = res
+          }
+        })
+      },
+      // 选择城市或省
+      changeProvince() {
+        this.getCityData(this.province)
+      },
+      // 获取市的数据
+      getCityData(proId) {
+        api.getProvinceIndex(proId).then((res) => {
+          if (res) {
+            this.showCity = false
+            this.cityData = res
+          }
+        })
+      },
+      // 选择城市
+      changeCity() {
+        this.getAreaData(this.city)
+      },
+      // 获取区域的数据
+      getAreaData(areaId) {
+        api.getCityManager(areaId).then((res) => {
+          if (res) {
+            this.showArea = false
+            this.areaData = res
+          }
+        })
+      },
+      // 选择区域
+      changeArea() {
+        this.getMarketData(this.area)
+      },
+      // 获取菜市场数据
+      getMarketData(areaId) {
+        api.getAreaMarket(areaId).then((res) => {
+          if (res) {
+            this.showMarket = false
+            this.marketData = res
+          }
+        })
+      },
+      // 选择菜市场
+      changeMarket() {
+        let params = {
+          marketId: this.market
+        }
+        // 获取首页数据
+        api.getIndeData(params).then((res) => {
+          console.log(res)
+          if (res) {
+            this.indexData = true
+            this.sysMsg = (res.custSysMsgList).map((item, index) => {
+              item.createdAt = time.formatDateTime(item.createdAt)
+              return item
+            })
+            this.statistics = res.head
+            this.knight = res.depliverData
+            this.monitoring = res.monitor
+            this.data = res.orderDataBlack
+          }
+        })
+      }
+    }
   }
 </script>
 <style lang="less" scoped type="text/less">
@@ -249,12 +262,12 @@
       height: 40px;
       line-height: 40px;
       margin-top: 12px;
-      background-color: #999;
+      background-color: #363e54;
       padding: 0 20px;
-      & > h4 {
+      color: #ffffff;
+      & > h3 {
         color: #fff;
         display: inline-block;
-        font-size: 16px;
       }
       & > ul {
         font-size: 0;
@@ -289,7 +302,7 @@
       .ivu-card-body > h3 {
         margin-bottom: 20px;
       }
-      .H-card-border{
+      .H-card-border {
         border: 1px solid #dddddd;
         border-radius: 4px;
         width: 150px;
@@ -301,84 +314,20 @@
         display: inline-block;
         margin-top: 2px;
       }
-      .H-card-data{
+      .H-card-data {
         width: 100%;
-        .item{
+        .item {
           width: 50%;
           float: left;
           padding: 20px 0;
           line-height: 35px;
           text-align: center;
         }
-        .item.border-right{
+        .item.border-right {
           border-right: 1px solid #dddddd;
         }
-        .item.border-bottom{
+        .item.border-bottom {
           border-bottom: 1px solid #dddddd;
-        }
-      }
-    }
-    .H_statistics {
-      margin-top: 40px;
-      .H_message {
-        width: 540px;
-        height: 285px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        float: left;
-        margin-bottom: 30px;
-        padding-top: 15px;
-        padding-left: 20px;
-        padding-right: 20px;
-        &:nth-of-type(odd) {
-          margin-right: 70px;
-        }
-        ul {
-          margin-top: 37px;
-          li {
-            text-align: left;
-            line-height: 35px;
-            padding-left: 10px;
-          }
-        }
-      }
-      .H_statistics_monitor {
-        ul {
-          li {
-            text-align: right;
-            border: none;
-            .H_statistics_monitor_shulian {
-              display: inline-block;
-              width: 200px;
-              height: 33px;
-              border: 1px solid #ccc;
-              border-radius: 3px;
-              text-align: center;
-              margin: 0 30px;
-            }
-          }
-        }
-      }
-      .H_statistics_kanban {
-        li {
-          float: right;
-          width: 50%;
-          height: 105px;
-          box-sizing: border-box;
-          padding: 10px 20px 0 30px;
-          &:nth-of-type(odd) {
-            border-right: 1px solid #ddd;
-          }
-          &:nth-of-type(1),
-          &:nth-of-type(2) {
-            border-bottom: 1px solid #ddd;
-          }
-          div {
-            width: 50%;
-            p {
-              text-align: center;
-            }
-          }
         }
       }
     }

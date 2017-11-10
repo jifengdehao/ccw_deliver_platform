@@ -1,17 +1,24 @@
 <template>
+  <div>
+  </div>
 </template>
-<script type='text/ecmascript-6'>
+<script>
 export default {
   components: {},
-  name: "main_header",
-  data () {
-    return {
-    }
+  props: {},
+  data() {
+    return {}
   },
   created: {},
   mounted: {},
-  methods: {}
+  activited: {},
+  update: {},
+  methods: {},
+  filfter: {},
+  computed: {},
+  watch: {}
 }
 </script>
 <style lang="css" scoped>
+
 </style>

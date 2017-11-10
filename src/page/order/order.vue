@@ -1,60 +1,199 @@
 <template>
-  <div id="order" class="main" :class="{'isShow':show}">
+  <div id="order">
     <!--内容头部-->
-    <div>
-      <span slot="h3">订单指派</span>
-      <li slot="ul" v-for="item in 5">
-        <Button>Default</Button>
-      </li>
-      <input type="search" placeholder=" 订单状态/收货人信息/订单号/运单号">
-      <Icon type="search" class="O_search_icon"></Icon>
-    </div>
-    <!--城市选择-->
-    <city-select v-model="cityinfo"></city-select>
-    <!--人员列表-->
-    <section class="O_cava">
-      <ul class="O_cava_name fl textCenter">
-        <li>姓名</li>
-        <li v-for="item in 10">菜城骑士</li>
-      </ul>
-      <div class="O_orderlist fr">
-        <Table border :columns="columns" :data="data"></Table>
+    <div class="top clearfix">
+      <h3 class="fl">订单指派</h3>
+      <div class="search-bar fr">
+        <Input v-model="expressId"
+               icon="search"
+               placeholder="订单状态/收货人信息/订单号/运单号"
+               style="width: 200px;margin-top: 4px;" @on-click="search"></Input>
       </div>
-    </section>
+    </div>
+    <Row style="margin-bottom: 20px;">
+      <Col span="6">
+      <h3>省区</h3>
+      <Select v-model="province" clearable style="width:200px" @on-change="changeProvince">
+        <Option v-for="(item,index) in provinceData" :value="item.provinceId" :key="item.provinceId">{{
+          item.provinceName}}
+        </Option>
+      </Select>
+      </Col>
+      <Col span="6">
+      <h3>市区</h3>
+      <Select v-model="city" style="width:200px" clearable :disabled="showCity" @on-change="changeCity">
+        <Option v-for="item in cityData" :value="item.cityId" :key="item.cityId">{{ item.cityName }}</Option>
+      </Select>
+      </Col>
+      <Col span="6">
+      <h3>区域</h3>
+      <Select v-model="area" style="width:200px" clearable :disabled="showArea" @on-change="changeArea">
+        <Option v-for="item in areaData" :value="item.areaId" :key="item.areaId">{{ item.areaName }}</Option>
+      </Select>
+      </Col>
+      <Col span="6">
+      <h3>菜市场</h3>
+      <Select v-model="market" style="width:200px" clearable :disabled="showMarket" @on-change="changeMarket">
+        <Option v-for="item in marketData" :value="item.marketId" :key="item.marketId">{{ item.marketName }}
+        </Option>
+      </Select>
+      </Col>
+    </Row>
+    <Tabs value="0" :animated="false" @on-click="selectTab" style="min-height: 600px;">
+      <TabPane label="新订单" name="0">
+        <Row class="O_cava" v-show="showResult">
+          <Col span="2">
+          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
+            <li>姓名</li>
+            <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
+                :class="{active:item.psDeliverId === deliverId} ">
+              {{item.name}}
+            </li>
+          </ul>
+          </Col>
+          <Col span="21" offset="1">
+          <Table border :columns="columns" :data="data"></Table>
+          <Page
+            :total="tableTotal"
+            :current="pageNumber"
+            :page-size="pageSize"
+            @on-change="changePage"
+            show-total
+            class="fr"
+            style="margin-top: 20px;"
+          ></Page>
+          </Col>
+        </Row>
+      </TabPane>
+      <!--<TabPane label="重抛池" name="1">-->
+      <!--</TabPane>-->
+      <TabPane label="配送中" name="1">
+        <Row class="O_cava" v-show="showResult">
+          <Col span="2">
+          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
+            <li>姓名</li>
+            <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
+                :class="{active:item.psDeliverId === deliverId} ">
+              {{item.name}}
+            </li>
+          </ul>
+          </Col>
+          <Col span="21" offset="1">
+          <Table border :columns="columns" :data="data"></Table>
+          <Page
+            :total="tableTotal"
+            :current="pageNumber"
+            :page-size="pageSize"
+            @on-change="changePage"
+            show-total
+            class="fr"
+            style="margin-top: 20px;"
+          ></Page>
+          </Col>
+        </Row>
+      </TabPane>
+      <TabPane label="配送完成" name="2">
+        <Row class="O_cava" v-show="showResult">
+          <Col span="2">
+          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
+            <li>姓名</li>
+            <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
+                :class="{active:item.psDeliverId === deliverId} ">
+              {{item.name}}
+            </li>
+          </ul>
+          </Col>
+          <Col span="21" offset="1">
+          <Table border :columns="columns" :data="data"></Table>
+          <Page
+            :total="tableTotal"
+            :current="pageNumber"
+            :page-size="pageSize"
+            @on-change="changePage"
+            show-total
+            class="fr"
+            style="margin-top: 20px;"
+          ></Page>
+          </Col>
+        </Row>
+      </TabPane>
+      <TabPane label="配送异常" name="3">
+        <Row class="O_cava" v-show="showResult">
+          <Col span="2">
+          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
+            <li>姓名</li>
+            <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
+                :class="{active:item.psDeliverId === deliverId} ">
+              {{item.name}}
+            </li>
+          </ul>
+          </Col>
+          <Col span="21" offset="1">
+          <Table border :columns="columns" :data="data"></Table>
+          <Page
+            :total="tableTotal"
+            :current="pageNumber"
+            :page-size="pageSize"
+            @on-change="changePage"
+            show-total
+            class="fr"
+            style="margin-top: 20px;"
+          ></Page>
+          </Col>
+        </Row>
+      </TabPane>
+    </Tabs>
   </div>
 </template>
 <script type="text/ecmascript-6">
-  import citySelect from '@/components/changecity/cityselect.vue'
+  import * as api from '@/api/common'
+  import * as time from '@/until/time'
 
   export default {
-    components: {
-      citySelect
-    },
     data() {
       return {
-        cityinfo: '',
+        provinceData: [], // 省或直轄市数据集
+        province: '', // 省或直轄市
+        city: '', // 市
+        cityData: [], // 市数据集
+        showCity: true, // 是否允许选择城市 true ===>不允许 false 允许
+        areaData: [], // 区域数据集
+        area: '', // 区域
+        showArea: true, // 是否允许选择区域  true ===>不允许 false 允许
+        market: '', // 市场
+        marketData: [], // 市场数据集
+        showMarket: true,  // 是否允许选择市场  true ===>不允许 false 允许
         columns: [
           {
-            title: '订单列表',
-            key: 'name',
+            title: '用户名',
+            key: 'customId',
+            align: 'center'
+          },
+          {
+            title: '下单时间',
+            align: 'center',
+            key: 'submitTime',
             render: (h, params) => {
-              return h('div', [
-                h('Icon', {
-                  props: {
-                    type: 'person'
-                  }
-                }),
-                h('strong', params.row.name)
-              ]);
+              return time.formatDateTime(params.row.submitTime)
             }
           },
           {
-            title: '年龄',
-            key: 'age'
+            title: '期待取货',
+            align: 'center',
+            key: 'endTime',
+            render: (h, params) => {
+              return time.formatDateTime(params.row.endTime)
+            }
           },
           {
-            title: '地址',
-            key: 'address'
+            title: '订单状态',
+            align: 'center',
+            key: 'status'
+          },
+          {
+            title: '运单编号',
+            align: 'center',
+            key: 'expressId'
           },
           {
             title: '操作',
@@ -73,7 +212,7 @@
                   },
                   on: {
                     click: () => {
-                      this.tocheckout(params.index)
+                      this.$router.push('/order/' + params.row.orderId)
                     }
                   }
                 }, '查看'),
@@ -81,68 +220,153 @@
             }
           }
         ],
-        data: [
-          {
-            name: '王小明',
-            age: 18,
-            address: '北京市朝阳区芍药居'
-          },
-          {
-            name: '张小刚',
-            age: 25,
-            address: '北京市海淀区西二旗'
-          },
-          {
-            name: '李小红',
-            age: 30,
-            address: '上海市浦东新区世纪大道'
-          },
-          {
-            name: '周小伟',
-            age: 26,
-            address: '深圳市南山区深南大道'
-          }
-        ]
+        data: [],
+        expressId: '', // 搜索
+        deliverId: '',// 配送员Id
+        pageSize: 20, //默认表格一页数据
+        pageNumber: 1,  // 默认第一页
+        tableTotal: 0,  // 表格数据总数
+        state: '0', // 状态
+        deliverData: [], //配送员数据
+        showResult: false // 数据展示
       }
     },
-    computed: {
-      show() {
-        return this.$store.state.show
-      }
+    created() {
+      this.getProvinceData()
     },
     methods: {
-      tocheckout(index) {
-        this.$router.push('/o_checkorder')
-        //            this.$Modal.info({
-        //              title: '用户信息',
-        //              content: `姓名：${this.data[index].name}<br>年龄：${this.data[index].age}<br>地址：${this.data[index].address}`
-        //            })
+      // 获取省市数据
+      getProvinceData() {
+        api.getDeployManager().then((res) => {
+          if (res) {
+            this.provinceData = res
+          }
+        })
       },
+      // 选择城市或省
+      changeProvince() {
+        this.getCityData(this.province)
+      },
+      // 获取市的数据
+      getCityData(proId) {
+        api.getProvinceIndex(proId).then((res) => {
+          if (res) {
+            this.showCity = false
+            this.cityData = res
+          }
+        })
+      },
+      // 选择城市
+      changeCity() {
+        this.getAreaData(this.city)
+      },
+      // 获取区域的数据
+      getAreaData(areaId) {
+        api.getCityManager(areaId).then((res) => {
+          if (res) {
+            this.showArea = false
+            this.areaData = res
+          }
+        })
+      },
+      // 选择区域
+      changeArea() {
+        this.getMarketData(this.area)
+      },
+      // 获取菜市场数据
+      getMarketData(areaId) {
+        api.getAreaMarket(areaId).then((res) => {
+          if (res) {
+            this.showMarket = false
+            this.marketData = res
+          }
+        })
+      },
+      // 选择菜市场
+      changeMarket() {
+        let params = {
+          marketId: this.market,
+          pageSize: this.pageSize,
+          pageNumber: this.pageNumber,
+          psDeliverId: this.deliverId,
+          expressId: this.expressId,
+          state: this.state
+        }
+        console.log(params)
+        if (params.marketId) {
+          api.getOrderData(params).then((res) => {
+            console.log(res)
+            if (res) {
+              this.showResult = true
+              this.data = res.expressPage.records
+              this.tableTotal = res.expressPage.total
+              this.deliverData = res.deliverList
+            }
+          })
+        }
+      },
+      // 分页
+      changePage(index) {
+        this.pageNumber = index
+        this.changeMarket()
+      },
+      // 切换
+      selectTab(name) {
+        this.state = name
+        this.pageNumber = 1
+        this.changeMarket()
+      },
+      // 选择配送员
+      getDeliver(key) {
+        console.log(key)
+        this.deliverId = key
+        this.changeMarket()
+      },
+      // 搜索
+      search() {
+        this.changeMarket()
+      }
     }
   }
 </script>
 <style lang="less" scoped type="text/less">
   #order {
+    .top {
+      height: 40px;
+      background-color: #363e54;
+      margin-bottom: 20px;
+      padding: 0 20px;
+      & > h3 {
+        color: #fff;
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+      }
+    }
     .O_cava {
+      margin-top: 40px;
       .O_cava_name {
-        width: 18%;
         border: 1px solid #ccc;
         li {
           width: 100%;
-          height: 30px;
-          line-height: 30px;
+          height: 35px;
+          line-height: 35px;
           border-bottom: 1px solid #ccc;
+          cursor: pointer;
           &:first-child {
             height: 40px;
             line-height: 40px;
             font-weight: 700;
           }
+          &:last-child {
+            border-bottom: none;
+          }
+          &.active {
+            background-color: #495062;
+            color: #ffffff;
+          }
         }
       }
-
-    }
-    .O_orderlist {
-      width: 80%;
     }
   }
 </style>

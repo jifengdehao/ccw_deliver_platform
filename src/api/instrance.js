@@ -16,7 +16,6 @@ var ax = axios.create({
   baseURL: URI,
   timeout: 30000,
   headers: {
-    // 'Content-Type': 'application/x-www-form-urlencoded',
     TOKEN: ''
   }
 })
@@ -35,6 +34,7 @@ export const itr = (type, url, params) => {
     token = userInfo.token ? userInfo.token : ''
   }
   ax.defaults.headers.TOKEN = token
+  // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
   return ax[type](url, params)
 }
 

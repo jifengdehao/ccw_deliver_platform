@@ -11,6 +11,7 @@ import cavalier from '@/page/cavalier/cavalier.vue' //骑士管理
 import cAuditing from '@/page/cavalier/c_auditing.vue' //骑士审核
 import c_message from '@/page/cavalier/c_message.vue' //查看骑士信息
 import cPersonal from '@/page/cavalier/c_personal.vue' //骑士-人员管理
+import SeePersonal from '@/page/cavalier/see_personal.vue' // 骑士-查看配送人员
 import cTrain from '@/page/cavalier/c_train.vue' //培训管理
 import addcourse from '@/page/cavalier/addcourse.vue' //培训管理-课程管理-增加
 import courseinfo from '@/page/cavalier/courseinfo.vue' //培训管理-课程管理=查看
@@ -50,6 +51,8 @@ import d_list from '@/page/DRP/d_list.vue' //分销列表
 import extendinfo from '@/page/DRP/extendinfo.vue' //分销列表
 import DRP_info from '@/page/DRP/DRP_info.vue' //分销列表
 import Layout from '@/components/layout/layout'
+import Finance from '@/page/finance/finance' // 财务对账
+import seeFinance from '@/page/finance/see_finance' // 查看个人对象信息
 
 export default new Router({
   routes: [
@@ -70,13 +73,11 @@ export default new Router({
         },
         {
           path: '/order',
-          component: order,
-          children: [
-            {
-              path: '/o_checkorder',
-              component: o_checkorder
-            }
-          ]
+          component: order
+        },
+        {
+          path:'/order/:id',
+          component: o_checkorder
         },
         {
           path: '/cavalier',
@@ -93,6 +94,10 @@ export default new Router({
         {
           path: '/cPersonal',
           component: cPersonal
+        },
+        {
+          path: '/infoDateil',
+          component: SeePersonal
         },
         {
           path: '/cTrain',
@@ -272,6 +277,16 @@ export default new Router({
           path: '/DRP_info',
           name: 'DRP_info',
           component: DRP_info
+        },
+        {
+          path: '/finance',
+          name: 'Finance',
+          component: Finance
+        },
+        {
+          path: '/seeFinance',
+          name: 'seeFinance',
+          component: seeFinance
         }
       ]
     }
