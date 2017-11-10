@@ -11,7 +11,7 @@
     <div class="header">
       <h2>未提交资料</h2>
       <div class="header-search">
-        <Button @click="exportModal=true">导出</Button>
+        <Button @click="onExportModal">导出</Button>
       </div>
     </div>
     <!-- table -->
@@ -28,7 +28,7 @@
       </div>
     </Modal>
 
-    <div v-if="DeliverManager && DeliverManager.length > 0" class="page"><Page :total="total" :current="pageNumber" @on-change="changePage"></Page></div>
+    <div v-if="DeliverManager && DeliverManager.length > 0" class="page"><Page :total="total" :current="params.pageNumber" @on-change="changePage"></Page></div>
   </div>
 </template>
 <script>
@@ -37,8 +37,6 @@ export default {
   components: {},
   data() {
     return {
-      pageSize: 10, // 每页显示记录数
-      pageNumber: 1, // 当前页码
       columns1: [
         {
           title: '序号',
@@ -67,7 +65,9 @@ export default {
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('Button', {
+              h(
+                'Button',
+                {
                   props: {
                     type: 'error',
                     size: 'small'
@@ -75,10 +75,18 @@ export default {
                   on: {
                     click: () => {
                       // 删某一个未提交资料骑士
-                      api.deleteUnverified(params.row.psDeliverApplyId).then(data => {})
+                      api
+                        .deleteUnverified(params.row.psDeliverApplyId)
+                        .then(data => {
+                          if (data === true) {
+                            this.getDeliverManager() // 刷新列表
+                          }
+                        })
                     }
                   }
-                }, '删除')
+                },
+                '删除'
+              )
             ])
           }
         }
@@ -88,22 +96,28 @@ export default {
       startTime: '', // 获取导出开始时间
       endTime: '', // 获取导出结束时间
       total: '', // 总页数
+      params: {
+        pageSize: 10, // 每页显示记录数
+        pageNumber: 1 // 当前页码
+      } // 列表请求数据
     }
   },
-  created: function () {
+  created: function() {
     this.getDeliverManager() // 初始化数据
   },
   methods: {
     // 获取列表数据
-    getDeliverManager(){
-      let params = {
-        pageSize: this.pageSize,
-        pageNumber: this.pageNumber
-      }
-      api.getDeliverManager(params).then(data => {
-         this.DeliverManager = data.records
-         this.total = data.total
+    getDeliverManager() {
+      api.getDeliverManager(this.params).then(data => {
+        this.DeliverManager = data.records
+        this.total = data.total
       })
+    },
+    // 打开导出弹框
+    onExportModal() {
+      this.exportModal = true
+      this.endTime = ''
+      this.startTime = ''
     },
     // 导出数据
     getExportData() {
@@ -112,19 +126,22 @@ export default {
         endTime: this.endTime
       }
       api.exportUnverified(parmas).then(data => {
-        console.log(data, 'data')
+        if (data && data != null) {
+          window.open(data)
+        }
       })
+      this.exportModal = false
     },
     // 点击分页发生变化
     changePage(page) {
+      console.log(page, 'page')
       this.params.pageNumber = page
-      this.getFinanceList()
+      this.getDeliverManager()
     }
   }
 }
 </script>
 <style lang="css" scoped>
-
 .header {
   height: 40px;
   line-height: 40px;
