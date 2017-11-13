@@ -1,9 +1,13 @@
 <template>
   <div id="s_operation" class="main" :class="{'isShow':show}">
-    <main-header>
-      <span slot="h3">操作日志</span>
+    <main-header :title="title">
+      <!-- <span slot="h3">操作日志</span>
       <input placeholder=" 姓名/联系方式/用户ID">
-      <Icon type="search" class="O_search_icon"></Icon>
+      <Icon type="search" class="O_search_icon"></Icon> -->
+       <Input v-model="searchModel"
+               icon="search"
+               placeholder="姓名/联系方式/用户ID"
+               style="width: 200px;margin-top: 4px;" @on-click="search"></Input>
     </main-header>
     <section>
       <div style="height: 50px;">
@@ -26,6 +30,8 @@ export default {
   },
   data() {
     return {
+      title:'操作日志',
+      searchModel:'',
       columns7: [
         {
           title: '姓名',
@@ -99,9 +105,8 @@ export default {
     }
   },
   methods: {
-
     to(index) {
-      this.$router.push('/s_operation_info')
+      this.$router.push('/s_operation／'+index)
     },
     exportData(type) {
       if (type === 1) {
@@ -109,6 +114,9 @@ export default {
           filename: '原始数据'
         });
       }
+    },
+    search(){
+      console.log(this.searchModel)
     }
 
   }

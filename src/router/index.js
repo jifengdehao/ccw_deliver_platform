@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Route from './route'
 
 Vue.use(Router)
 
+/*
 import Login from '@/page/login/login' //登录页
 import home from '@/page/home/home.vue' //主页
 import order from '@/page/order/order.vue' //订单管理
@@ -51,7 +53,8 @@ import DRP_info from '@/page/DRP/DRP_info.vue' //分销列表
 import Layout from '@/components/layout/layout'
 import Finance from '@/page/finance/finance' // 财务对账
 import seeFinance from '@/page/finance/see_finance' // 查看个人对象信息
-
+*/
+/*
 export default new Router({
   routes: [
     {
@@ -273,4 +276,9 @@ export default new Router({
       ]
     }
   ]
+})
+*/
+
+export default new Router({
+  routes: Route
 })

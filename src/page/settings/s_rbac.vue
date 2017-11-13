@@ -1,9 +1,13 @@
 <template>
   <div id="s_rbac" class="main" :class="{'isShow':show}">
-    <main-header>
-      <span slot="h3">权限管理</span>
+    <main-header :title="title">
+      <!-- <span slot="h3">权限管理</span>
       <input placeholder=" 姓名/联系方式/用户ID">
-      <Icon type="search" class="O_search_icon"></Icon>
+      <Icon type="search" class="O_search_icon"></Icon> -->
+       <Input v-model="searchModel"
+               icon="search"
+               placeholder="姓名/联系方式/用户ID"
+               style="width: 200px;margin-top: 4px;" @on-click="search"></Input>
     </main-header>
     <section class="s_rbac_list">
       <Table border :columns="columns7" :data="data6"></Table>
@@ -16,6 +20,8 @@ export default {
   components: { mainHeader },
   data() {
     return {
+      title:'权限管理',
+      searchModel:'',
       columns7: [
         {
           title: '姓名',
@@ -99,8 +105,11 @@ export default {
       return new Date().toLocaleDateString()
     },
     to(index) {
-      this.$router.push('/s_rbac_chakan')
+      this.$router.push('/s_rbac/'+index)
     },
+    search(){
+      console.log(this.searchModel)
+    }
   }
 }
 </script>

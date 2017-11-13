@@ -5,7 +5,7 @@
     </div>
     <!--统计信息-->
     <div class="H-tip clearfix">
-      <h3>首页统计信息</h3>
+      <h2>首页统计信息</h2>
       <ul class="fr">
         <li>在线骑手：{{statistics.onlineDeliver}}</li>
         <li>今日订单：{{statistics.todayOrderCount}}</li>
@@ -265,7 +265,7 @@
       background-color: #363e54;
       padding: 0 20px;
       color: #ffffff;
-      & > h3 {
+      & > h2 {
         color: #fff;
         display: inline-block;
       }

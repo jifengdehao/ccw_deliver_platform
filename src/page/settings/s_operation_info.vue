@@ -1,7 +1,7 @@
 <template>
   <div id="s_operation_info" class="main" :class="{'isShow':show}">
-    <main-header>
-      <span slot="h3">操作日志</span>
+    <main-header :title="title">
+      <!-- <span slot="h3">操作日志</span> -->
     </main-header>
     <section class="s_operation_infolist">
       <p>用户ID： Ca1234</p>
@@ -45,7 +45,9 @@ import mainHeader from '../../components/header/main_header.vue'
 export default {
   components: { mainHeader },
   data() {
-    return {}
+    return {
+      title:'日志详情'
+    }
   },
   computed: {
     show() {

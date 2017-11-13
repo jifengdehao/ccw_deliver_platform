@@ -1,10 +1,13 @@
 <template>
   <div id="s_message" class="main" :class="{'isShow':show}">
-    <main-header>
-      <span slot="h3">消息管理</span>
-      <Button slot="button" @click="addmessage()">新增</Button>
+    <main-header :title="title">
+      <!-- <span slot="h3">消息管理</span> -->
+      <!-- <Button type="button" @click="addmessage()">新增</Button> -->
     </main-header>
     <section>
+      <div style="height:50px;text-align:right;">
+        <Button type="button" @click="addmessage()">新增</Button>
+      </div>
       <Table border :columns="columns7" :data="data6"></Table>
     </section>
   </div>
@@ -15,6 +18,7 @@ export default {
   components: { mainHeader },
   data() {
     return {
+      title:'消息管理',
       columns7: [
         {
           title: '姓名',

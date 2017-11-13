@@ -1,0 +1,36 @@
+{
+    "code":0,
+    "msg":"成功",
+    "data":[
+        {
+            "menu":"home",
+            "icon":"home",
+            "name":"首页",
+            "noDropdown": true
+        },
+        {
+            "menu":"",
+            "icon":"ios-paper",
+            "name":"订单管理",
+            "noDropdown": false,
+            "submenu":[
+                {
+                    "menu":"order",
+                    "name":"订单管理"
+                }
+            ]
+        },
+        {
+            "menu":"",
+            "icon":"ios-people",
+            "name":"骑士管理",
+            "noDropdown": false,
+            "submenu":[
+                {
+                    "menu":"order",
+                    "name":"骑士管理"
+                }
+            ]
+        }
+    ]
+}

@@ -1,7 +1,7 @@
 <template>
   <div id="s_rbac_chakan" class="main" :class="{'isShow':show}">
-    <main-header>
-      <span slot="h3">权限管理</span>
+    <main-header :title="title">
+      <!-- <span slot="h3">权限管理</span> -->
     </main-header>
     <section class="s_rbac_chakan_shuju">
       <ul>
@@ -27,7 +27,7 @@ export default {
   components: { mainHeader },
   data() {
     return {
-
+      title:'查看权限'
     }
   },
   computed: {

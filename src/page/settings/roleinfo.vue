@@ -1,7 +1,7 @@
 <template>
   <div id="roleinfo" class="main" :class="{'isShow':show}">
-    <main-header>
-      <span slot="h3">查看</span>
+    <main-header :title="title">
+      <!-- <span slot="h3">查看</span> -->
     </main-header>
     <section style="text-align: left;padding: 20px 0;">
       <span style="font-size: 16px">角色：</span>
@@ -52,6 +52,7 @@ export default {
   components: { mainHeader },
   data() {
     return {
+      title:"查看角色",
       model1: '',
       cityList: [
         {

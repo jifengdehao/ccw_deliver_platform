@@ -44,7 +44,7 @@ export default {
   data () {
     return {
       id: (() => {
-        return this.$route.query.userId
+        return this.$route.params.id
       })(),
       startTimeStr: '', // 导出开始时间
       endTimeStr: '', // 导出结束时间

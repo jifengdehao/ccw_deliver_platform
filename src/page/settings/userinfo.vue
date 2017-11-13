@@ -1,7 +1,6 @@
 <template>
   <div id="userinfo" class="main" :class="{'isShow':show}">
-    <main-header>
-      <span slot="h3">用户管理</span>
+    <main-header :title="title">
     </main-header>
     <section class="userinfo_list">
       <ul>
@@ -27,7 +26,9 @@ import mainHeader from '../../components/header/main_header.vue'
 export default {
   components: { mainHeader },
   data() {
-    return {}
+    return {
+      title:'用户信息'
+    }
   },
   computed: {
     show() {

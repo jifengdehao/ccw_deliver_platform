@@ -1,6 +1,6 @@
 <template>
   <div id="addrole" class="main" :class="{'isShow':show}">
-    <main-header>
+    <main-header :title="title">
       <span slot="h3">新增</span>
     </main-header>
     <section style="text-align: left;padding: 20px 0;">
@@ -52,6 +52,7 @@ export default {
   components: { mainHeader },
   data() {
     return {
+      title:'新增角色',
       model1: '',
       cityList: [
         {

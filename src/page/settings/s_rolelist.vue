@@ -1,9 +1,13 @@
 <template>
   <div id="s_rolelist" class="main" :class="{'isShow':show}">
-    <main-header>
-      <span slot="h3">角色列表</span>
+    <main-header :title="title">
+      <!-- <span slot="h3">角色列表</span>
       <input placeholder=" 姓名/手机号/用户ID/角色名称">
-      <Icon type="search" class="O_search_icon"></Icon>
+      <Icon type="search" class="O_search_icon"></Icon> -->
+      <Input v-model="searchModel"
+               icon="search"
+               placeholder="姓名/联系方式/用户ID"
+               style="width: 200px;margin-top: 4px;" @on-click="search"></Input>
     </main-header>
     <section>
       <div style="height: 50px;">
@@ -19,6 +23,8 @@ export default {
   components: { mainHeader },
   data() {
     return {
+      title:'角色列表',
+      searchModel:'',
       columns7: [
         {
           title: '姓名',
@@ -101,8 +107,11 @@ export default {
       this.$router.push('/addrole')
     },
     to(index) {
-      this.$router.push('/roleinfo')
+      this.$router.push('/s_rolelist/'+index)
     },
+    search(){
+      console.log(this.searchModel)
+    }
   }
 }
 </script>

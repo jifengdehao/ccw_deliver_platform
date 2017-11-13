@@ -1,9 +1,10 @@
 <template>
   <div id="s_platform" class="main" :class="{'isShow':show}">
-    <main-header>
-      <span slot="h3">平台用户</span>
-      <input placeholder=" 姓名/联系方式/用户ID">
-      <Icon type="search" class="O_search_icon"></Icon>
+    <main-header :title="title">
+      <Input v-model="searchModel"
+               icon="search"
+               placeholder="姓名/联系方式/用户ID"
+               style="width: 200px;margin-top: 4px;" @on-click="search"></Input>
     </main-header>
     <section>
       <div style="height: 50px;">
@@ -21,6 +22,8 @@ export default {
   },
   data() {
     return {
+      title:'平台用户',
+      searchModel:'',
       columns7: [
         {
           title: '姓名',
@@ -115,7 +118,7 @@ export default {
       this.$router.push('/adduser')
     },
     touserinfo(index) {
-      this.$router.push('/userinfo')
+      this.$router.push('/s_platform/'+index)
     },
     remove(index) {
       this.$Modal.info({
@@ -126,6 +129,9 @@ export default {
 
       })
       this.data6.splice(index, 1);
+    },
+    search(){
+      console.log(this.searchModel)
     }
   }
 }

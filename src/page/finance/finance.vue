@@ -171,9 +171,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push(
-                        '/seeFinance?userId=' + params.row.psDeliverId
-                      )
+                      this.$router.push('/finance/'+ params.row.psDeliverId)
                     }
                   }
                 },
