@@ -1,3 +1,10 @@
+/*
+ * @Author: ZengFanlu 
+ * @Date: 2017-11-10 11:52:57 
+ * DeveloperMailbox:   zengfanlu@ccw163.com 
+ * FunctionPoint: 骑士管理 配送人员列表 
+ */
+
 <template>
   <div>
     <!-- 头部 -->
@@ -15,7 +22,7 @@
       </div>
 
       <Table border :columns="columns7" :data="deliverListData" style="margin-bottom: 20px"></Table>
-      <Page v-if="deliverListData && deliverListData.length > 0" :current="params.pageNumber" :total="total" style="float: right"></Page>
+      <Page v-if="deliverListData && deliverListData.length > 0" :current="params.pageNumber" :total="total" @on-change="changePage" style="float: right"></Page>
 
        <!-- 导出数据Modal -->
       <Modal v-model="exportModal" width="300">
@@ -44,14 +51,14 @@
 <script>
 import * as api from '@/api/common'
 export default {
-  components: { },
+  components: {},
   data() {
     return {
       params: {
         pageSize: 10,
         pageNumber: 1,
         condition: ''
-      }, // 列表请求数据 
+      }, // 列表请求数据
       searchData: '', // 搜索数据
       total: '', // 总条数
       exportModal: false, // 隐藏导出弹框
@@ -80,9 +87,7 @@ export default {
           title: '所属菜市场',
           key: 'psDeliverMarket',
           render: (h, params) => {
-            return h('div', [
-              h('span', params.row.psDeliverMarket.marketName)
-            ])
+            return h('div', [h('span', params.row.psDeliverMarket.marketName)])
           }
         },
         {
@@ -96,40 +101,50 @@ export default {
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.$router.push('/infoDateil/?id=' + params.row.psDeliverId)
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push(
+                        '/infoDateil/?id=' + params.row.psDeliverId
+                      )
+                    }
                   }
-                }
-              }, '查看'),
-              h('Button', {
-                props: {
-                  type: 'error',
-                  size: 'small'
                 },
-                on: {
-                  click: () => {
-                    this.showModal = true
-                    this.psDeliverId = params.row.psDeliverId
+                '查看'
+              ),
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'error',
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      this.showModal = true
+                      this.psDeliverId = params.row.psDeliverId
+                    }
                   }
-                }
-              }, '冻结')
-            ]);
+                },
+                '冻结'
+              )
+            ])
           }
         }
       ],
       deliverListData: []
     }
   },
-  created () {
+  created() {
     this.getDeliverList() // 初始化数据
   },
   methods: {
@@ -141,7 +156,7 @@ export default {
       })
     },
     // 搜索请求
-    onSearch(){
+    onSearch() {
       this.params.pageNumber = 1
       this.params.condition = this.searchData
       this.getDeliverList()
@@ -154,12 +169,13 @@ export default {
       this.startTime = ''
     },
     // 导出数据
-    getExportData(){
+    getExportData() {
       let params = {
         beginTime: this.startTime,
         endTime: this.endTime
       }
-      api.getDeliverPoi(params).then(data => { // 导出数据
+      api.getDeliverPoi(params).then(data => {
+        // 导出数据
         window.open(data)
       })
       this.exportModal = false
@@ -173,7 +189,12 @@ export default {
         }
       })
     },
-    cancel(){}
+    // 点击分页发生变化
+    changePage(page) {
+      this.params.pageNumber = page
+      this.getDeliverList()
+    },
+    cancel() {}
   }
 }
 </script>

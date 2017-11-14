@@ -2,7 +2,7 @@
   <div id="order">
     <!--内容头部-->
     <div class="top clearfix">
-      <h3 class="fl">订单指派</h3>
+      <h2 class="fl">订单指派</h2>
       <div class="search-bar fr">
         <Input v-model="expressId"
                icon="search"
@@ -336,7 +336,7 @@
       background-color: #363e54;
       margin-bottom: 20px;
       padding: 0 20px;
-      & > h3 {
+      & > h2 {
         color: #fff;
         display: inline-block;
         height: 40px;

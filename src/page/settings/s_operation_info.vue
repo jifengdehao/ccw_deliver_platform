@@ -1,9 +1,10 @@
 <template>
   <div id="s_operation_info" class="main" :class="{'isShow':show}">
     <!-- 头部 -->
-    <div class="header">
-      <h2>操作日志</h2>
-    </div>
+    <!--<div class="header">-->
+      <!--<h2>操作日志</h2>-->
+    <!--</div>-->
+    <main-header :title="title"></main-header>
     <section class="s_operation_infolist">
       <p><span>用户ID&nbsp;&nbsp;:&nbsp;&nbsp;</span>Ca1234</p>
       <p><span>姓名&nbsp;&nbsp;:&nbsp;&nbsp;</span>应浦和</p>
@@ -46,7 +47,9 @@ import mainHeader from '../../components/header/main_header.vue'
 export default {
   components: { mainHeader },
   data() {
-    return {}
+    return {
+      title:'日志详情'
+    }
   },
   computed: {
     show() {

@@ -1,8 +1,8 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2017-11-06 14:18:46 
- * DeveloperMailbox:   wufengliang@ccw163.com 
- * FunctionPoint: 角色列表 
+ * @Author: WuFengliang
+ * @Date: 2017-11-06 14:18:46
+ * DeveloperMailbox:   wufengliang@ccw163.com
+ * FunctionPoint: 角色列表
  */
 <template>
   <div id="s_rolelist" class="main" :class="{'isShow':show}">

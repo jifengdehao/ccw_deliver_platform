@@ -1,8 +1,8 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2017-11-03 15:49:25 
- * DeveloperMailbox:   wufengliang@ccw163.com 
- * FunctionPoint: 权限管理查看 
+ * @Author: WuFengliang
+ * @Date: 2017-11-03 15:49:25
+ * DeveloperMailbox:   wufengliang@ccw163.com
+ * FunctionPoint: 权限管理查看
  */
 <template>
   <div>

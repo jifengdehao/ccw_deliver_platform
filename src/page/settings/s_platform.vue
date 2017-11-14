@@ -1,8 +1,8 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2017-11-03 15:33:21 
- * DeveloperMailbox:   wufengliang@ccw163.com 
- * FunctionPoint: 平台用户 
+ * @Author: WuFengliang
+ * @Date: 2017-11-03 15:33:21
+ * DeveloperMailbox:   wufengliang@ccw163.com
+ * FunctionPoint: 平台用户
  */
 <template>
   <div id="s_platform" class="main" :class="{'isShow':show}">
@@ -152,6 +152,19 @@ export default {
     //  添加用户
     addpersonal() {
       this.$router.push('/adduser')
+    },
+    touserinfo(index) {
+      this.$router.push('/userinfo')
+    },
+    remove(index) {
+      this.$Modal.info({
+        title: '提醒',
+        cancel: "cancel",
+        content: `是否删除 :${this.data6[index].name} @on-ok="ok"
+              @on-cancel="cancel"`
+
+      })
+      this.data6.splice(index, 1);
     }
   }
 }

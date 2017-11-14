@@ -1,25 +1,27 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2017-11-03 16:25:45 
- * DeveloperMailbox:   wufengliang@ccw163.com 
- * FunctionPoint: 添加用户 
+ * @Author: WuFengliang
+ * @Date: 2017-11-03 16:25:45
+ * DeveloperMailbox:   wufengliang@ccw163.com
+ * FunctionPoint: 添加用户
  */
 <template>
   <div id="adduser" class="main" :class="{'isShow':show}">
     <div class="header">
       <h2>用户管理</h2>
     </div>
+    <main-header :title="title">
+    </main-header>
     <section class="userinfo_list">
       <ul>
         <li><span>姓名</span><input type="text" v-model="params.userName"></li>
-        <li><span>性别</span><Select v-model="params.sex" style="width:168px;height:30px;" 
+        <li><span>性别</span><Select v-model="params.sex" style="width:168px;height:30px;"
                                    >
                                    <Option value="1">男</Option>
                                    <Option value="0">女</Option>
                                    </Select></li>
         <li><span>联系方式</span><input type="text" v-model="params.mobileno"></li>
         <li><span>邮箱地址</span><input type="text" v-model="params.email"></li>
-        <li><span>角色名称</span><Select v-model="params.role" style="width:168px;" 
+        <li><span>角色名称</span><Select v-model="params.role" style="width:168px;"
                                    >
                                    <Option value="管理员">管理员</Option>
                                    <Option value="区长">区长</Option>
@@ -46,6 +48,7 @@
         </Select>
         </li>
       </ul>
+
     </section>
     <p class="btn-p">
       <Button type="ghost" size="large" @click="resetInfo">取消</Button>
@@ -54,9 +57,9 @@
   </div>
 </template>
 <script>
-import * as http from '@/api/common'
+import mainHeader from '../../components/header/main_header.vue'
 export default {
-  name: 'addUser',
+  components: { mainHeader },
   data() {
     return {
       params: {
@@ -74,6 +77,9 @@ export default {
       cityList: null, //  市区数据集合
       areaList: null, //  区域集合
       marketList: null //  菜市场集合
+    }
+    return {
+      title:'新增用户'
     }
   },
   computed: {

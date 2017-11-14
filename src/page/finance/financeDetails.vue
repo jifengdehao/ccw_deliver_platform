@@ -44,7 +44,7 @@ export default {
   data () {
     return {
       id: (() => {
-        return this.$route.query.userId
+        return this.$route.params.id
       })(),
       startTimeStr: '', // 导出开始时间
       endTimeStr: '', // 导出结束时间
@@ -145,7 +145,9 @@ export default {
         endTime: this.endTimeStr
       }
       api.getFinanceOrderExport(params).then(data => {
-        console.log(data)
+        if (data && data != null) {
+          window.open(data)
+        }
       })
     },
     // 开始选择搜索时间
@@ -162,7 +164,7 @@ export default {
     // 点击分页发生变化
     changePage(page) {
       this.params.pageNumber = page
-      this.getFinanceList()
+      this.getFinanceOrderList()
     }
   }
 }

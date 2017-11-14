@@ -65,7 +65,7 @@ export default {
           key: 'action_desc'
         }
       ],
-      operationData: [
+      data6: [
         {
           name: '王小明',
           age: 18,
@@ -111,6 +111,7 @@ export default {
         console.log(data)
       })
     }
+
   }
 }
 </script>
