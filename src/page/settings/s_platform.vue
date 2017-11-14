@@ -1,51 +1,73 @@
+/*
+ * @Author: WuFengliang
+ * @Date: 2017-11-03 15:33:21
+ * DeveloperMailbox:   wufengliang@ccw163.com
+ * FunctionPoint: 平台用户
+ */
 <template>
   <div id="s_platform" class="main" :class="{'isShow':show}">
-    <main-header :title="title">
-      <Input v-model="searchModel"
-               icon="search"
-               placeholder="姓名/联系方式/用户ID"
-               style="width: 200px;margin-top: 4px;" @on-click="search"></Input>
-    </main-header>
-    <section>
-      <div style="height: 50px;">
-        <Button type="ghost" size="large" class="fr" @click="addpersonal()">新增</Button>
+    <!-- 头部 -->
+    <div class="header">
+      <h2>平台用户</h2>
+      <div class="header-search">
+        <Input placeholder="姓名/联系方式/用户ID" style="width: 200px" v-model="params.condition"></Input>
+        <span @click="search"><Icon type="ios-search icos"></Icon></span>
       </div>
-      <Table border :columns="columns7" :data="data6"></Table>
-    </section>
+    </div>
+    <div class="btn-box">
+      <Button type="ghost" size="large" class="fr" @click="addpersonal()">新增</Button>
+    </div>
+    <Table v-if="userData" border :columns="UserListTitles" :data="userData.records"></Table>
+    <Page v-if="userData" class="fr" style="margin:20px 0" :total="userData.total" @on-change="reLoadData"></Page>
+    <Modal
+        v-model="isDelBoolean"
+        title="提醒"
+        @on-ok="deleteUser">
+        <p style="text-align:center;">是否确认删除此用户?</p>
+    </Modal>
   </div>
 </template>
 <script>
-import mainHeader from '../../components/header/main_header.vue'
+import * as http from '@/api/common'
 export default {
-  components: {
-    mainHeader,
-  },
+  name: 'usersList',
   data() {
     return {
-      title:'平台用户',
-      searchModel:'',
-      columns7: [
+      isDelBoolean: false, //  对话框状态
+      singleData: null, //  单个用户数据集合
+      params: {
+        pageSize: 10,
+        pageNumber: 1,
+        condition: ''
+      },
+      UserListTitles: [
+        {
+          title: '序号',
+          type: 'index'
+        },
+        {
+          title: '用户ID',
+          key: 'psUserId'
+        },
         {
           title: '姓名',
-          key: 'name',
-          render: (h, params) => {
-            return h('div', [
-              h('Icon', {
-                props: {
-                  type: 'person'
-                }
-              }),
-              h('strong', params.row.name)
-            ]);
-          }
+          key: 'name'
         },
         {
-          title: '年龄',
-          key: 'age'
+          title: '联系方式',
+          key: 'mobileno'
         },
         {
-          title: '地址',
-          key: 'address'
+          title: '角色名称',
+          key: 'roleName'
+        },
+        {
+          title: '所属区域',
+          key: 'areaName'
+        },
+        {
+          title: '所属菜市场',
+          key: 'marketName'
         },
         {
           title: '操作',
@@ -54,59 +76,52 @@ export default {
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.touserinfo(params.index)
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push({
+                        path: 'userinfo',
+                        query: { psUserId: params.row.psUserId }
+                      })
+                    }
                   }
-                }
-              }, '查看'),
-              h('Button', {
-                props: {
-                  type: 'error',
-                  size: 'small',
-
                 },
-                on: {
-                  click: () => {
-                    this.remove(params.index)
+                '查看'
+              ),
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'error',
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      this.isDelBoolean = true
+                      this.singleData = params.row
+                    }
                   }
-                }
-              }, '删除')
-            ]);
+                },
+                '删除'
+              )
+            ])
           }
         }
       ],
-      data6: [
-        {
-          name: '王小明',
-          age: 18,
-          address: '北京市朝阳区芍药居'
-        },
-        {
-          name: '张小刚',
-          age: 25,
-          address: '北京市海淀区西二旗'
-        },
-        {
-          name: '李小红',
-          age: 30,
-          address: '上海市浦东新区世纪大道'
-        },
-        {
-          name: '周小伟',
-          age: 26,
-          address: '深圳市南山区深南大道'
-        }
-      ]
+      userData: null //  平台用户数据
     }
+  },
+  created() {
+    this.getUsersList()
   },
   computed: {
     show() {
@@ -114,11 +129,32 @@ export default {
     }
   },
   methods: {
+    //  获取用户列表数据
+    getUsersList() {
+      http.getUsersList(this.params).then(data => {
+        this.userData = data
+      })
+    },
+    //  删除用户
+    deleteUser() {
+      http.deleteUser(this.singleData).then(this.getUsersList())
+    },
+    //  分页页面跳转
+    reLoadData(pageNum) {
+      this.params.pageNumber = pageNum
+      this.getUsersList()
+    },
+    //  搜索
+    search() {
+      this.params.pageNumber = 1
+      this.getUsersList()
+    },
+    //  添加用户
     addpersonal() {
       this.$router.push('/adduser')
     },
     touserinfo(index) {
-      this.$router.push('/s_platform/'+index)
+      this.$router.push('/userinfo')
     },
     remove(index) {
       this.$Modal.info({
@@ -129,13 +165,41 @@ export default {
 
       })
       this.data6.splice(index, 1);
-    },
-    search(){
-      console.log(this.searchModel)
     }
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="css" scoped>
+.header {
+  height: 40px;
+  line-height: 40px;
+  background-color: #363e54;
+}
 
+.main .header h2 {
+  float: left;
+  color: #fff;
+  margin-left: 20px;
+}
+
+.main .header .header-search {
+  position: relative;
+  float: right;
+  margin-right: 45px;
+}
+.icos {
+  position: absolute;
+  top: 8px;
+  right: -25px;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.btn-box {
+  width: 100%;
+  line-height: 50px;
+  overflow: hidden;
+  margin: 10px auto;
+}
 </style>

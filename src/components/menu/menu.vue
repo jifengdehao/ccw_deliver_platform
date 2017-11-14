@@ -55,6 +55,7 @@
       <MenuItem name="s_rolelist">角色列表</MenuItem>
       <MenuItem name="s_operation">操作日志</MenuItem>
       <MenuItem name="s_message">消息管理</MenuItem>
+      <!--<MenuItem name="setting_message">系统消息</MenuItem>-->
     </Submenu>
     <Submenu name="">
       <template slot="title">
@@ -79,28 +80,29 @@
   </Menu>
 </template>
 <script type='text/ecmascript-6'>
-  export default {
-    props: {
-      spanLeft: {
-        type: Number,
-        default: 3
-      }
+export default {
+  props: {
+    spanLeft: {
+      type: Number,
+      default: 3
+    }
+  },
+  computed: {
+    activeName() {
+      return this.$route.path.split('/')[1]
     },
-    computed: {
-      activeName() {
-        return this.$route.path.split('/')[1]
-      },
-      iconSize() {
-        return this.spanLeft === 3 ? 14 : 24
-      }
-    },
-    methods: {
-      route(name) {
-        console.log(name)
-        this.$router.push('/' + name);
-      }
+    iconSize() {
+      return this.spanLeft === 3 ? 14 : 24
+    }
+  },
+  methods: {
+    route(name) {
+      console.debug(name)
+      this.$router.push('/' + name)
     }
   }
+}
 </script>
 <style lang="css" scoped>
+
 </style>

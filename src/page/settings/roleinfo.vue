@@ -1,78 +1,31 @@
 <template>
   <div id="roleinfo" class="main" :class="{'isShow':show}">
-    <main-header :title="title">
-      <!-- <span slot="h3">查看</span> -->
-    </main-header>
-    <section style="text-align: left;padding: 20px 0;">
-      <span style="font-size: 16px">角色：</span>
-      <Select v-model="model1" style="width:150px">
-        <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-      </Select>
-    </section>
-    <section style="text-align: left" class="clearfix">
-      <Checkbox style="font-size: 18px;line-height: 40px;">订单管理</Checkbox>
-      <ul>
-        <li v-for="item in 5" style="text-align: center;line-height: ;">
-          <Checkbox style="font-size: 14px;">查看</Checkbox>
-          <Checkbox style="font-size: 14px;">指派</Checkbox>
-        </li>
+    <p class="role-p"><span>角色：</span><input type="text"></p>
+    <div class="tree-box">
+      <ul v-if="menuData">
+        <auth-tree :menuData="menuData"></auth-tree>
       </ul>
-    </section>
-    <section style="text-align: left" class="clearfix">
-      <Checkbox style="font-size: 18px;line-height: 40px;">骑士管理</Checkbox>
-      <ul>
-        <li v-for="item in 10">
-          <Checkbox style="font-size: 14px;">未提交资料</Checkbox>
-        </li>
-      </ul>
-    </section>
-    <section style="text-align: left" class="clearfix">
-      <Checkbox style="font-size: 18px;line-height: 40px;">配置设置</Checkbox>
-      <ul>
-        <li v-for="item in 10">
-          <Checkbox style="font-size: 14px;">查看</Checkbox>
-          <Checkbox style="font-size: 14px;">新增</Checkbox>
-        </li>
-      </ul>
-    </section>
-    <section style="text-align: left" class="clearfix">
-      <Checkbox style="font-size: 18px;line-height: 40px;">数据中心</Checkbox>
-      <ul>
-        <li v-for="item in 10">
-          <Checkbox style="font-size: 14px;">配送员数据</Checkbox>
-          <Checkbox style="font-size: 14px;">指派</Checkbox>
-        </li>
-      </ul>
-    </section>
+    </div>
+    <p class="btn-p">
+      <Button @click="getRoleInfo">取消</Button>
+      <Button>确认</Button>
+    </p>
   </div>
 </template>
 <script>
-import mainHeader from '../../components/header/main_header.vue'
+import * as http from '@/api/common'
+import authTree from './tree'
 export default {
-  components: { mainHeader },
+  components: {
+    authTree
+  },
   data() {
     return {
-      title:"查看角色",
-      model1: '',
-      cityList: [
-        {
-          value: 'quzhang',
-          label: '区长'
-        },
-        {
-          value: 'zhanzhang',
-          label: '站长'
-        },
-        {
-          value: 'Administrators',
-          label: '管理员'
-        },
-        {
-          value: 'super_Administrators',
-          label: '超级管理员'
-        },
-      ]
-
+      menuData: null, //  传递给子组件的值
+      putParams: {
+        roleId: '', //  角色ID
+        permissionList: [] //  用户权限
+      }
     }
   },
   computed: {
@@ -80,25 +33,39 @@ export default {
       return this.$store.state.show
     }
   },
+  created() {
+    this.getRoleInfo()
+  },
   methods: {
-    getCurrentDate() {
-      return new Date().toLocaleDateString()
+    //  获取角色信息
+    getRoleInfo() {
+      http
+        .getRoleInfo({
+          roleId: this.$route.query.creatorId
+        })
+        .then(data => {
+          console.log(data)
+          this.menuData = data.menu
+        })
     }
   }
 }
 </script>
-<style lang="less" scoped>
-#roleinfo {
-  section {
-    li {
-      width: 220px;
-      height: 61px;
-      line-height: 61px;
-      float: left;
-      border: 1px solid #666666;
-      margin-left: -1px;
-      margin-top: -1px;
-    }
-  }
+<style lang="css" scoped>
+p.role-p {
+  margin: 20px auto;
+}
+
+p.role-p input[type='text'] {
+  width: 100px;
+}
+
+p.btn-p {
+  margin: 20px auto;
+  text-align: center;
+}
+
+p.btn-p button {
+  margin: 0 5px;
 }
 </style>

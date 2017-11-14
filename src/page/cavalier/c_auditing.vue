@@ -1,3 +1,10 @@
+/*
+ * @Author: ZengFanlu 
+ * @Date: 2017-11-10 11:53:38 
+ * DeveloperMailbox:   zengfanlu@ccw163.com 
+ * FunctionPoint: 骑士管理 骑士审核列表 
+ */
+
 <template>
   <div class="main">
     <!-- 头部 -->
@@ -59,7 +66,7 @@ export default {
       DeliverAudit: {
         status: '',
         deliverApplyId: []
-      },// 通过/ 不通过数据
+      }, // 通过/ 不通过数据
       columns4: [
         {
           type: 'selection',
@@ -118,27 +125,31 @@ export default {
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h( 'Button', {
+              h(
+                'Button',
+                {
                   on: {
                     click: () => {
                       this.paramsData = params.row.pictureList
                       this.paramsData.forEach(function(item, index) {
                         switch (item.picType) {
-                          case 1:
+                          case 4:
                             this.PositiveImg = item.picUrl
                             this.visible = true
                             break
-                          case 2:
+                          case 5:
                             this.negativeImg = item.picUrl
                             this.visible = true
                             break
-                          case 3:
+                          case 8:
                             this.HealthImg = item.picUrl
                         }
                       }, this)
                     }
                   }
-                },'浮窗预览')
+                },
+                '浮窗预览'
+              )
             ])
           }
         },
@@ -148,7 +159,9 @@ export default {
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('Button', {
+              h(
+                'Button',
+                {
                   on: {
                     click: () => {
                       this.paramsData = params.row.pictureList
@@ -161,7 +174,9 @@ export default {
                       }, this)
                     }
                   }
-                },'浮窗预览')
+                },
+                '浮窗预览'
+              )
             ])
           }
         },
@@ -171,32 +186,47 @@ export default {
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('Button', {
+              h(
+                'Button',
+                {
                   style: {
                     marginRight: '5px'
                   },
                   on: {
                     click: () => {
                       this.selectData.forEach(function(item) {
-                        if (params.row.psDeliverApplyId === item.psDeliverApplyId) { // 点击判断选择ID跟点击ID是否一致
+                        if (
+                          params.row.psDeliverApplyId === item.psDeliverApplyId
+                        ) {
+                          // 点击判断选择ID跟点击ID是否一致
                           this.ModalTitle = '是否确认此用户通过'
                           this.showModal = true
                         }
                       }, this)
                     }
-                  }}, '通过'),
-              h('Button',{
-                on: {
+                  }
+                },
+                '通过'
+              ),
+              h(
+                'Button',
+                {
+                  on: {
                     click: () => {
-                       this.selectData.forEach(function(item) {
-                        if (params.row.psDeliverApplyId === item.psDeliverApplyId) { // 点击判断选择ID跟点击ID是否一致
+                      this.selectData.forEach(function(item) {
+                        if (
+                          params.row.psDeliverApplyId === item.psDeliverApplyId
+                        ) {
+                          // 点击判断选择ID跟点击ID是否一致
                           this.ModalTitle = '是否确认此用户不通过'
                           this.showModal = true
                         }
                       }, this)
                     }
                   }
-                }, '不通过')
+                },
+                '不通过'
+              )
             ])
           }
         }
@@ -206,7 +236,7 @@ export default {
       params: {
         pageSize: 10, // 每页显示记录数
         pageNumber: 1, // 当前页码
-        condition: '', //	查询条件框
+        condition: '' //	查询条件框
       }
     }
   },
@@ -235,7 +265,7 @@ export default {
         this.showModal = true
         switch (index) {
           case '1':
-            this.ModalTitle = '是否确认所有用户通过审核？';
+            this.ModalTitle = '是否确认所有用户通过审核？'
             this.DeliverAudit.status = '1'
             break
           case '2':
@@ -244,29 +274,33 @@ export default {
         }
       }
     },
-    ok() { // 点击Modal确定按钮 发送请求
-      this.selectData.forEach((item) => { // 获取数据ID
+    ok() {
+      // 点击Modal确定按钮 发送请求
+      this.selectData.forEach(item => {
+        // 获取数据ID
         this.DeliverAudit.deliverApplyId.push(item.psDeliverApplyId)
       })
       switch (this.ModalTitle) {
         case '是否确认此用户通过':
-            this.DeliverAudit.status = '3'
-            api.getDeliverAudit(this.DeliverAudit).then(data => {}); 
-            break
-        case '是否确认此用户不通过': 
-            this.DeliverAudit.status = '4'
-            api.getDeliverAudit(this.DeliverAudit).then(data => {});
-            break
+          this.DeliverAudit.status = '3'
+          break
+        case '是否确认此用户不通过':
+          this.DeliverAudit.status = '4'
+          break
         case '是否确认所有用户通过审核？':
-            this.DeliverAudit.status = '3'
-            api.getDeliverAudit(this.DeliverAudit).then(data => {});
-            break
+          this.DeliverAudit.status = '3'
+          break
         case '是否确认所有用户不通过审核？':
-            this.DeliverAudit.status = '4'
-            api.getDeliverAudit(this.DeliverAudit).then(data => {});
+          this.DeliverAudit.status = '4'
       }
-      this.$refs.selection.selectAll(false) // 取消选中框
-      this.getAuditManager() // 初始化请求
+      api.getDeliverAudit(this.DeliverAudit).then(data => {
+        if (data === true) {
+          this.getAuditManager() // 初始化请求
+          this.DeliverAudit.deliverApplyId = []
+        }
+      })
+      // this.$refs.selection.selectAll(false) // 取消选中框
+      
     },
     cancel() {
       this.$refs.selection.selectAll(false) // 取消选中框

@@ -1,36 +1,114 @@
 {
-    "code":0,
-    "msg":"成功",
-    "data":[
+  "code": 0,
+  "msg": "成功",
+  "data": [
+    {
+      "menu": "home",
+      "icon": "home",
+      "name": "首页",
+      "noDropdown": true
+    },
+    {
+      "menu": "order",
+      "icon": "ios-paper",
+      "name": "订单管理",
+      "noDropdown": true
+    },
+    {
+      "menu": "",
+      "icon": "ios-people",
+      "name": "骑士管理",
+      "noDropdown": false,
+      "submenu": [
         {
-            "menu":"home",
-            "icon":"home",
-            "name":"首页",
-            "noDropdown": true
+          "menu": "cUncommitted",
+          "name": "未提交资料"
         },
         {
-            "menu":"",
-            "icon":"ios-paper",
-            "name":"订单管理",
-            "noDropdown": false,
-            "submenu":[
-                {
-                    "menu":"order",
-                    "name":"订单管理"
-                }
-            ]
+          "menu": "cAuditing",
+          "name": "骑士审核"
         },
         {
-            "menu":"",
-            "icon":"ios-people",
-            "name":"骑士管理",
-            "noDropdown": false,
-            "submenu":[
-                {
-                    "menu":"order",
-                    "name":"骑士管理"
-                }
-            ]
+          "menu": "cTrain",
+          "name": "培训管理"
+        },
+        {
+          "menu": "cPersonal",
+          "name": "人员管理"
         }
-    ]
+      ]
+    },
+    {
+      "menu": "configuration",
+      "icon": "ios-gear",
+      "name": "配置设置",
+      "noDropdown": true
+    },
+    {
+      "menu": "",
+      "icon": "stats-bars",
+      "name": "数据管理",
+      "noDropdown": false,
+      "submenu": [
+        {
+          "menu": "dataCenter",
+          "name": "数据中心"
+        },
+        {
+          "menu": "dataDeliver",
+          "name": "配送员数据"
+        }
+      ]
+    },
+    {
+      "menu": "",
+      "icon": "settings",
+      "name": "设置中心",
+      "noDropdown": false,
+      "submenu": [
+        {
+          "menu": "s_platform",
+          "name": "平台用户"
+        },
+        {
+          "menu": "s_rbac",
+          "name": "权限管理"
+        },
+        {
+          "menu": "s_rolelist",
+          "name": "角色列表"
+        },
+        {
+          "menu": "s_operation",
+          "name": "操作日志"
+        },
+        {
+          "menu": "s_message",
+          "name": "消息管理"
+        }
+      ]
+    },
+    {
+      "menu":"",
+      "icon":"person-stalker",
+      "name":"分销管理",
+      "noDropdown": false,
+      "submenu": [
+        {
+          "menu":"d_extend",
+          "name": "推广列表"
+        },
+        {
+          "menu": "d_list",
+          "name": "分销列表"
+        }
+      ]
+    },
+    {
+      "menu":"finance",
+      "icon":"person-stalker",
+      "name":"财务对账",
+      "noDropdown": true
+    }
+  ]
 }

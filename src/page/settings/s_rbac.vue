@@ -1,49 +1,64 @@
+/*
+ * @Author: WuFengliang
+ * @Date: 2017-11-03 15:33:08
+ * DeveloperMailbox:   wufengliang@ccw163.com
+ * FunctionPoint: 权限管理
+ */
 <template>
   <div id="s_rbac" class="main" :class="{'isShow':show}">
-    <main-header :title="title">
-      <!-- <span slot="h3">权限管理</span>
-      <input placeholder=" 姓名/联系方式/用户ID">
-      <Icon type="search" class="O_search_icon"></Icon> -->
-       <Input v-model="searchModel"
-               icon="search"
-               placeholder="姓名/联系方式/用户ID"
-               style="width: 200px;margin-top: 4px;" @on-click="search"></Input>
-    </main-header>
+    <!-- 头部 -->
+    <div class="header">
+      <h2>权限管理</h2>
+      <div class="header-search">
+        <Input placeholder="姓名/联系方式/用户ID" style="width: 200px" v-model="params.condition"></Input>
+        <span @click="search"><Icon type="ios-search icos"></Icon></span>
+      </div>
+    </div>
     <section class="s_rbac_list">
-      <Table border :columns="columns7" :data="data6"></Table>
+      <Table v-if="userData" border :columns="UserListTitles" :data="userData.records"></Table>
     </section>
+    <Page v-if="userData" class="fr" :total="userData.total" @on-change="reLoadData"></Page>
   </div>
 </template>
 <script>
-import mainHeader from '../../components/header/main_header.vue'
+import * as http from '@/api/common'
 export default {
-  components: { mainHeader },
+  name: 'authList',
   data() {
     return {
-      title:'权限管理',
-      searchModel:'',
-      columns7: [
+      params: {
+        pageSize: 10,
+        pageNumber: 1,
+        condition: ''
+      },
+      UserListTitles: [
+        {
+          title: '序号',
+          type: 'index'
+        },
+        {
+          title: '用户ID',
+          key: 'psUserId'
+        },
         {
           title: '姓名',
-          key: 'name',
-          render: (h, params) => {
-            return h('div', [
-              h('Icon', {
-                props: {
-                  type: 'person'
-                }
-              }),
-              h('strong', params.row.name)
-            ]);
-          }
+          key: 'name'
         },
         {
-          title: '年龄',
-          key: 'age'
+          title: '联系方式',
+          key: 'mobileno'
         },
         {
-          title: '地址',
-          key: 'address'
+          title: '邮箱地址',
+          key: 'email'
+        },
+        {
+          title: '角色名称',
+          key: 'roleName'
+        },
+        {
+          title: '所属菜市场',
+          key: 'marketName'
         },
         {
           title: '操作',
@@ -52,48 +67,36 @@ export default {
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.to(params.index)
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push({
+                        path: 's_rbac_chakan',
+                        query: { psUserId: params.row.psUserId }
+                      })
+                    }
                   }
-                }
-              }, '查看'),
-
-            ]);
+                },
+                '查看'
+              )
+            ])
           }
         }
       ],
-      data6: [
-        {
-          name: '王小明',
-          age: 18,
-          address: '北京市朝阳区芍药居'
-        },
-        {
-          name: '张小刚',
-          age: 25,
-          address: '北京市海淀区西二旗'
-        },
-        {
-          name: '李小红',
-          age: 30,
-          address: '上海市浦东新区世纪大道'
-        },
-        {
-          name: '周小伟',
-          age: 26,
-          address: '深圳市南山区深南大道'
-        }
-      ]
+      userData: null //  权限管理数据
     }
+  },
+  created() {
+    this.getUsersList()
   },
   computed: {
     show() {
@@ -101,18 +104,53 @@ export default {
     }
   },
   methods: {
-    getCurrentDate() {
-      return new Date().toLocaleDateString()
+    //  获取权限数据列表
+    getUsersList() {
+      http.getUsersList(this.params).then(data => {
+        this.userData = data
+      })
     },
-    to(index) {
-      this.$router.push('/s_rbac/'+index)
+    //  搜索
+    search() {
+      this.params.pageNumber = 1
+      this.getUsersList()
     },
-    search(){
-      console.log(this.searchModel)
+    //  分页加载数据
+    reLoadData() {
+      this.params.pageNumber = pageNum
+      this.getUsersList()
     }
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="css" scoped>
+.header {
+  height: 40px;
+  line-height: 40px;
+  background-color: #363e54;
+}
 
+.main .header h2 {
+  float: left;
+  color: #fff;
+  margin-left: 20px;
+}
+
+.main .header .header-search {
+  position: relative;
+  float: right;
+  margin-right: 45px;
+}
+.icos {
+  position: absolute;
+  top: 8px;
+  right: -25px;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.s_rbac_list {
+  margin: 20px auto;
+}
 </style>

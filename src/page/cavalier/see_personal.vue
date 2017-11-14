@@ -13,11 +13,11 @@
     </div>
     <div class="content">
       <ul class="content1">
-        <li><span>用户ID</span><span>{{ DeliverInfo.psEmpno }}</span></li>
-        <li><span>姓名</span><span>{{ DeliverInfo.name }}</span></li>
-        <li><span>性别</span><span>{{ DeliverInfo.sexStr }}</span></li>
-        <li><span>联系方式</span><span>{{ DeliverInfo.mobileno }}</span></li>
-        <li><span>身份证号</span><span>{{ DeliverInfo.identityNo }}</span></li>
+        <li v-if="DeliverInfo.psEmpno"><span>用户ID</span><span>{{ DeliverInfo.psEmpno }}</span></li>
+        <li v-if="DeliverInfo.name"><span>姓名</span><span>{{ DeliverInfo.name }}</span></li>
+        <li v-if="DeliverInfo.sexStr"><span>性别</span><span>{{ DeliverInfo.sexStr }}</span></li>
+        <li v-if="DeliverInfo.mobileno"><span>联系方式</span><span>{{ DeliverInfo.mobileno }}</span></li>
+        <li v-if="DeliverInfo.identityNo"><span>身份证号</span><span>{{ DeliverInfo.identityNo }}</span></li>
         <li><span>审核结果</span><span>通过</span></li>
         <li><span>新人培训结果</span><span>通过</span></li>
         <li><span>身份证正反面</span></li>
@@ -73,14 +73,14 @@
       </ul>
 
        <ul class="content3">
-        <li><span>星级</span><span>{{ DeliverInfo.starLevel }}</span></li>
-        <li><span>转正时间</span><span>{{ DeliverInfo.regularDate }}</span></li>
-        <li><span>离职时间</span><span>{{ DeliverInfo.leaveDate }}</span></li>
-        <li><span>总收入(元)</span><span>{{ psDeliverIncomeData.allIncome }}</span></li>
-        <li><span>本月收入(元)</span><span>{{ psDeliverIncomeData.monthIncome }}</span></li>
-        <li><span>本月提成(元)</span><span>{{ psDeliverIncomeData.monthDeliverIncome }}</span></li>
-        <li><span>累计配送单量</span><span>{{ psDeliverIncomeData.allDeliverAcount }}</span></li>
-        <li><span>本月配送单量</span><span>{{ psDeliverIncomeData.monthDeliverAcount }}</span></li>
+        <li v-if="DeliverInfo.starLevel"><span>星级</span><span>{{ DeliverInfo.starLevel }}</span></li>
+        <li v-if="DeliverInfo.regularDate"><span>转正时间</span><span>{{ DeliverInfo.regularDate }}</span></li>
+        <li v-if="DeliverInfo.leaveDate"><span>离职时间</span><span>{{ DeliverInfo.leaveDate }}</span></li>
+        <li v-if="psDeliverIncomeData.allIncome"><span>总收入(元)</span><span>{{ psDeliverIncomeData.allIncome }}</span></li>
+        <li v-if="psDeliverIncomeData.monthIncome"><span>本月收入(元)</span><span>{{ psDeliverIncomeData.monthIncome }}</span></li>
+        <li v-if="psDeliverIncomeData.monthDeliverIncome"><span>本月提成(元)</span><span>{{ psDeliverIncomeData.monthDeliverIncome }}</span></li>
+        <li v-if="psDeliverIncomeData.allDeliverAcount"><span>累计配送单量</span><span>{{ psDeliverIncomeData.allDeliverAcount }}</span></li>
+        <li v-if="psDeliverIncomeData.monthDeliverAcount"><span>本月配送单量</span><span>{{ psDeliverIncomeData.monthDeliverAcount }}</span></li>
       </ul>
 
     </div>
@@ -136,13 +136,13 @@ export default {
         this.status = list.personStatus.toString() // 初始化上班状态
         list.pictureList.forEach(function(item) {
           switch (item.picType) {
-            case 1:
+            case 4:
               this.PositiveImg = item.picUrl
               break
-            case 2:
+            case 5:
               this.negativeImg = item.picUrl
               break
-            case 3:
+            case 8:
               this.HealthImg = item.picUrl
           }
         }, this);

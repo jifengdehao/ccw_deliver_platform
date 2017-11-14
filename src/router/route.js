@@ -118,6 +118,42 @@ const configuration = resolve => {
     resolve(module)
   })
 }
+//配置设置-增加区域
+const addregion = resolve => {
+  import ('@/page/configuration/addregion').then(module => {
+    resolve(module)
+  })
+}
+//配置设置-增加菜市场
+const addmarket = resolve => {
+  import ('@/page/configuration/addmarket').then(module => {
+    resolve(module)
+  })
+}
+//配置设置-查看省
+const shengInfo = resolve => {
+  import ('@/page/configuration/shengInfo').then(module => {
+    resolve(module)
+  })
+}
+//配置设置-查看市场
+const marketInfo = resolve => {
+  import ('@/page/configuration/shengInfo').then(module => {
+    resolve(module)
+  })
+}
+//配置设置-查看城市
+const cityInfo = resolve => {
+  import ('@/page/configuration/cityInfo').then(module => {
+    resolve(module)
+  })
+}
+//配置设置-查看区
+const quInfo = resolve => {
+  import ('@/page/configuration/quInfo').then(module => {
+    resolve(module)
+  })
+}
 // 设置中心 - 平台用户
 const s_platform = resolve => {
   import ('@/page/settings/s_platform').then(module => {
@@ -191,11 +227,24 @@ const addmessage = resolve => {
     resolve(module)
   })
 }
+// 设置中心 - 系统消息
+const setting_message = resolve => {
+  import ('@/page/settings/settingMessage').then(module => {
+    resolve(module)
+  })
+}
+// 设置中心 - 系统消息 -详情
+const settingMessageDetail = resolve => {
+  import ('@/page/settings/settingMessageDetail').then(module => {
+    resolve(module)
+  })
+}
+
 export default [{
-    path: '/login',
-    name: 'login',
-    component: Login
-  },
+  path: '/login',
+  name: 'login',
+  component: Login
+},
   {
     path: '*',
     component: NotFound
@@ -206,9 +255,9 @@ export default [{
     component: Layout,
     redirect: '/home',
     children: [{
-        path: '/home',
-        component: Home
-      },
+      path: '/home',
+      component: Home
+    },
       {
         path: '/order',
         component: Order
@@ -274,6 +323,30 @@ export default [{
         component: configuration
       },
       {
+        path: '/addregion',
+        component: addregion
+      },
+      {
+        path: '/addmarket',
+        component: addmarket
+      },
+      {
+        path: '/marketInfo',
+        component: marketInfo
+      },
+      {
+        path: '/cityInfo',
+        component: cityInfo
+      },
+      {
+        path: '/shengInfo',
+        component: shengInfo
+      },
+      {
+        path: '/quInfo',
+        component: quInfo
+      },
+      {
         path: '/s_platform',
         component: s_platform
       },
@@ -318,8 +391,16 @@ export default [{
         component: s_message
       },
       {
-        path: '/addmessage',
+        path: '/s_message/addmessage',
         component: addmessage
+      },
+      {
+        path: '/setting_message',
+        component: setting_message
+      },
+      {
+        path: '/setting_message/:id',
+        component: settingMessageDetail
       }
     ]
   }

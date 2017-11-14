@@ -1,30 +1,32 @@
 <template>
   <div id="s_operation_info" class="main" :class="{'isShow':show}">
-    <main-header :title="title">
-      <!-- <span slot="h3">操作日志</span> -->
-    </main-header>
+    <!-- 头部 -->
+    <!--<div class="header">-->
+      <!--<h2>操作日志</h2>-->
+    <!--</div>-->
+    <main-header :title="title"></main-header>
     <section class="s_operation_infolist">
-      <p>用户ID： Ca1234</p>
-      <p>姓名： 应浦和</p>
-      <p>性别： 男</p>
-      <p>联系方式： 12345678</p>
-      <p>邮箱地址： 1234567@163.com</p>
-      <p>角色名称：站长</p>
-      <p>所属市区：广州市</p>
-      <p>所属省区：广东省</p>
-      <p>所属菜市场：番禺菜市场</p>
-      <p>所属区域：番禺区</p>
-      <p>本次登陆时间：2017-08-03 8:47:30</p>
-      <p>上次登陆时间：2017-08-02 8:47:30</p>
-      <p>在线时长：5分钟</p>
-      <p>上次登陆时长：1小时</p>
-      <p>本次登录IP：121.11.61.210（广东省广州市）</p>
-      <p>上次登录IP：121.11.61.210（广东省广州市）</p>
-      <p>本次登录设备：W的Mac（Mac版）</p>
-      <p>上次登录设备：W的Mac（Mac版）</p>
-      <p>操作时间：2017-08-03 11:35:40</p>
+      <p><span>用户ID&nbsp;&nbsp;:&nbsp;&nbsp;</span>Ca1234</p>
+      <p><span>姓名&nbsp;&nbsp;:&nbsp;&nbsp;</span>应浦和</p>
+      <p><span>性别&nbsp;&nbsp;:&nbsp;&nbsp;</span>男</p>
+      <p><span>联系方式&nbsp;&nbsp;:&nbsp;&nbsp;</span>12345678</p>
+      <p><span>邮箱地址&nbsp;&nbsp;:&nbsp;&nbsp;</span>1234567@163.com</p>
+      <p><span>角色名称&nbsp;&nbsp;:&nbsp;&nbsp;</span>长</p>
+      <p><span>所属市区&nbsp;&nbsp;:&nbsp;&nbsp;</span>州市</p>
+      <p><span>所属省区&nbsp;&nbsp;:&nbsp;&nbsp;</span>东省</p>
+      <p><span>所属菜市场&nbsp;&nbsp;:&nbsp;&nbsp;</span>禺菜市场</p>
+      <p><span>所属区域&nbsp;&nbsp;:&nbsp;&nbsp;</span>禺区</p>
+      <p><span>本次登陆时间&nbsp;&nbsp;:&nbsp;&nbsp;</span>017-08-03 8:47:30</p>
+      <p><span>上次登陆时间&nbsp;&nbsp;:&nbsp;&nbsp;</span>017-08-02 8:47:30</p>
+      <p><span>在线时长&nbsp;&nbsp;:&nbsp;&nbsp;</span>分钟</p>
+      <p><span>上次登陆时长&nbsp;&nbsp;:&nbsp;&nbsp;</span>小时</p>
+      <p><span>本次登录IP&nbsp;&nbsp;:&nbsp;&nbsp;</span>21.11.61.210（广东省广州市）</p>
+      <p><span>上次登录IP&nbsp;&nbsp;:&nbsp;&nbsp;</span>21.11.61.210（广东省广州市）</p>
+      <p><span>本次登录设备&nbsp;&nbsp;:&nbsp;&nbsp;</span>的Mac（Mac版）</p>
+      <p><span>上次登录设备&nbsp;&nbsp;:&nbsp;&nbsp;</span>的Mac（Mac版）</p>
+      <p><span>操作时间&nbsp;&nbsp;:&nbsp;&nbsp;</span>017-08-03 11:35:40</p>
       <div class="s_operation_info_record fl">
-        操作记录：
+        <span>操作记录：</span>
         <p>
           <Breadcrumb>
             <BreadcrumbItem>订单管理</BreadcrumbItem>
@@ -61,33 +63,57 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
-#s_operation_info {
-  .s_operation_infolist {
-    width: 66.6%;
-    padding-left: 20px;
-    p {
-      width: 50%;
-      height: 50px;
-      line-height: 50px;
-      font-size: 16px;
-      float: left;
-      text-align: left;
-      &:last-of-type {
-        float: right;
-      }
-    }
-  }
-  .s_operation_info_record {
-    font-size: 16px;
-    padding-left: 30px;
-    padding-top: 30px;
-    p {
-      width: 520px;
-      height: 210px;
-      border: 1px solid #aaa;
-      padding-left: 10px;
-    }
-  }
+<style lang="css" scoped>
+.header {
+  height: 40px;
+  line-height: 40px;
+  background-color: #363e54;
+}
+
+.main .header h2 {
+  float: left;
+  color: #fff;
+  margin-left: 20px;
+}
+
+.s_operation_infolist {
+  width: 66.6%;
+  padding-left: 20px;
+}
+.s_operation_infolist p {
+  width: 50%;
+  height: 50px;
+  line-height: 50px;
+  font-size: 16px;
+  float: left;
+  text-align: left;
+}
+
+.s_operation_infolist > p > span {
+  display: inline-block;
+  width: 130px;
+  text-align: right;
+}
+
+.s_operation_infolist p:last-of-type {
+  float: right;
+}
+
+.s_operation_info_record {
+  font-size: 16px;
+  padding-top: 30px;
+}
+
+.s_operation_info_record > span {
+  display: inline-block;
+  width: 130px;
+  text-align: right;
+}
+
+.s_operation_info_record p {
+  width: 520px;
+  height: 210px;
+  border: 1px solid #aaa;
+  padding-left: 10px;
 }
 </style>
