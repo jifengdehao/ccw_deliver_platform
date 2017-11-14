@@ -1,9 +1,9 @@
 <template>
-  <div id="roleinfo" class="main" :class="{'isShow':show}">
-    <p class="role-p"><span>角色：</span><input type="text" v-model="putParams.roleName"></p>
+  <div id="roleinfo" class="main" :class="{'isShow':show}"  v-if="menuData">
+    <p class="role-p"><span>角色：</span><input :disabled="menuData.role.isAdmin === 1 ? true : false" type="text" v-model="putParams.roleName"></p>
     <div class="tree-box">
-      <ul v-if="menuData">
-        <auth-tree :Todiabled="menuData.role.isAdmin" :menuData="menuData.menu" :parentData="menuData"></auth-tree>
+      <ul>
+        <auth-tree :Todiabled="menuData.role.isAdmin === 1 ? true : false" :menuData="menuData.menu" :parentData="menuData"></auth-tree>
       </ul>
     </div>
     <p class="btn-p">
@@ -63,7 +63,6 @@ export default {
               }
               if (permissin.isHave) {
                 single.permissionId = permissin.permissionId
-                // single.name = permissin.permissionName
                 this.putParams.permissionList.push(single)
               }
             })

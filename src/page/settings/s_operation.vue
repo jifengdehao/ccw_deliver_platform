@@ -12,7 +12,7 @@
       <Button type="ghost" size="large" class="fr" @click="isBoolean=true">导出</Button>
     </div>
     <Table border :columns="operationTitles" :data="operationData.records"></Table>
-    <Page v-if="operationData" class="fr" style="margin:20px 0" :total="operationData.total" @on-change="reLoadData"></Page>
+    <Page class="fr" style="margin:20px 0" :total="operationData.total" @on-change="reLoadData"></Page>
     <Modal v-model="isBoolean" @on-ok="downLoadData">
         <div class="modal-box">
           <DatePicker format="yyyy年MM月dd日" v-model="downParams.beginTime" type="date" placeholder="请选择开始时间" style="width: 200px"></DatePicker>
@@ -65,28 +65,7 @@ export default {
           key: 'action_desc'
         }
       ],
-      data6: [
-        {
-          name: '王小明',
-          age: 18,
-          address: '北京市朝阳区芍药居'
-        },
-        {
-          name: '张小刚',
-          age: 25,
-          address: '北京市海淀区西二旗'
-        },
-        {
-          name: '李小红',
-          age: 30,
-          address: '上海市浦东新区世纪大道'
-        },
-        {
-          name: '周小伟',
-          age: 26,
-          address: '深圳市南山区深南大道'
-        }
-      ]
+      operationData: null
     }
   },
   created() {
@@ -111,7 +90,6 @@ export default {
         console.log(data)
       })
     }
-
   }
 }
 </script>

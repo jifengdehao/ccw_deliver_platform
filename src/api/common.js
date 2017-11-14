@@ -273,6 +273,20 @@ export const putRoleInfo = params => {
 }
 
 /**
+ * 查询指定角色权限列表
+ */
+export const getUserRoleList = () => {
+  return ax.g(`/settingCentre/Auth/getRole`)
+}
+
+/**
+ * 新增角色
+ */
+export const addUserRole = params => {
+  return ax.p(`/settingCentre/Auth/role`, params)
+}
+
+/**
  * 获取操作日志
  */
 export const getOperationLog = params => {
@@ -325,7 +339,7 @@ export const addSingleInfo = params => {
  * 更新单个消息
  */
 export const putSingleInfo = params => {
-  return ax.u(`/settingCentre/info/${params.smMssageId}`)
+  return ax.u(`/settingCentre/info/${params.smMssageId}`, params.params)
 }
 
 /**

@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="btn-box">
-      <Button type="ghost" size="large" class="fr" @click="addpersonal()">新增</Button>
+      <Button type="ghost" size="large" class="fr" @click="addpersonal">新增</Button>
     </div>
     <Table v-if="userData" border :columns="UserListTitles" :data="userData.records"></Table>
     <Page v-if="userData" class="fr" style="margin:20px 0" :total="userData.total" @on-change="reLoadData"></Page>
