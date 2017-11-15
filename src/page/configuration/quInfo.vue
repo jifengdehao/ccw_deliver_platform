@@ -61,7 +61,6 @@ export default {
     getQuInfo() {
       api.getQuInfo(this.areaId).then(response => {
         this.areaData = response
-        // console.log(this.areaData)
       })
     },
     init: function() {

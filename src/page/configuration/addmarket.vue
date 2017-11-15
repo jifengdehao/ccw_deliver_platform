@@ -150,7 +150,6 @@ export default {
     // 添加菜市场
     addMarket() {
       this.formItem.areaCoordinate = this.path
-      console.log(this.formItem)
       if (this.current === 1 && this.formItem.marketName) {
         let params = {
           areaId: this.areaData.areaId,

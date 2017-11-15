@@ -86,7 +86,6 @@ export default {
         this.marketData = response
         this.marketName = response.marketName
         this.init()
-        console.log(response)
       })
     },
     init(e) {

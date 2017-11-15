@@ -106,7 +106,6 @@ export default {
       let params = {
         expenseConfig: cityData
       }
-      console.log(cityData)
       api.modfiyCityMessage(params).then(response => {})
     }
   },
