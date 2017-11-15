@@ -26,7 +26,7 @@
         </ul>
       </div>
       <!-- 市区 -->
-      <div class="configuration_quyu clearfix" v-if="showCitys">
+      <div class="configuration_quyu clearfix">
         <div class="configuration_quyu_title clearfix">
           <h3>市区</h3>
         </div>
@@ -38,10 +38,10 @@
         </ul>
       </div>
       <!-- 大区 -->
-      <div class="configuration_quyu clearfix" v-if="showQus">
+      <div class="configuration_quyu clearfix">
         <div class="configuration_quyu_title clearfix">
           <h3>区域</h3>
-          <Button @click="addregion()" style="width: 60px;" type="ghost" size="small">新增</Button>
+          <Button @click="addregion()" style="width: 60px;" type="ghost" size="small" v-if="addQu">新增</Button>
         </div>
         <ul class="configuration_quyu_content" v-for="(item,index) in qus" :key="index">
           <li>
@@ -52,10 +52,10 @@
         </ul>
       </div>
       <!-- 菜市场 -->
-      <div class="configuration_quyu clearfix" v-if="showMarkets">
+      <div class="configuration_quyu clearfix">
         <div class="configuration_quyu_title clearfix">
           <h3>菜市场</h3>
-          <Button @click="addmarket()" style="width: 60px;" type="ghost" size="small">新增</Button>
+          <Button @click="addmarket()" style="width: 60px;" type="ghost" size="small" v-if="addMarket">新增</Button>
         </div>
         <ul class="configuration_quyu_content" v-for="(item,index) in markets" :key="index">
           <li>
@@ -74,9 +74,9 @@ export default {
   components: {},
   data() {
     return {
-      showCitys: false,
-      showQus: false,
-      showMarkets: false,
+      showCitys: true,
+      addQu: false,
+      addMarket: false,
       provinceName:'',
       cityName: '',
       areaName: '',
@@ -139,7 +139,6 @@ export default {
       api.getCitys(provinceId).then(response => {
         this.citys = response
       })
-      this.showCitys = true
     },
     showQu(cityId,cityName) {
       this.cityName = cityName
@@ -147,7 +146,7 @@ export default {
       api.getQus(cityId).then(response => {
         this.qus = response
       })
-      this.showQus = true
+      this.addQu = true
     },
     showMarket(areaId,areaName) {
       this.areaId = areaId
@@ -155,7 +154,7 @@ export default {
       api.getMarkets(areaId).then(response => {
         this.markets = response
       })
-      this.showMarkets = true
+      this.addMarket = true
     }
   },
   computed: {}
@@ -167,7 +166,7 @@ export default {
     height: 40px;
     line-height: 40px;
     margin-bottom: 30px;
-    background-color: #999;
+    background-color: #363e54;
     span {
       margin-left: 10px;
       font-size: 18px;
