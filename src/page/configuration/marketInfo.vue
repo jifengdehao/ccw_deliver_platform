@@ -28,18 +28,19 @@
       <Form v-model="marketData"  inline>
         <FormItem >
             <span>菜市场名称：</span>
-            <Input v-model="marketData.marketName"  style="width:160px"></Input>
+            <Input v-model="marketData.marketName"  style="width:200px"></Input>
             <span>菜市场电话：</span>
-            <Input v-model="marketData.mobileno"  style="width:160px"></Input>
+            <Input v-model="marketData.mobileno"  style="width:200px"></Input>
             <span>配送时间段：</span>
-            <TimePicker v-model="marketData.beginTime"  type="timerange" placement="bottom-end" placeholder="选择时间" style="width: 160px"></TimePicker>
+            <TimePicker v-model="marketData.beginTime" type="time" placeholder="Select time" style="width: 95px"></TimePicker> - 
+            <TimePicker v-model="marketData.endTime" type="time" placeholder="Select time" style="width: 95px"></TimePicker>
             <br>
-            <span>绑定小区：</span>            
-            <Input v-model="marketData.districtId" style="width:160px"></Input> 
+            <span>自提点电话：</span>            
+            <Input v-model="marketData.self_pick_address_number" style="width:200px" ></Input> 
              <span>自提点：</span>
-            <Input v-model="marketData.selfPickAddress"  style="width:160px"></Input>
+            <Input v-model="marketData.selfPickAddress"  style="width:200px"></Input>
             <span>菜市场地址：</span>
-            <Input v-model="marketData.address" style="width:160px"></Input>
+            <Input v-model="marketData.address" style="width:200px" ></Input>
         </FormItem>
     </Form>
     </section>
@@ -85,9 +86,10 @@ export default {
         this.marketData = response
         this.marketName = response.marketName
         this.init()
+        console.log(response)
       })
     },
-    init() {
+    init(e) {
       var map = new AMap.Map('container', {
         resizeEnable: true,
         zoom: 12
@@ -96,6 +98,14 @@ export default {
         map.addControl(new AMap.ToolBar())
         map.addControl(new AMap.Scale())
       })
+      // 菜市场位置
+      // AMap.Marker()
+      var marker = new AMap.Marker({
+        icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
+        position: [this.marketData.longitude, this.marketData.latitude]
+      })
+      marker.setMap(map)
+      // 绘制多边形
       var editor = {}
       editor._polygon = (() => {
         var arr = this.marketData.areaCoordinate
@@ -132,7 +142,7 @@ export default {
     height: 40px;
     line-height: 40px;
     margin-bottom: 20px;
-    background-color: #999;
+    background-color: #363e54;
     span {
       margin-left: 10px;
       font-size: 18px;
