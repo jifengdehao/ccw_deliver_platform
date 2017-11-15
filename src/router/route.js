@@ -1,3 +1,10 @@
+/**
+ * 2017/11/14
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 路由懒加载
+ */
+
 // 登录
 const Login = resolve => {
   import ('@/page/login/login').then(module => {
@@ -112,6 +119,13 @@ const cPersonal = resolve => {
     resolve(module)
   })
 }
+// 骑士管理 - 人员管理 -查看
+const SeePersonal = resolve => {
+  import ('@/page/cavalier/see_personal').then(module => {
+    resolve(module)
+  })
+}
+
 // 配置设置
 const configuration = resolve => {
   import ('@/page/configuration/configuration').then(module => {
@@ -317,6 +331,10 @@ export default [{
       {
         path: '/cPersonal',
         component: cPersonal
+      },
+      {
+        path: '/cPersonal/:id',
+        component: SeePersonal
       },
       {
         path: '/configuration',

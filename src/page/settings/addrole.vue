@@ -47,58 +47,59 @@
   </div>
 </template>
 <script>
-import mainHeader from '../../components/header/main_header.vue'
-export default {
-  components: { mainHeader },
-  data() {
-    return {
-      title:'新增角色',
-      model1: '',
-      cityList: [
-        {
-          value: 'quzhang',
-          label: '区长'
-        },
-        {
-          value: 'zhanzhang',
-          label: '站长'
-        },
-        {
-          value: 'Administrators',
-          label: '管理员'
-        },
-        {
-          value: 'super_Administrators',
-          label: '超级管理员'
-        },
-      ]
+  import mainHeader from '../../components/header/main_header.vue'
 
-    }
-  },
-  computed: {
-    show() {
-      return this.$store.state.show
-    }
-  },
-  methods: {
-    getCurrentDate() {
-      return new Date().toLocaleDateString()
+  export default {
+    components: {mainHeader},
+    data() {
+      return {
+        title: '新增角色',
+        model1: '',
+        cityList: [
+          {
+            value: 'quzhang',
+            label: '区长'
+          },
+          {
+            value: 'zhanzhang',
+            label: '站长'
+          },
+          {
+            value: 'Administrators',
+            label: '管理员'
+          },
+          {
+            value: 'super_Administrators',
+            label: '超级管理员'
+          },
+        ]
+
+      }
+    },
+    computed: {
+      show() {
+        return this.$store.state.show
+      }
+    },
+    methods: {
+      getCurrentDate() {
+        return new Date().toLocaleDateString()
+      }
     }
   }
-}
 </script>
-<style lang="less" scoped>
-#addrole {
-  section {
-    li {
-      width: 220px;
-      height: 61px;
-      line-height: 61px;
-      float: left;
-      border: 1px solid #666666;
-      margin-left: -1px;
-      margin-top: -1px;
+<style lang="less" scoped type="text/less">
+  #addrole {
+    section {
+      li {
+        width: 220px;
+        height: 61px;
+        line-height: 61px;
+        float: left;
+        border: 1px solid #666666;
+        margin-left: -1px;
+        margin-top: -1px;
+      }
     }
   }
-}
 </style>

@@ -22,7 +22,7 @@
       </template>
       <MenuItem name="cUncommitted">未提交资料</MenuItem>
       <MenuItem name="cAuditing">骑士审核</MenuItem>
-      <MenuItem name="cTrain">培训管理</MenuItem>
+      <!-- <MenuItem name="cTrain">培训管理</MenuItem> -->
       <MenuItem name="cPersonal">人员管理</MenuItem>
     </Submenu>
     <!-- <Submenu name="">
@@ -72,36 +72,36 @@
       </template>
       <MenuItem name="finance">财务对账</MenuItem>
     </Submenu> -->
-  <MenuItem name="finance">
-     <Icon type="person-stalker" :size="iconSize"></Icon>
-     <span class="layout-text">财务对账</span>
-  </MenuItem>
+    <MenuItem name="finance">
+      <Icon type="person-stalker" :size="iconSize"></Icon>
+      <span class="layout-text">财务对账</span>
+    </MenuItem>
 
   </Menu>
 </template>
 <script type='text/ecmascript-6'>
-export default {
-  props: {
-    spanLeft: {
-      type: Number,
-      default: 3
-    }
-  },
-  computed: {
-    activeName() {
-      return this.$route.path.split('/')[1]
+  export default {
+    props: {
+      spanLeft: {
+        type: Number,
+        default: 3
+      }
     },
-    iconSize() {
-      return this.spanLeft === 3 ? 14 : 24
-    }
-  },
-  methods: {
-    route(name) {
-      console.debug(name)
-      this.$router.push('/' + name)
+    computed: {
+      activeName() {
+        return this.$route.path.split('/')[1]
+      },
+      iconSize() {
+        return this.spanLeft === 3 ? 14 : 24
+      }
+    },
+    methods: {
+      route(name) {
+        console.debug(name)
+        this.$router.push('/' + name)
+      }
     }
   }
-}
 </script>
 <style lang="css" scoped>
 

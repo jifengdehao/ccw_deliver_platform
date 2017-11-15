@@ -114,7 +114,7 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push(
-                        '/infoDateil/?id=' + params.row.psDeliverId
+                        '/cPersonal/' + params.row.psDeliverId
                       )
                     }
                   }

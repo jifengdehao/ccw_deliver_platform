@@ -76,10 +76,13 @@ export default {
     .ivu-menu-submenu-title > i:last-child {
       margin-right: 10px;
     }
-  }
-  .ivu-menu-item,
-  .ivu-menu-submenu {
-    text-align: center;
+    .ivu-menu-item,
+    .ivu-menu-submenu {
+      text-align: center;
+    }
+    .ivu-menu .ivu-menu-item {
+      padding-left: 26px;
+    }
   }
   .sidebar {
     background: #363e4f;
