@@ -1,8 +1,8 @@
 /*
- * @Author: huShangJun 
- * @Date: 2017-10-31 10:18:20 
- * DeveloperMailbox:   hsjcc@ccw163.com 
- * FunctionPoint: 配置设置 
+ * @Author: huShangJun
+ * @Date: 2017-10-31 10:18:20
+ * DeveloperMailbox:   hsjcc@ccw163.com
+ * FunctionPoint: 配置设置
  */
 
 <template>
@@ -33,7 +33,7 @@
         <ul class="configuration_quyu_content" v-for="(item,index) in citys" :key="index">
           <li>
             <span @click="showQu(item.cityId,item.cityName)"> {{item.cityName}}</span>
-            <Button type="info" size="small" class="fr" style="border: none" @click="seeThisCity(item.cityId,item.cityName)">查看</Button>            
+            <Button type="info" size="small" class="fr" style="border: none" @click="seeThisCity(item.cityId,item.cityName)">查看</Button>
           </li>
         </ul>
       </div>
@@ -47,7 +47,7 @@
           <li>
             <span @click="showMarket(item.areaId,item.areaName)"> {{item.areaName}}</span>
             <Button type="ghost" size="small" class="fr" style="color: red;border: none;" @click="delQu(index)">删除</Button>
-            <Button type="info" size="small" class="fr" style="border: none;" @click="seeThisQu(item.areaId,item.areaName)">查看</Button>            
+            <Button type="info" size="small" class="fr" style="border: none;" @click="seeThisQu(item.areaId,item.areaName)">查看</Button>
           </li>
         </ul>
       </div>
@@ -119,12 +119,12 @@ export default {
     },
     // 查看
     seeThisSheng(provinceId, provinceName) {
-      
+
       this.$router.push('/shengInfo?provinceName=' + provinceName + '&provinceId=' + provinceId)
     },
     seeThisCity(cityId, cityName) {
-      
-      this.$router.push('/cityInfo?cityName=' + cityName + '&provinceName=' + this.provinceName + '&cityId=' + cityId)      
+
+      this.$router.push('/cityInfo?cityName=' + cityName + '&provinceName=' + this.provinceName + '&cityId=' + cityId)
     },
     seeThisQu(areaId) {
       this.areaId = areaId
@@ -160,7 +160,7 @@ export default {
   computed: {}
 }
 </script>
-<style lang="less" scoped>
+<style lang="less" scoped type="text/less">
 #configuration {
   .configurationHeader {
     height: 40px;

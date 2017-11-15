@@ -1,8 +1,8 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2017-11-03 15:33:08 
- * DeveloperMailbox:   wufengliang@ccw163.com 
- * FunctionPoint: 权限管理 
+ * @Author: WuFengliang
+ * @Date: 2017-11-03 15:33:08
+ * DeveloperMailbox:   wufengliang@ccw163.com
+ * FunctionPoint: 权限管理
  */
 <template>
   <div id="s_rbac" class="main" :class="{'isShow':show}">
