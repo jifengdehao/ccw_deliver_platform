@@ -101,7 +101,7 @@ export default {
         var arr = this.marketData.areaCoordinate
         return new AMap.Polygon({
           map: map,
-          path: JSON.parse(arr),
+          path: arr,
           strokeColor: '#0000ff',
           strokeOpacity: 1,
           strokeWeight: 1,
