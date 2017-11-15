@@ -8,18 +8,17 @@
    <div>
       <li v-for="(item,index) in menuData" :key="index">
         <span>
-          <Icon :type="item.childMenuList.length > 0 ? 'arrow-down-b' : ''"></Icon>
+          <Icon style="width:8px;height:12px;" :type="item.childMenuList.length > 0 ? 'arrow-down-b' : ''"></Icon>
+          <input type="checkbox" :disabled="Todiabled" @click="changeCheck(item)" v-model="item.isHave" :checked="item.isHave" style="margin:5px;">
         </span>
-        <input type="checkbox" @click="changeCheck(item,menuData,index)" v-model="item.isHave" :checked="item.isHave" style="margin:5px;">
         <span>{{item.menuName}}
-          <span style="margin-left:20px;" v-for="(permission,index) in item.permissonList" :key="index">
-            <!-- <li v-for="(permission,index) in item.permissonList" :key="index">{{permission.permissionName}}</li> -->
-          <input type="checkbox" :checked="permission.isHave">
+          <a style="margin-left:20px;" v-for="(permission,index) in item.permissonList" :key="index">
+          <input :disabled="Todiabled" type="checkbox" v-model="permission.isHave" :checked="permission.isHave" @permissionCheck="permissionCheck" @click="checkPermission(permission,item)">
           {{permission.permissionName}}
-          </span>
+          </a>
         </span>
         <ul v-if="item.childMenuList">
-          <auth-tree :menuData="item.childMenuList"></auth-tree>
+          <auth-tree :Todiabled="Todiabled" :menuData="item.childMenuList" :parentData="item" @forward="forwardChecked" @permissionCheck="permissionCheck"></auth-tree>
         </ul>
       </li>
    </div>
@@ -27,17 +26,74 @@
  <script>
 export default {
   name: 'authTree',
-  props: ['menuData'],
+  props: ['menuData', 'parentData', 'Todiabled'],
   data() {
     return {}
   },
   created() {},
   methods: {
     //  查看选中
-    changeCheck(child, parent, index) {
-      child.isHave = !child.isHave
-      console.log(child)
-      console.log(parent)
+    changeCheck(child, bool) {
+      // child.isHave = !child.isHave
+      child.isHave = bool ? bool : !child.isHave
+      if (!bool) {
+        this.selectChildAll(child)
+      }
+      // this.selectChildAll(child)
+      this.$emit('forward', {
+        isHave: child.isHave,
+        parent: this.parentData
+      })
+    },
+    //  子项菜单全部选中状态
+    selectChildAll(parent) {
+      let bool = parent.isHave
+      if (parent.childMenuList) {
+        parent.childMenuList.forEach(item => {
+          item.isHave = bool
+          this.selectChildAll(item)
+        })
+      }
+
+      if (parent.permissonList) {
+        parent.permissonList.forEach(permission => {
+          permission.isHave = bool
+          this.selectChildAll(permission)
+        })
+      }
+    },
+    //  自定义权限点击
+    checkPermission(permission, item, bool) {
+      // console.log(permission)
+      if (!this.parentData.childMenuList || !this.parentData.permissonList) {
+        item.isHave = !permission.isHave ? true : true
+        return
+      }
+      this.$emit('permissionCheck', {
+        permission: permission,
+        item: item,
+        bool: bool,
+        parent: this.parentData
+      })
+    },
+    //  权限点击
+    // permissionCheck(permission, item, bool) {
+    permissionCheck(data) {
+      data.permission.isHave = !data.bool ? !data.permission.isHave : data.bool
+      data.item.isHave = data.permission.isHave
+      this.checkPermission(data.item, data.parent, true)
+    },
+    //  向上传递值
+    forwardChecked(data) {
+      if (data.parent && data.isHave) {
+        data.parent.isHave = true
+        if (data.parent.permissonList) {
+          data.parent.permissonList.forEach(item => {
+            item.isHave = true
+          })
+        }
+        this.changeCheck(data.parent, true)
+      }
     }
   }
 }

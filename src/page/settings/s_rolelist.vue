@@ -46,7 +46,11 @@ export default {
         },
         {
           title: '创建时间',
-          key: 'createdAt'
+          key: 'createdAt',
+          width: 170,
+          render: (h, params) => {
+            return h('span', this.formatTime(params.row.createdAt))
+          }
         },
         {
           title: '修改人ID',
@@ -62,7 +66,11 @@ export default {
         },
         {
           title: '修改时间',
-          key: 'lastUpdateTime'
+          key: 'lastUpdateTime',
+          width: 170,
+          render: (h, params) => {
+            return h('span', this.formatTime(params.row.lastUpdateTime))
+          }
         },
         {
           title: '权限内容',
@@ -84,7 +92,7 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        path: 'roleinfo',
+                        path: '/s_rolelist/roleinfo',
                         query: { creatorId: params.row.roleId }
                       })
                     }
@@ -132,7 +140,22 @@ export default {
     },
     //  添加角色用户
     addRoleUser() {
-      this.$router.push('/addrole')
+      this.$router.push('/s_rolelist/addrole')
+    },
+    //  时间过滤
+    formatTime(time) {
+      let date = new Date(time)
+      let month =
+        date.getMonth() + 1 >= 10
+          ? date.getMonth() + 1
+          : '0' + date.getMonth() + 1
+      let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
+      let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
+      let minutes =
+        date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()
+      let seconds =
+        date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()
+      return `${date.getFullYear()}/${month}/${day} ${hour}:${minutes}:${seconds}`
     }
   }
 }

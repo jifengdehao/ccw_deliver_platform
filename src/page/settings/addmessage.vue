@@ -33,7 +33,8 @@
         <input type="text" v-model="params.title" style="width: 200px;height: 36px;border: 1px solid #ddd;border-radius: 5px">
       </p>
       <p>
-        <h3 style="display: inline-block;width: 100px">内容或链接： </h3>
+        <!-- <h3 style="display: inline-block;width: 100px">内容或链接： </h3> -->
+        <h3 style="display: inline-block;width: 100px">{{params.pushType === 1 && params.types === 2 ? '链接':'内容'}} </h3>
         <textarea v-model="params.content" cols="100" rows="5" style="border: 1px solid #ddd;border-radius: 5px;vertical-align: top;font-size: 16px;padding: 5px;" placeholder="请输入内容或链接"></textarea>
       </p>
     </section>
@@ -119,7 +120,8 @@ export default {
     },
     //  重置消息
     resetSingleInfo() {
-      if (this.$route.name.indexOf('addMessage') > -1) {
+      console.log(this.$route)
+      if (this.$route.path.indexOf('addMessage') > -1) {
         //  路由是addMessage
         for (let i in this.params) {
           this.params[i] = ''
@@ -130,7 +132,7 @@ export default {
             this.singleParams[i] = ''
           }
         }
-      } else if (this.$route.name.startsWith('edit')) {
+      } else if (this.$route.path.indexOf('toEidt')) {
         //  路由是edit
         http
           .getSingleInfo({
@@ -141,6 +143,7 @@ export default {
             for (let i in this.params) {
               this.params[i] = data[i]
             }
+            this.filterTypes(this.params.types)
             let date = new Date(this.params.pushTimeStr)
             this.singleParams = {
               year: date.getFullYear(),
@@ -190,15 +193,20 @@ export default {
           return
         }
       }
-      if (this.$route.name.indexOf('addMessage') > -1) {
+      if (this.$route.path.indexOf('addMessage') > -1) {
         //  添加消息
         http.addSingleInfo(this.params).then(data => {
           this.resetSingleInfo()
         })
-      } else if (this.$route.name.startsWith('edit')) {
-        http.putSingleInfo({
-          smMssageId: this.$route.params.smMssageId
-        })
+      } else if (this.$route.path.indexOf('edit')) {
+        http
+          .putSingleInfo({
+            smMssageId: this.$route.params.smMssageId,
+            params: this.params
+          })
+          .then(data => {
+            console.log(data)
+          })
       }
     }
   }

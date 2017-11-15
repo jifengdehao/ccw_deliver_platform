@@ -25,11 +25,17 @@ export default {
         },
         {
           title: '发布时间',
-          key: 'pushTime'
+          key: 'pushTime',
+          render: (h, params) => {
+            return h('span', this.formatTime(params.row.pushTime))
+          }
         },
         {
           title: '发布类型',
-          key: 'pushType'
+          key: 'pushType',
+          render: (h, params) => {
+            return h('span', params.row.pushType == 7 ? '平台消息' : '应用消息')
+          }
         },
         {
           title: '发布内容',
@@ -41,7 +47,10 @@ export default {
         },
         {
           title: '创建时间',
-          key: 'createdAt'
+          key: 'createdAt',
+          render: (h, params) => {
+            return h('span', this.formatTime(params.row.createdAt))
+          }
         },
         {
           title: '操作',
@@ -63,7 +72,7 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        path: `/s_message/edit/${params.row.smMssageId}`
+                        path: `/s_message/toEidt/${params.row.smMssageId}`
                       })
                     }
                   }
@@ -122,6 +131,21 @@ export default {
     //  新增 -> 路由跳转
     addMessage() {
       this.$router.push('/s_message/addMessage')
+    },
+    //  时间过滤
+    formatTime(time) {
+      let date = new Date(time)
+      let month =
+        date.getMonth() + 1 >= 10
+          ? date.getMonth() + 1
+          : '0' + date.getMonth() + 1
+      let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
+      let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
+      let minutes =
+        date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()
+      let seconds =
+        date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()
+      return `${date.getFullYear()}/${month}/${day} ${hour}:${minutes}:${seconds}`
     }
   }
 }
