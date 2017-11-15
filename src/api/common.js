@@ -61,6 +61,10 @@ export const putDeliver = (orderId, params) => {
   return ax.u(`/orderManager/${orderId}/${params}`)
 }
 
+export const getMenu = (params) => {
+  return ax.g('/User/menuList', params)
+}
+
 // author: zhangwenlong end
 
 // 配置设置   胡上军   start  ********************************************************
@@ -219,9 +223,9 @@ export const getFinanceOrderList = params => {
 }
 
 /**
-  * @description 设置模块相关功能点
-  * @author Create By WuFengliang
-  */
+ * @description 设置模块相关功能点
+ * @author Create By WuFengliang
+ */
 
 /**
  * 获取平台用户列表
@@ -343,6 +347,6 @@ export const putSingleInfo = params => {
 }
 
 /**
-  * @description 设置模块相关功能点
-  * @author Create By WuFengliang
-  */
+ * @description 设置模块相关功能点
+ * @author Create By WuFengliang
+ */

@@ -79,9 +79,9 @@
       handleSubmit(name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
-           // this.login(this.formLogin)
-            sessionStorage.setItem('user', JSON.stringify(this.formLogin))
-            this.$router.push('/')
+            this.login(this.formLogin)
+//            sessionStorage.setItem('user', JSON.stringify(this.formLogin))
+//            this.$router.push('/')
           } else {
             this.$Message.error('表单验证失败!')
           }
@@ -126,8 +126,8 @@
         api.login(params).then((res) => {
           console.log(res)
           if (res) {
-            // cookie.setData('userInfo', JSON.stringify(res))
-            this.$router.push('/')
+            cookie.setData('userInfo', JSON.stringify(res))
+            this.$router.go(0)
           }
         })
       }

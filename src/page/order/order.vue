@@ -39,7 +39,32 @@
       </Select>
       </Col>
     </Row>
-    <Tabs value="0" :animated="false" @on-click="selectTab" style="min-height: 600px;">
+    <Tabs :value="this.state" :animated="false" @on-click="selectTab" style="min-height: 600px;">
+      <TabPane label="全部" name="5">
+        <Row class="O_cava" v-show="showResult">
+          <Col span="2">
+          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
+            <li>姓名</li>
+            <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
+                :class="{active:item.psDeliverId === deliverId} ">
+              {{item.name}}
+            </li>
+          </ul>
+          </Col>
+          <Col span="21" offset="1">
+          <Table border :columns="columns" :data="data"></Table>
+          <Page
+            :total="tableTotal"
+            :current="pageNumber"
+            :page-size="pageSize"
+            @on-change="changePage"
+            show-total
+            class="fr"
+            style="margin-top: 20px;"
+          ></Page>
+          </Col>
+        </Row>
+      </TabPane>
       <TabPane label="新订单" name="0">
         <Row class="O_cava" v-show="showResult">
           <Col span="2">
@@ -166,7 +191,7 @@
         columns: [
           {
             title: '用户名',
-            key: 'customId',
+            key: 'customerName',
             align: 'center'
           },
           {
@@ -226,7 +251,7 @@
         pageSize: 20, //默认表格一页数据
         pageNumber: 1,  // 默认第一页
         tableTotal: 0,  // 表格数据总数
-        state: '0', // 状态
+        state: '5', // 状态
         deliverData: [], //配送员数据
         showResult: false // 数据展示
       }

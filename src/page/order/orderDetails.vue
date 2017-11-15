@@ -113,7 +113,7 @@
             const map = new AMap.Map("container", {
               center: res.market,//地图中心点
               zoom: 10, //地图显示的缩放级别
-              mapStyle: 'amap://styles/dark'//样式URL
+              mapStyle: 'amap://styles/normal'//样式URL
             })
             // 取件 - 送达
             AMap.service('AMap.Driving', function () {//回调函数
@@ -140,7 +140,9 @@
               console.log(deliver)
               marker.content = '<a href="javascript:void(0);" onclick="goAssign(this);" data-deliver="' + deliver + '">指派</a>';
               //给Marker绑定单击事件
-              marker.on('click', markerClick);
+              if(res.isShow !==0){
+                marker.on('click', markerClick);
+              }
               marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
                 offset: new AMap.Pixel(0, -22),//修改label相对于maker的位置
                 content: this.data[i].deliverMsg

@@ -14,8 +14,8 @@ Vue.use(iView)
  */
 router.beforeEach((to, from, next) => {
   let path = to.path.substr(1)
-  // let userInfo = cookie.getData('userInfo')
-  let userInfo = sessionStorage.getItem('user')
+  let userInfo = cookie.getData('userInfo')
+  // let userInfo = sessionStorage.getItem('user')
   if (path !== 'login') {
     if (!userInfo) {
       next('/login')
