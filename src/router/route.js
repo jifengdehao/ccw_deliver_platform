@@ -1,3 +1,10 @@
+/**
+ * 2017/11/14
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 路由懒加载
+ */
+
 // 登录
 const Login = resolve => {
   import('@/page/login/login').then(module => {

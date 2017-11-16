@@ -1,98 +1,105 @@
 <template>
-  <div id="roleinfo" class="main" :class="{'isShow':show}"  v-if="menuData">
-    <p class="role-p"><span>角色：</span><input type="text" v-model="putParams.roleName"></p>
-    <div class="tree-box">
+  <div id="addrole" class="main" :class="{'isShow':show}">
+    <main-header :title="title">
+      <span slot="h3">新增</span>
+    </main-header>
+    <section style="text-align: left;padding: 20px 0;">
+      <span style="font-size: 16px">角色：</span>
+      <Select v-model="model1" style="width:150px">
+        <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+      </Select>
+    </section>
+    <section style="text-align: left">
+      <Checkbox style="font-size: 18px;line-height: 40px;">订单管理</Checkbox>
       <ul>
-        <auth-tree :menuData="menuData.menu" :parentData="menuData"></auth-tree>
+        <li v-for="item in 5" style="text-align: center;line-height: ;">
+          <Checkbox style="font-size: 14px;">查看</Checkbox>
+          <Checkbox style="font-size: 14px;">指派</Checkbox>
+        </li>
       </ul>
-    </div>
-    <p class="btn-p">
-      <Button @click="getRoleInfo">取消</Button>
-      <Button @click="submitInfoData">确认</Button>
-    </p>
+    </section>
+    <section style="text-align: left">
+      <Checkbox style="font-size: 18px;line-height: 40px;">骑士管理</Checkbox>
+      <ul>
+        <li v-for="item in 10">
+          <Checkbox style="font-size: 14px;">未提交资料</Checkbox>
+        </li>
+      </ul>
+    </section>
+    <section style="text-align: left">
+      <Checkbox style="font-size: 18px;line-height: 40px;">配置设置</Checkbox>
+      <ul>
+        <li v-for="item in 10">
+          <Checkbox style="font-size: 14px;">查看</Checkbox>
+          <Checkbox style="font-size: 14px;">新增</Checkbox>
+        </li>
+      </ul>
+    </section>
+    <section style="text-align: left">
+      <Checkbox style="font-size: 18px;line-height: 40px;">数据中心</Checkbox>
+      <ul>
+        <li v-for="item in 10">
+          <Checkbox style="font-size: 14px;">配送员数据</Checkbox>
+          <Checkbox style="font-size: 14px;">指派</Checkbox>
+        </li>
+      </ul>
+    </section>
   </div>
 </template>
 <script>
-import * as http from '@/api/common'
-import authTree from './tree'
-export default {
-  name: 'addRole',
-  components: {
-    authTree
-  },
-  data() {
-    return {
-      menuData: null, //  传递给子组件的值
-      putParams: {
-        roleName: '', //  角色名称
-        permissionList: [] //  用户权限
+  import mainHeader from '../../components/header/main_header.vue'
+
+  export default {
+    components: {mainHeader},
+    data() {
+      return {
+        title: '新增角色',
+        model1: '',
+        cityList: [
+          {
+            value: 'quzhang',
+            label: '区长'
+          },
+          {
+            value: 'zhanzhang',
+            label: '站长'
+          },
+          {
+            value: 'Administrators',
+            label: '管理员'
+          },
+          {
+            value: 'super_Administrators',
+            label: '超级管理员'
+          },
+        ]
+
       }
-    }
-  },
-  computed: {
-    show() {
-      return this.$store.state.show
-    }
-  },
-  created() {
-    this.getRoleInfo()
-  },
-  methods: {
-    //  获取角色权限信息
-    getRoleInfo() {
-      http.getUserRoleList().then(data => {
-        this.menuData = data
-      })
     },
-    //  传递至过滤
-    filterValue(array) {
-      array.forEach(item => {
-        if (item.isHave) {
-          if (item.permissonList && item.permissonList.length > 0) {
-            item.permissonList.forEach(permissin => {
-              let single = {
-                menuId: item.menuId
-              }
-              if (permissin.isHave) {
-                single.permissionId = permissin.permissionId
-                this.putParams.permissionList.push(single)
-              }
-            })
-            this.filterValue(item.childMenuList)
-          }
-        }
-        console.log(this.putParams.permissionList)
-      })
-    },
-    //  确认
-    submitInfoData() {
-      this.putParams.permissionList = []
-      this.filterValue(this.menuData.menu)
-      if (!this.putParams.roleName) {
-        return
+    computed: {
+      show() {
+        return this.$store.state.show
       }
-      http.addUserRole(this.putParams).then(data => {
-        this.getRoleInfo()
-      })
+    },
+    methods: {
+      getCurrentDate() {
+        return new Date().toLocaleDateString()
+      }
     }
   }
-}
 </script>
-<style lang="css" scoped>
-p.role-p {
-  margin: 20px auto;
-}
-
-p.role-p input[type='text'] {
-  width: 100px;
-}
-
-p.btn-p {
-  margin: 20px auto;
-  text-align: center;
-}
-
-p.btn-p button {
-  margin: 0 5px;
-}
+<style lang="less" scoped type="text/less">
+  #addrole {
+    section {
+      li {
+        width: 220px;
+        height: 61px;
+        line-height: 61px;
+        float: left;
+        border: 1px solid #666666;
+        margin-left: -1px;
+        margin-top: -1px;
+      }
+    }
+  }
 </style>

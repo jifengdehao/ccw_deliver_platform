@@ -33,17 +33,17 @@
     },
     computed: {
       username() {
-       // return JSON.parse(cookie.getData('userInfo')).userName
-        return JSON.parse(sessionStorage.getItem('user')).mobileno
+        return JSON.parse(cookie.getData('userInfo')).userName
+       // return JSON.parse(sessionStorage.getItem('user')).mobileno
       }
     },
     methods: {
       logout() {
         api.logout().then((res) => {
-          console.log(res)
           if(res){
+            console.log(res)
             cookie.delData('userInfo')
-            this.$router.push('/Login')
+            this.$router.go(0)
           }
         })
       }
