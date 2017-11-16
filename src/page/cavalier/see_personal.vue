@@ -37,7 +37,7 @@
           <span>市区</span>
           <span>
             <Select style="width:200px" :disabled="showCity" @on-change="changeCityData" v-model="cityIdIndex">
-              <Option v-for="city in cityManager" :key="city.id" :value="city.cityId">{{ city.cityName }}</Option>
+              <Option v-for="city in cityManager" :key="city.cityId" :value="city.cityId">{{ city.cityName }}</Option>
             </Select>
           </span>
         </li>
@@ -85,8 +85,8 @@
 
     </div>
     <div class="footer">
-      <Button size="large" type="ghost">取消</Button>
-      <Button size="large" type="ghost">确定</Button>
+      <Button size="large" type="ghost" @click="onSave('1')">取消</Button>
+      <Button size="large" type="ghost" @click="onSave('2')">确定</Button>
     </div>
   </div>
 </template>
@@ -94,8 +94,8 @@
 import * as api from '@/api/common'
 export default {
   components: {},
-  name: "see_personal",
-  data () {
+  name: 'see_personal',
+  data() {
     return {
       id: (() => {
         return this.$route.query.id
@@ -117,58 +117,71 @@ export default {
       marketIdData: '', // 获取菜市场ID数据
       status: '', // 默认上班状态
       psDeliverIncomeData: {}, // 获取收入金额
+      areaValue: '' // 获取市区value
     }
   },
-  created () {
+  created() {
     this.getDeliverInfo() // 初始化用户数据
     this.getDeployManager() //  初始化省区数据
   },
   methods: {
     // 请求初始化用户个人信息
-    getDeliverInfo(){
+    getDeliverInfo() {
       api.getDeliverInfo(this.id).then(list => {
-        this.DeliverInfo = list
-        this.psDeliverIncomeData = list.psDeliverIncome
-        this.provinceData = list.psDeliverMarket.provinceId   // 省区ID 初始化
-        this.cityIdIndex = list.psDeliverMarket.cityId // 市区ID 初始化
-        this.areaIdData = list.psDeliverMarket.areaId // 区域ID 初始化
-        this.marketIdData = list.psDeliverMarket.marketId // 菜市场ID 初始化
-        this.status = list.personStatus.toString() // 初始化上班状态
-        list.pictureList.forEach(function(item) {
-          switch (item.picType) {
-            case 4:
-              this.PositiveImg = item.picUrl
-              break
-            case 5:
-              this.negativeImg = item.picUrl
-              break
-            case 8:
-              this.HealthImg = item.picUrl
+        if (list && list != null) {
+          this.DeliverInfo = list
+          if (list.psDeliverIncome && list.psDeliverIncome != null) {
+            this.psDeliverIncomeData = list.psDeliverIncome
           }
-        }, this);
-        console.log(list)
+          if (list.psDeliverMarket && list.psDeliverMarket != null) {
+            this.provinceData = list.psDeliverMarket.provinceId // 省区ID 初始化
+            this.cityIdIndex = list.psDeliverMarket.cityId // 市区ID 初始化
+            this.areaIdData = list.psDeliverMarket.areaId // 区域ID 初始化
+            this.marketIdData = list.psDeliverMarket.marketId // 菜市场ID 初始化
+          }
+          this.status = list.personStatus.toString() // 初始化上班状态
+          if (list.pictureList && list.pictureList != null) {
+            // 图片
+            list.pictureList.forEach(function(item) {
+              switch (item.picType) {
+                case 4:
+                  this.PositiveImg = item.picUrl
+                  break
+                case 5:
+                  this.negativeImg = item.picUrl
+                  break
+                case 8:
+                  this.HealthImg = item.picUrl
+              }
+            }, this)
+          }
+        }
       })
     },
-     // 获取省区下拉框数据
+    // 获取省区下拉框数据
     getDeployManager() {
+      this.cityManager = []
+      this.areaManager = []
+      this.marketManager = []
       api.getDeployManager().then(data => {
         this.deployManager = data
       })
     },
     // 获取市区下拉框数据
     changeDate(value) {
-      this.cityManager = ''
-      if (value && value != '') {
-         api.getProvinceIndex(value).then(data => {
-            this.cityManager = data
-          })
+      this.cityManager = []
+      console.log(value, 'areaValue')
+      if (value && value != null) {
+        api.getProvinceIndex(value).then(data => {
+          this.cityManager = data
+        })
       }
       this.showCity = false
     },
-     // 获取区域下拉框数据
+    // 获取区域下拉框数据
     changeCityData(value) {
-      this.areaManager = ''
-      if (value && value != '') {
+      this.areaManager = []
+      if (value && value != null) {
         api.getCityManager(value).then(data => {
           this.areaManager = data
         })
@@ -177,18 +190,46 @@ export default {
     },
     // 获取菜市场下拉框数据
     changeAreaData(value) {
-      this.marketManager = ''
-      if (value && value != '') {
+      this.marketManager = []
+      if (value && value != null) {
         api.getAreaMarket(value).then(data => {
           this.marketManager = data
         })
       }
-        this.showMarket = false
+      this.showMarket = false
     },
     // 获取菜市场下拉框数据
     changeMarkData(value) {
       this.userId = value
     },
+
+    // 保存修改 清空修改
+    onSave(status) {
+      switch (status) {
+        case '1':
+          this.getDeployManager()
+          this.getDeliverInfo()
+          break
+        case '2':
+          let saveDate = {
+            personStatus: this.status, // 保存上班状态
+            psDeliverId: this.id, // 保存修改用户ID
+            psDeliverMarket: {
+              // 修改用户地区
+              areaId: this.areaIdData, // 区域ID
+              cityId: this.cityIdIndex, // 市区ID
+              provinceId: this.provinceData, // 省区ID
+              marketId: this.marketIdData // 菜市场ID
+            }
+          } // 修改参数
+          api.getUpdateDeliver(saveDate).then(res => {
+            if (res && res === true) {
+              this.getDeployManager()
+              this.getDeliverInfo()
+            }
+          })
+      }
+    }
   }
 }
 </script>
@@ -219,7 +260,7 @@ export default {
 
 .content1 li span:nth-child(1),
 .content2 li span:nth-child(1),
-.content3 li span:nth-child(1){
+.content3 li span:nth-child(1) {
   width: 80px;
   display: inline-block;
   margin-right: 16px;
@@ -228,7 +269,7 @@ export default {
 .content1 > li,
 .content2 > li,
 .content3 > li {
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
 
 .content1 li img,

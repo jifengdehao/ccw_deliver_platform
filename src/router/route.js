@@ -112,6 +112,12 @@ const cPersonal = resolve => {
     resolve(module)
   })
 }
+
+const cPersonalDetailInfo = resolve => {
+  import('@/page/cavalier/see_personal').then(module => {
+    resolve(module)
+  })
+}
 // 配置设置
 const configuration = resolve => {
   import('@/page/configuration/configuration').then(module => {
@@ -319,6 +325,10 @@ export default [
       {
         path: '/cPersonal',
         component: cPersonal
+      },
+      {
+        path: '/cPersonalDetailInfo/:id',
+        component: cPersonalDetailInfo
       },
       {
         path: '/configuration',
