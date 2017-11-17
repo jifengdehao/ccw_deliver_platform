@@ -28,25 +28,30 @@
       <Form v-model="formItem"  inline>
         <FormItem >
             <span>菜市场名称：</span>
-            <Input v-model="formItem.marketName" style="width:160px"></Input>
+            <Input v-model="formItem.marketName" style="width:200px" required></Input>
             <span>菜市场电话：</span>
-            <Input v-model="formItem.mobileno" style="width:160px"></Input>
+            <Input v-model="formItem.mobileno" style="width:200px" required></Input>
             <span>配送时间段：</span>
-            <TimePicker v-model="formItem.beginTime" type="timerange" placement="bottom-end" placeholder="选择时间" style="width: 160px"></TimePicker>
+            <TimePicker v-model="formItem.beginTime" type="time" placeholder="Select time" style="width: 95px"></TimePicker> - 
+            <TimePicker v-model="formItem.endTime" type="time" placeholder="Select time" style="width: 95px"></TimePicker>
             <br>
-            <span>绑定小区：</span>            
-            <Input v-model="formItem.districtId" style="width:160px"></Input> 
+            <span>自提点电话：</span>            
+            <Input v-model="formItem.self_pick_address_number" style="width:200px" required></Input> 
              <span>自提点：</span>
-            <Input v-model="formItem.selfPickAddress" style="width:160px"></Input>
+            <Input v-model="formItem.selfPickAddress" style="width:200px" required></Input>
             <span>菜市场地址：</span>
-            <Input v-model="formItem.address" style="width:160px"></Input>
+            <Input v-model="formItem.address" style="width:200px" required ></Input>
+        </FormItem>
+        <FormItem class="addmarket_button">
+           <Button type="ghost" size="large" style="width: 150px" @click="goBack">取消</Button>
+           <Button type="ghost" size="large" style="width: 150px" @click="addMarket">保存</Button>
         </FormItem>
     </Form>
     </section>
-    <section class="addmarket_button">
+    <!-- <section class="addmarket_button">
       <Button type="ghost" size="large" style="width: 150px">取消</Button>
       <Button type="ghost" size="large" style="width: 150px" @click="addMarket">保存</Button>
-    </section>
+    </section> -->
   </div>
 </template>
 <script>
@@ -56,7 +61,11 @@ export default {
   components: {},
   data() {
     return {
-      formItem: {},
+      marketId: Number,
+      formItem: {
+        latitude: 0, // 维度
+        longitude: 0 // 经度
+      },
       areaData: {},
       marketName: '',
       current: 0,
@@ -79,7 +88,7 @@ export default {
       })
     }
   },
-  created() {
+  mounted() {
     this.getQuInfo()
   },
   methods: {
@@ -103,7 +112,7 @@ export default {
         var arr = this.areaData.areaCoordinate
         return new AMap.Polygon({
           map: map,
-          path: JSON.parse(arr),
+          path: arr,
           strokeColor: '#0000ff',
           strokeOpacity: 1,
           strokeWeight: 1,
@@ -121,21 +130,47 @@ export default {
           this.current = 1 // 规划了区域状态为1
         })
       })
+      var _this = this
+      // 选定菜市场地址
+      AMap.plugin('AMap.Geocoder', function() {
+        var geocoder = new AMap.Geocoder({
+          // city: '020' //城市，默认：“全国”
+        })
+        var marker = new AMap.Marker({
+          map: map,
+          bubble: true
+        })
+        map.on('dblclick', e => {
+          marker.setPosition(e.lnglat)
+          _this.formItem.latitude = e.lnglat.O
+          _this.formItem.longitude = e.lnglat.M
+        })
+      })
     },
     // 添加菜市场
     addMarket() {
-      this.formItem.AreaCoordinate = this.path
+      this.formItem.areaCoordinate = this.path
       if (this.current === 1 && this.formItem.marketName) {
         let params = {
           areaId: this.areaData.areaId,
           market: this.formItem,
+          marketId: this.marketId
         }
-        api.addMarket(params).then(response => {
-          this.$Message.info('添加菜市场成功')
-        })
+        api
+          .addMarket(params)
+          .then(response => {
+            this.$Message.info('添加菜市场成功')
+          })
+          .catch(err => {
+            this.$Message.info('添加菜市场失败' + err)
+          })
       } else {
-        alert('请划定菜市场区域或输入菜市场名称')
+        this.$Message.info('请划定菜市场区域或输入菜市场名称')
       }
+    },
+    // 取消按钮
+    goBack() {
+      // this.$route.go(-1)
     }
   }
 }
@@ -148,7 +183,7 @@ export default {
     height: 40px;
     line-height: 40px;
     margin-bottom: 20px;
-    background-color: #999;
+    background-color: #363e54;
     span {
       margin-left: 10px;
       font-size: 18px;

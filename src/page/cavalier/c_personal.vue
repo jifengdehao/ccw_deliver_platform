@@ -114,7 +114,7 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push(
-                        '/cPersonal/' + params.row.psDeliverId
+                        '/cPersonalDetailInfo/seeUser?id=' + params.row.psDeliverId
                       )
                     }
                   }
