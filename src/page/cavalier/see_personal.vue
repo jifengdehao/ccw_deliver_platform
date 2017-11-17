@@ -63,7 +63,7 @@
           <span>工作状态</span>
           <span>
             <Select style="width:200px; margin: 0;" v-model="status">
-                <Option value="1">上班</Option>
+                <Option value="1">工作</Option>
                 <Option value="2">休息</Option>
             </Select>
           </span>
@@ -160,9 +160,6 @@ export default {
     },
     // 获取省区下拉框数据
     getDeployManager() {
-      this.cityManager = []
-      this.areaManager = []
-      this.marketManager = []
       api.getDeployManager().then(data => {
         this.deployManager = data
       })
@@ -170,7 +167,6 @@ export default {
     // 获取市区下拉框数据
     changeDate(value) {
       this.cityManager = []
-      console.log(value, 'areaValue')
       if (value && value != null) {
         api.getProvinceIndex(value).then(data => {
           this.cityManager = data
@@ -207,6 +203,9 @@ export default {
     onSave(status) {
       switch (status) {
         case '1':
+          this.cityManager = []
+          this.areaManager = []
+          this.marketManager = []
           this.getDeployManager()
           this.getDeliverInfo()
           break

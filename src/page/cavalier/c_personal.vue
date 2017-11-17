@@ -114,7 +114,8 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push(
-                        '/cPersonalDetailInfo/seeUser?id=' + params.row.psDeliverId
+                        '/cPersonalDetailInfo/seeUser?id=' +
+                          params.row.psDeliverId
                       )
                     }
                   }
@@ -182,7 +183,6 @@ export default {
     },
     // 确定冻结用户
     ok() {
-      console.log(this.psDeliverId)
       api.getDeliverId(this.psDeliverId).then(obj => {
         if (obj === true) {
           this.getDeliverList() // 初始化数据

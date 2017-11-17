@@ -139,7 +139,6 @@
       },
       // 点击分页发生变化
       changePage(page) {
-        console.log(page, 'page')
         this.params.pageNumber = page
         this.getDeliverManager()
       }
