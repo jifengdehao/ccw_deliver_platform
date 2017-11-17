@@ -61,7 +61,7 @@ export default {
         },
         {
           title: '性别',
-          key: 'sex',
+          key: 'sexStr',
           width: '60',
           align: 'center'
         },
@@ -88,7 +88,7 @@ export default {
         },
         {
           title: '配送单类型',
-          key: 'deliveryMode',
+          key: 'deliveryModeStr',
           align: 'center'
         },
         {

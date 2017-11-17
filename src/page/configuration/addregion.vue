@@ -24,7 +24,7 @@
       <Form ref="formInline"  label-position="left"  inline>
         <FormItem>
             <span>区域名称：</span>
-            <Input type="text" v-model="formInline.user" style="width: 150px"></Input>
+            <Input type="text" v-model="formInline.user" style="width: 150px" required></Input>
             <!-- <span>区域范围：</span>
             <Button type="info" size="large" style="width: 150px" @click="startEditable">编辑</Button>
             <Button type="info" size="large" style="width: 150px" @click="endEditable">清除</Button> -->
@@ -32,7 +32,7 @@
     </Form>
     </section>
     <section class="addregion_button">
-      <Button type="ghost" size="large" style="width: 150px" @click="">取消</Button>
+      <Button type="ghost" size="large" style="width: 150px" @click="goback">取消</Button>
       <Button type="ghost" size="large" style="width: 150px" @click="addQu()">增加</Button>
     </section>
   </div>
@@ -109,14 +109,25 @@ export default {
     },
     // 添加
     addQu() {
-      let params = {
-        cityId: this.adcode,
-        areaName: this.formInline.user,
-        areaCoordinate: this.path
+      if (this.formInline.user&&this.path) {
+        let params = {
+          cityId: this.adcode,
+          areaName: this.formInline.user,
+          areaCoordinate: this.path
+        }
+        api.addQu(params).then(response => {
+          // this.$route.go(-1)
+          this.$Message.success('添加成功')
+        }).catch(err => {
+          this.$Message.success('添加失败'+ err)
+        })
+      }else{
+        this.$Message.success('请输入菜市场名称或者规划区域范围')
       }
-      api.addQu(params).then(response => {
-        this.$Message.success('添加成功')
-      })
+    },
+    // 点击取消按钮  返回设置主页
+    goback(){
+    this.initMap()
     }
   },
   computed: {
@@ -143,7 +154,7 @@ export default {
     height: 40px;
     line-height: 40px;
     margin-bottom: 20px;
-    background-color: #999;
+    background-color: #363e54;
     span {
       margin-left: 10px;
       font-size: 18px;

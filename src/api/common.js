@@ -197,6 +197,11 @@ export const getDeliverInfo = id => {
   return ax.g(`/deliverManager/deliver/${id}`)
 }
 
+// 配送人员 查看用户 修改数据/deliverManager/deliver/updateDeliver
+export const getUpdateDeliver = (params) => {
+  return ax.u('/deliverManager/deliver/updateDeliver', params)
+}
+
 /**
  * @author Zeng FanLu
  * components 财务对账

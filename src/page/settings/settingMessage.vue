@@ -42,7 +42,7 @@ export default {
         },
         {
           title: '消息内容',
-          key: 'content'
+          key: 'outline'
         },
         {
           title: '操作',

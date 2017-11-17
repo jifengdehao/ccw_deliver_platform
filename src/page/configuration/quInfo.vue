@@ -23,7 +23,7 @@
             </div>
         </section>
         <section class="quInfo_button">
-            <Button size="large" style="width: 200px;" >取消</Button>
+            <Button size="large" style="width: 200px;" @click="goback">取消</Button>
             <Button size="large" style="width: 200px;" @click="test">确定</Button>
         </section>
     </div>
@@ -74,7 +74,8 @@ export default {
       })
       var editor = {}
       editor._polygon = (() => {
-        var arr = JSON.parse(this.areaData.areaCoordinate)
+        // var arr = JSON.parse(this.areaData.areaCoordinate)
+        var arr = this.areaData.areaCoordinate
         return new AMap.Polygon({
           map: map,
           path: arr,
@@ -89,7 +90,9 @@ export default {
       map.setFitView() //地图自适应
     },
     test() {
-      console.log(this.areaData.areaCoordinate)
+    },
+    goback(){
+      window.history.go(-1)
     }
   }
 }
@@ -100,7 +103,7 @@ export default {
     height: 40px;
     line-height: 40px;
     margin-bottom: 20px;
-    background-color: #999;
+    background-color: #363e54;
     span {
       margin-left: 10px;
       font-size: 18px;

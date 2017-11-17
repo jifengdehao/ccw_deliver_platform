@@ -51,7 +51,7 @@ export default {
         },
         {
           title: '姓名',
-          key: 'name'
+          key: 'userName'
         },
         {
           title: '联系方式',
@@ -88,10 +88,9 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({
-                        path: 'userinfo',
-                        query: { psUserId: params.row.psUserId }
-                      })
+                      this.$router.push(
+                        `/s_platform/userinfo/${params.row.psUserId}`
+                      )
                     }
                   }
                 },
@@ -151,7 +150,7 @@ export default {
     },
     //  添加用户
     addpersonal() {
-      this.$router.push('/adduser')
+      this.$router.push('/s_platform/adduser')
     },
     touserinfo(index) {
       this.$router.push('/userinfo')
@@ -159,12 +158,11 @@ export default {
     remove(index) {
       this.$Modal.info({
         title: '提醒',
-        cancel: "cancel",
+        cancel: 'cancel',
         content: `是否删除 :${this.data6[index].name} @on-ok="ok"
               @on-cancel="cancel"`
-
       })
-      this.data6.splice(index, 1);
+      this.data6.splice(index, 1)
     }
   }
 }

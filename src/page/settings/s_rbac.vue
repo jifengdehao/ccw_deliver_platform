@@ -79,10 +79,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({
-                        path: 's_rbac_chakan',
-                        query: { psUserId: params.row.psUserId }
-                      })
+                      this.$router.push(`/s_rbac/${params.row.psUserId}`)
                     }
                   }
                 },

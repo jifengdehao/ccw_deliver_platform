@@ -7,6 +7,7 @@
              style="width: 200px;margin-top: 4px;" @on-click="search"></Input>
     </main-header>
     <section>
+      <h1>培训管理模块延期…………</h1>
     </section>
   </div>
 </template>
@@ -22,9 +23,7 @@
       }
     },
     methods: {
-      search(){
-        console.log(this.searchModel)
-      }
+      search(){}
     }
   }
 </script>

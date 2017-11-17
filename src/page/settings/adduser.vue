@@ -9,8 +9,6 @@
     <div class="header">
       <h2>用户管理</h2>
     </div>
-    <main-header :title="title">
-    </main-header>
     <section class="userinfo_list">
       <ul>
         <li><span>姓名</span><input type="text" v-model="params.userName"></li>
@@ -23,9 +21,7 @@
         <li><span>邮箱地址</span><input type="text" v-model="params.email"></li>
         <li><span>角色名称</span><Select v-model="params.role" style="width:168px;"
                                    >
-                                   <Option value="管理员">管理员</Option>
-                                   <Option value="区长">区长</Option>
-                                   <Option value="站长">站长</Option>
+                                   <Option v-for="role in roleArray" :value="role.roleId" :key="role.roleName">{{ role.roleName }}</Option> 
                                    </Select></li>
         <li><span>所属省区</span>
           <Select v-model="params.provinceId"  style="width:168px;height:30px;" @on-change="chooseProvince">
@@ -57,9 +53,8 @@
   </div>
 </template>
 <script>
-import mainHeader from '../../components/header/main_header.vue'
+import * as http from '@/api/common'
 export default {
-  components: { mainHeader },
   data() {
     return {
       params: {
@@ -76,10 +71,8 @@ export default {
       provinceList: null, //  省区数据集合
       cityList: null, //  市区数据集合
       areaList: null, //  区域集合
-      marketList: null //  菜市场集合
-    }
-    return {
-      title:'新增用户'
+      marketList: null, //  菜市场集合
+      roleArray: null //  角色列表
     }
   },
   computed: {
@@ -88,9 +81,16 @@ export default {
     }
   },
   created() {
+    this.getRoleList()
     this.getProvinceList()
   },
   methods: {
+    //  获取角色列表
+    getRoleList() {
+      http.getRoleList({}).then(data => {
+        this.roleArray = data.records
+      })
+    },
     //  获取省区
     getProvinceList() {
       http.getDeployManager().then(data => {
@@ -125,7 +125,7 @@ export default {
     },
     putUserInfo() {
       http.addOrPutUserInfo(this.params).then(data => {
-        this.resetInfo()
+        this.$router.go(-1)
       })
     }
   }
