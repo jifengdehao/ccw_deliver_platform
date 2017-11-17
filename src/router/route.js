@@ -119,13 +119,12 @@ const cPersonal = resolve => {
     resolve(module)
   })
 }
-// 骑士管理 - 人员管理 -查看
-const SeePersonal = resolve => {
-  import ('@/page/cavalier/see_personal').then(module => {
+
+const cPersonalDetailInfo = resolve => {
+  import('@/page/cavalier/see_personal').then(module => {
     resolve(module)
   })
 }
-
 // 配置设置
 const configuration = resolve => {
   import('@/page/configuration/configuration').then(module => {
@@ -335,8 +334,8 @@ export default [
         component: cPersonal
       },
       {
-        path: '/cPersonal/:id',
-        component: SeePersonal
+        path: '/cPersonalDetailInfo/:id',
+        component: cPersonalDetailInfo
       },
       {
         path: '/configuration',
