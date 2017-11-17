@@ -19,9 +19,9 @@
     </ul>
     <ul class="fl">
       <li><span>联系方式:</span>{{data.user.mobileno}}</li>
-      <li><span>角色名称:</span>{{data.user.role}}</li>
-      <li><span>所属省区:</span>{{data.user.provinceId}}</li>
-      <li><span>所属市区:</span>{{data.user.cityId}}</li>
+      <li><span>角色名称:</span>{{data.user.roleName}}</li>
+      <li><span>所属省区:</span>{{data.user.provinceName}}</li>
+      <li><span>所属市区:</span>{{data.user.cityName}}</li>
       <li><span>所属区域:</span>{{data.user.areaName}}</li>
     </ul>
     </div>
@@ -50,7 +50,7 @@ export default {
   methods: {
     //  获取用户信息
     getUserInfoData() {
-      this.params.psUserId = this.$route.query.psUserId
+      this.params.psUserId = this.$route.params.psUserId
       http.lookUser(this.params).then(data => {
         this.data = data
         console.log(data)
@@ -75,10 +75,11 @@ export default {
 ul {
   overflow: hidden;
   margin: 20px auto;
+  padding-left: 20px;
 }
 
 ul.first {
-  margin: 20px 250px 20px 150px;
+  margin: 20px 250px 20px 0;
 }
 
 ul > li {
