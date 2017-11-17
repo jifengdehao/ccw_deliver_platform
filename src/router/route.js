@@ -370,11 +370,11 @@ export default [
         component: s_platform
       },
       {
-        path: '/adduser',
+        path: '/s_platform/adduser',
         component: adduser
       },
       {
-        path: '/s_platform/:id',
+        path: '/s_platform/userinfo/:psUserId',
         component: userinfo
       },
       {
@@ -382,7 +382,7 @@ export default [
         component: s_rbac
       },
       {
-        path: '/s_rbac/:id',
+        path: '/s_rbac/:psUserId',
         component: s_rbac_chakan
       },
       {

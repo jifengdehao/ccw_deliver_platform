@@ -171,7 +171,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push('/finance/'+ params.row.psDeliverId)
+                      this.$router.push('/finance/' + params.row.psDeliverId)
                     }
                   }
                 },
@@ -183,7 +183,7 @@ export default {
       ], // table 数据
       finance: [], // 列表数据,
       total: '', // 总页面
-      exportModal: false, // 导出时间弹框隐藏
+      exportModal: false // 导出时间弹框隐藏
     }
   },
   created: function() {
@@ -256,8 +256,11 @@ export default {
           endTime: this.endTimeStr
         }
         api.getFinanceListExport(params).then(data => {
-          console.log(data)
+          if (data && data != null) {
+            window.open(data)
+          }
         })
+        this.exportModal = false
       }
     },
     // 获取开始时间
@@ -267,7 +270,12 @@ export default {
     },
     // 获取结束时间
     changeTime(data) {
-      if (this.params.marketId && this.params.marketId != '' && this.params.beginTime && this.params.beginTime != '') {
+      if (
+        this.params.marketId &&
+        this.params.marketId != '' &&
+        this.params.beginTime &&
+        this.params.beginTime != ''
+      ) {
         this.params.endTime = data
         this.getFinanceList()
       }

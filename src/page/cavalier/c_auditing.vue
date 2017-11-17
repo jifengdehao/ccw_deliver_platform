@@ -289,9 +289,11 @@ export default {
           break
         case '是否确认所有用户通过审核？':
           this.DeliverAudit.status = '3'
+          this.params.pageNumber = 1
           break
         case '是否确认所有用户不通过审核？':
           this.DeliverAudit.status = '4'
+          this.params.pageNumber = 1
       }
       api.getDeliverAudit(this.DeliverAudit).then(data => {
         if (data === true) {
@@ -300,7 +302,6 @@ export default {
         }
       })
       // this.$refs.selection.selectAll(false) // 取消选中框
-      
     },
     cancel() {
       this.$refs.selection.selectAll(false) // 取消选中框
