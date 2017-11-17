@@ -85,6 +85,10 @@
         {
           "menu": "s_message",
           "name": "消息管理"
+        },
+        {
+          "menu": "setting_message",
+          "name": "消息"
         }
       ]
     },

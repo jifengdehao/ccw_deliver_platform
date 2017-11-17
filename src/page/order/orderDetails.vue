@@ -1,5 +1,8 @@
 <template>
   <div id="o_checkorder">
+    <div class="close" @click="close">
+      <Button type="text" icon="close"></Button>
+    </div>
     <div class="o_checkorder_map" id="container"></div>
     <Row style="margin-top: 20px;margin-bottom: 20px;">
       <Col span="24">
@@ -128,7 +131,7 @@
             })
             const infoWindow = new AMap.InfoWindow(
               {
-                offset: new AMap.Pixel(0, -22)//-113, -140
+                offset: new AMap.Pixel(0, -22) //-113, -140
               }
             );
             for (var i = 0, marker; i < this.data.length; i++) {
@@ -176,12 +179,23 @@
             }
           }
         })
+      },
+      close(){
+        this.$router.back()
       }
     }
   }
 </script>
 <style lang="less" scoped type="text/less">
   #o_checkorder {
+    position: relative;
+    .close{
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 10;
+      background-color: #ffffff;
+    }
     .o_checkorder_map {
       height: 450px;
     }

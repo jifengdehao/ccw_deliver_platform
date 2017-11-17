@@ -5,19 +5,19 @@
         <h3>菜城配送系统登录</h3>
       </Form-item>
       <Form-item prop="mobileno">
-        <Input size="large" type="text" v-model="formLogin.mobileno" placeholder="手机号">
+        <Input size="large" type="text" v-model.trim="formLogin.mobileno" placeholder="手机号">
         <Icon type="ios-person-outline" slot="prepend"></Icon>
         </Input>
       </Form-item>
       <Form-item prop="password">
-        <Input size="large" type="password" v-model="formLogin.password" placeholder="密码">
+        <Input size="large" type="password" v-model.trim="formLogin.password" placeholder="密码">
         <Icon type="ios-locked-outline" slot="prepend"></Icon>
         </Input>
       </Form-item>
       <Form-item prop="code">
         <Row>
           <Col span="15">
-          <Input size="large" type="text" v-model="formLogin.code" placeholder="验证码">
+          <Input size="large" type="text" v-model.trim="formLogin.code" placeholder="验证码">
           <Icon type="ios-pulse" slot="prepend"></Icon>
           </Input>
           </Col>
@@ -45,9 +45,7 @@
 </template>
 <script type="text/ecmascript-6">
   import * as api from '@/api/common'
-  import * as cookie from '@/data/index'
 
-  let countdown = 60
   export default {
     name: 'login',
     data() {
@@ -80,13 +78,12 @@
         this.$refs[name].validate((valid) => {
           if (valid) {
             this.login(this.formLogin)
-//            sessionStorage.setItem('user', JSON.stringify(this.formLogin))
-//            this.$router.push('/')
           } else {
             this.$Message.error('表单验证失败!')
           }
           if (this.remember) {
-            sessionStorage.setItem('user', JSON.stringify(this.formLogin))
+            sessionStorage.setItem('mobileno', this.formLogin.mobileno)
+            sessionStorage.setItem('password', this.formLogin.password)
           }
         })
       },
@@ -103,6 +100,7 @@
           api.getCode(params).then((res) => {
             if (res) {
               this.$Message.success('验证码已发送,请注意查收～')
+              let countdown = 60
               let timer = setInterval(() => {
                 countdown--
                 this.codeName = countdown + 's重新获取'
@@ -124,18 +122,20 @@
       login(params) {
         console.log(params)
         api.login(params).then((res) => {
-          console.log(res)
           if (res) {
-            cookie.setData('userInfo', JSON.stringify(res))
-            this.$router.go(0)
+            console.log(res)
+            sessionStorage.setItem('userInfo', JSON.stringify(res))
+            this.$router.push('/')
           }
         })
       }
     },
     mounted() {
-      if (sessionStorage.getItem('user')) {
-        this.formLogin.password = JSON.parse(sessionStorage.getItem('user')).password
-        this.formLogin.mobileno = JSON.parse(sessionStorage.getItem('user')).mobileno
+      if (sessionStorage.getItem('mobileno')) {
+        this.formLogin.mobileno = sessionStorage.getItem('mobileno')
+      }
+      if (sessionStorage.getItem('password')) {
+        this.formLogin.password = sessionStorage.getItem('password')
       }
     }
   }

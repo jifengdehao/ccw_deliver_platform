@@ -36,7 +36,7 @@ export const logout = params => {
  * @param params =>{marketId}
  */
 export const getIndeData = params => {
-  return ax.g('/User/index', params)
+  return ax.g(`/User/index/${params}`)
 }
 /**
  * 订单管理

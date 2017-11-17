@@ -47,7 +47,7 @@
         <Card class="H-card" dis-hover>
           <h3>系统消息</h3>
           <ul v-if="sysMsg.length>0">
-            <li v-for="(item,index) in sysMsg" :key="index">
+            <li v-for="(item,index) in sysMsg" :key="index" @click="linkMsg(item.smMssageId)">
               {{item.createdAt}}&nbsp;&nbsp;{{item.title}}
               <Icon type="chevron-right"></Icon>
             </li>
@@ -228,11 +228,8 @@
       },
       // 选择菜市场
       changeMarket() {
-        let params = {
-          marketId: this.market
-        }
         // 获取首页数据
-        api.getIndeData(params).then((res) => {
+        api.getIndeData(this.market).then((res) => {
           console.log(res)
           if (res) {
             this.indexData = true
@@ -246,6 +243,9 @@
             this.data = res.orderDataBlack
           }
         })
+      },
+      linkMsg(id) {
+        this.$router.push('/setting_message/' + id)
       }
     }
   }
@@ -293,6 +293,7 @@
         text-overflow: ellipsis;
         overflow: hidden;
         position: relative;
+        cursor: pointer;
       }
       .ivu-card-body > ul > li > i {
         position: absolute;

@@ -22,3 +22,8 @@ export const userInfo = () => {
   let user = getData('userInfo')
   return JSON.parse(user)
 }
+
+export const cookie = () => {
+  let cookie = getData('CCWTOKEN')
+  return cookie
+}

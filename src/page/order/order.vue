@@ -320,8 +320,8 @@
         console.log(params)
         if (params.marketId) {
           api.getOrderData(params).then((res) => {
-            console.log(res)
             if (res) {
+              console.log(res)
               this.showResult = true
               this.data = res.expressPage.records
               this.tableTotal = res.expressPage.total

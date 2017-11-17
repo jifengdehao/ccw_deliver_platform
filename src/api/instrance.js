@@ -8,7 +8,6 @@ import axios from 'axios'
 import config from '../../config/config.js'
 import qs from 'qs'
 import iview from 'iview'
-import * as ac from '../data/index.js'
 import hash from 'js-md5'
 
 var URI = config.apiDomain
@@ -16,6 +15,7 @@ var URI = config.apiDomain
 var ax = axios.create({
   baseURL: URI,
   timeout: 30000,
+  withCredentials: true,
   headers: {
     CCWTOKEN: '',
     sign: ''
@@ -25,11 +25,11 @@ export const itr = (type, url, params) => {
   if (typeof params !== 'object') {
     params = {}
   }
-  let arg = qs.stringify(params)
+  var arg = qs.stringify(params)
   if (Object.keys(params).length > 0) {
     url = type === 'get' || type === 'delete' ? url + '?' + arg : url
   }
-  var userInfo = ac.getData('userInfo')
+  var userInfo = sessionStorage.getItem('userInfo')
   var token = ''
   if (userInfo) {
     userInfo = typeof userInfo === 'string' ? JSON.parse(userInfo) : userInfo
@@ -39,7 +39,11 @@ export const itr = (type, url, params) => {
   if (Object.keys(params).length === 0) {
     sign = hash(token)
   } else {
-    sign = hash(JSON.stringify(params) + token)
+    if (type === 'get') {
+      sign = hash(arg + token)
+    } else {
+      sign = hash(JSON.stringify(params) + token)
+    }
   }
   ax.defaults.headers.CCWTOKEN = token
   ax.defaults.headers.sign = sign

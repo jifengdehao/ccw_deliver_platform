@@ -2,16 +2,18 @@
   <div id="header">
     <Row>
       <Col span="3">
-          <div class="logo">菜城科技有限公司</div>
+      <div class="logo">菜城科技有限公司</div>
       </Col>
       <Col span="12">
       <div class="message">系统消息：2017-8-8 XXXXXX市场XXXX菜市场XXX暂时暂停配送</div>
       </Col>
       <Col span="3">
-            <Icon type="android-person" :size="iconSize"></Icon>&nbsp;&nbsp;管理员：{{username}}
+      <Icon type="android-person" :size="iconSize"></Icon>&nbsp;&nbsp;管理员：{{username}}
       </Col>
       <Col span="3">
-          <Icon type="ios-chatboxes-outline" :size="iconSize"></Icon>&nbsp;&nbsp;消息
+      <div @click="goToMsg">
+        <Icon type="ios-chatboxes-outline" :size="iconSize"></Icon>&nbsp;&nbsp;消息
+      </div>
       </Col>
       <Col span="3">
       <div @click="logout">
@@ -22,7 +24,6 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-  import * as cookie from '@/data/index'
   import * as api from '@/api/common'
 
   export default {
@@ -33,19 +34,21 @@
     },
     computed: {
       username() {
-        return JSON.parse(cookie.getData('userInfo')).userName
-       // return JSON.parse(sessionStorage.getItem('user')).mobileno
+        return JSON.parse(sessionStorage.getItem('userInfo')).userName
       }
     },
     methods: {
       logout() {
         api.logout().then((res) => {
-          if(res){
+          if (res) {
             console.log(res)
-            cookie.delData('userInfo')
-            this.$router.go(0)
+            sessionStorage.removeItem('userInfo')
+            this.$router.push('/login')
           }
         })
+      },
+      goToMsg() {
+        this.$router.push('/s_message')
       }
     }
   }

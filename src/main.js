@@ -6,7 +6,6 @@ import router from './router'
 import store from './vuex/store'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
-import * as cookie from '@/data/index'
 Vue.use(iView)
 
 /**
@@ -14,8 +13,7 @@ Vue.use(iView)
  */
 router.beforeEach((to, from, next) => {
   let path = to.path.substr(1)
-  let userInfo = cookie.getData('userInfo')
-  // let userInfo = sessionStorage.getItem('user')
+  let userInfo = sessionStorage.getItem('userInfo')
   if (path !== 'login') {
     if (!userInfo) {
       next('/login')
