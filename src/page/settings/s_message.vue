@@ -39,7 +39,7 @@ export default {
         },
         {
           title: '发布内容',
-          key: 'msgContent'
+          key: 'outline'
         },
         {
           title: '发布人',

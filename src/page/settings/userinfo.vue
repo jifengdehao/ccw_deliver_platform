@@ -17,9 +17,7 @@
        <li>
          <span>角色名称</span>
          <Select style="width:168px;" v-model="data.user.role">
-            <Option value="管理员">管理员</Option>
-            <Option value="区长">区长</Option>
-            <Option value="站长">站长</Option>
+            <Option v-for="role in roleArray" :value="role.roleId" :key="role.roleName">{{ role.roleName }}</Option>        
           </Select>
         </li>
       <li>
@@ -78,7 +76,8 @@ export default {
       provinceList: null, //  省区集合
       cityList: null, //  市区集合
       areaList: null, //  区域集合
-      marketList: null //  菜市场集合
+      marketList: null, //  菜市场集合
+      roleArray: null //  角色集合
     }
   },
   computed: {
@@ -87,10 +86,17 @@ export default {
     }
   },
   created() {
+    this.getRoleList()
     this.getProvinceList()
     this.getUserInfoData()
   },
   methods: {
+    //  获取角色列表
+    getRoleList() {
+      http.getRoleList({}).then(data => {
+        this.roleArray = data.records
+      })
+    },
     //  获取省区集合
     getProvinceList() {
       http.getDeployManager().then(data => {
@@ -101,6 +107,9 @@ export default {
     //  选择省区 获取市区集合
     chooseProvince(provinceId) {
       this.cityList = []
+      if (!provinceId) {
+        return
+      }
       http.getProvinceIndex(provinceId).then(data => {
         this.cityList = data
         this.areaList = this.marketList = []
@@ -109,6 +118,9 @@ export default {
     //  选择市区 获取区域集合
     chooseCity(cityId) {
       this.areaList = []
+      if (!cityId) {
+        return
+      }
       http.getCityManager(cityId).then(data => {
         this.areaList = data
         this.marketList = []
@@ -117,20 +129,18 @@ export default {
     //  选择区域 获取菜市场集合
     chooseArea(areaId) {
       this.marketList = []
+      if (!areaId) {
+        return
+      }
       http.getAreaMarket(areaId).then(data => {
         this.marketList = data
       })
     },
     //  获取用户信息  ||  重置
     getUserInfoData() {
-      this.params.psUserId = this.$route.query.psUserId
+      this.params.psUserId = this.$route.params.psUserId
       http.lookUser(this.params).then(data => {
         this.data = data
-        for (let i in this.data.user) {
-          if (i === 'provinceId' || i === 'cityId') {
-            this.data.user[i] = parseInt(this.data.user[i])
-          }
-        }
         this.chooseProvince(this.data.user.provinceId) //  获取市
         this.chooseCity(this.data.user.cityId) //  获取区
         this.chooseArea(this.data.user.areaId) //  获取菜市场
@@ -138,7 +148,22 @@ export default {
     },
     //  更新用户信息
     putUserInfo() {
-      http.addOrPutUserInfo(this.data).then(data => {
+      let data = {}
+      for (let i in this.data) {
+        if (i === 'user') {
+          for (let n in this.data[i]) {
+            if (
+              n !== 'cityName' &&
+              n !== 'marketName' &&
+              n !== 'provinceName' &&
+              n !== 'roleName'
+            ) {
+              data[n] = this.data[i][n]
+            }
+          }
+        }
+      }
+      http.addOrPutUserInfo(data).then(data => {
         this.getUserInfoData()
       })
     }
