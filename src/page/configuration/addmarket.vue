@@ -170,7 +170,7 @@ export default {
     },
     // 取消按钮
     goback() {
-      location.reload([true])
+      this.getQuInfo()
     }
   }
 }

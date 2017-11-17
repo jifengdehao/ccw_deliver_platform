@@ -127,7 +127,7 @@ export default {
     },
     // 点击取消按钮  返回设置主页
     goback(){
-      location.reload([true]) 
+    this.initMap()
     }
   },
   computed: {
