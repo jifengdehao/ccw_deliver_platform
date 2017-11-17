@@ -9,7 +9,7 @@ import config from '../../config/config.js'
 import qs from 'qs'
 import iview from 'iview'
 import * as ac from '../data/index.js'
-// import hash from 'js-md5'
+import hash from 'js-md5'
 
 var URI = config.apiDomain
 
