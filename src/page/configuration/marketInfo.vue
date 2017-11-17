@@ -45,7 +45,7 @@
     </Form>
     </section>
     <section class="addmarket_button">
-      <Button type="ghost" size="large" style="width: 150px">取消</Button>
+      <Button type="ghost" size="large" style="width: 150px" @click="goback">取消</Button>
       <Button type="ghost" size="large" style="width: 150px" @click="modifyMarket">保存</Button>
     </section>
   </div>
@@ -129,6 +129,9 @@ export default {
       api.addMarket(params).then(response => {
         this.$Message.info('修改菜市场成功')
       })
+    },
+    goback(){
+      window.history.go(-1)
     }
   }
 }

@@ -32,7 +32,7 @@
     </Form>
     </section>
     <section class="addregion_button">
-      <Button type="ghost" size="large" style="width: 150px" @click="">取消</Button>
+      <Button type="ghost" size="large" style="width: 150px" @click="goback">取消</Button>
       <Button type="ghost" size="large" style="width: 150px" @click="addQu()">增加</Button>
     </section>
   </div>
@@ -124,6 +124,10 @@ export default {
       }else{
         this.$Message.success('请输入菜市场名称或者规划区域范围')
       }
+    },
+    // 点击取消按钮  返回设置主页
+    goback(){
+      location.reload([true]) 
     }
   },
   computed: {

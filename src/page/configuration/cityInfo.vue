@@ -29,7 +29,7 @@
             </div>
         </section>
          <section class="cityInfo_button">
-            <Button size="large" style="width: 200px;background-color: #fff;" @click="">取消</Button>
+            <Button size="large" style="width: 200px;background-color: #fff;" @click="goback">取消</Button>
             <Button size="large" style="width: 200px;background-color: #fff;" @click="nodifyCityInfo(cityData)">确定</Button>
         </section>
     </div>
@@ -107,6 +107,9 @@ export default {
         expenseConfig: cityData
       }
       api.modfiyCityMessage(params).then(response => {})
+    },
+    goback(){
+      window.history.go(-1)
     }
   },
   computed: {

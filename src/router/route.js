@@ -152,7 +152,7 @@ const shengInfo = resolve => {
 }
 //配置设置-查看市场
 const marketInfo = resolve => {
-  import('@/page/configuration/shengInfo').then(module => {
+  import('@/page/configuration/marketInfo').then(module => {
     resolve(module)
   })
 }

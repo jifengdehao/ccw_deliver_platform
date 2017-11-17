@@ -43,7 +43,7 @@
             <Input v-model="formItem.address" style="width:200px" required ></Input>
         </FormItem>
         <FormItem class="addmarket_button">
-           <Button type="ghost" size="large" style="width: 150px" @click="goBack">取消</Button>
+           <Button type="ghost" size="large" style="width: 150px" @click="goback">取消</Button>
            <Button type="ghost" size="large" style="width: 150px" @click="addMarket">保存</Button>
         </FormItem>
     </Form>
@@ -169,8 +169,8 @@ export default {
       }
     },
     // 取消按钮
-    goBack() {
-      // this.$route.go(-1)
+    goback() {
+      location.reload([true])
     }
   }
 }

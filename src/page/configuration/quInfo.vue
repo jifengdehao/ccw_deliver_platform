@@ -23,7 +23,7 @@
             </div>
         </section>
         <section class="quInfo_button">
-            <Button size="large" style="width: 200px;" >取消</Button>
+            <Button size="large" style="width: 200px;" @click="goback">取消</Button>
             <Button size="large" style="width: 200px;" @click="test">确定</Button>
         </section>
     </div>
@@ -90,6 +90,9 @@ export default {
       map.setFitView() //地图自适应
     },
     test() {
+    },
+    goback(){
+      window.history.go(-1)
     }
   }
 }
