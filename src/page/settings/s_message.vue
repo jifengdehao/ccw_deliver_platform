@@ -134,6 +134,9 @@ export default {
     },
     //  时间过滤
     formatTime(time) {
+      if (!time) {
+        return
+      }
       let date = new Date(time)
       let month =
         date.getMonth() + 1 >= 10

@@ -16,7 +16,7 @@
           <Option v-for="item in singleParams.days" :value="item" :key="item">{{ item }}</Option>
         </Select>&nbsp;&nbsp;日&nbsp;&nbsp;
         <Select v-model="singleParams.hour" size="large" style="width:50px" placeholder="时">
-          <Option v-for="(item,index) in 24" :value="item" :key="item">{{ index }}</Option>
+          <Option v-for="(item,index) in 24" :value="item - 1" :key="item">{{ index }}</Option>
         </Select>&nbsp;&nbsp;时&nbsp;&nbsp;
         <Select v-model="singleParams.minutes" size="large" style="width:50px" placeholder="分">
           <Option v-for="(item,index) in 60" :value="item - 1" :key="item">{{ index }}</Option>
@@ -24,7 +24,7 @@
       </p>
       <p>
         <h3 style="display: inline-block;width: 100px">发布类型： </h3>
-        <Select v-model="params.pushType" size="large" style="width:200px" @on-change="filterTypes">
+        <Select v-model="params.msgType" size="large" style="width:200px" @on-change="filterTypes">
           <Option v-for="item in pushTypeArray" :value="item.value" :key="item.value">{{ item.text }}</Option>
         </Select>
       </p>
@@ -34,7 +34,7 @@
       </p>
       <p>
         <!-- <h3 style="display: inline-block;width: 100px">内容或链接： </h3> -->
-        <h3 style="display: inline-block;width: 100px">{{params.pushType === 1 && params.types === 2 ? '链接':'内容'}} </h3>
+        <h3 style="display: inline-block;width: 100px">{{params.msgType === 1 && params.types === 2 ? '链接':'内容'}} </h3>
         <textarea v-model="params.content" cols="100" rows="5" style="border: 1px solid #ddd;border-radius: 5px;vertical-align: top;font-size: 16px;padding: 5px;" placeholder="请输入内容或链接"></textarea>
       </p>
     </section>
@@ -51,7 +51,7 @@ export default {
     return {
       params: {
         pushTimeStr: '', //  发布时间
-        pushType: '', //  发布类型
+        msgType: '', //  发布类型
         title: '', //  消息
         content: '', //  消息内容
         types: ''
@@ -67,15 +67,15 @@ export default {
       pushTypeArray: [
         {
           value: 7,
-          text: '平台消息'
+          text: '平台消息' //  types:1
         },
         {
           value: 1,
-          text: '应用消息-url'
+          text: '应用消息-url' //  types:2
         },
         {
           value: 2,
-          text: '应用消息-文本消息'
+          text: '应用消息-文本消息' //  types:3
         }
       ]
     }
@@ -105,22 +105,18 @@ export default {
     filterTypes(value) {
       switch (value) {
         case 7:
-          this.params.pushType = 7
           this.params.types = 1
           break
         case 1:
-          this.params.pushType = 1
           this.params.types = 2
           break
         case 2:
-          this.params.pushType = 1
           this.params.types = 3
           break
       }
     },
     //  重置消息
     resetSingleInfo() {
-      console.log(this.$route)
       if (this.$route.path.indexOf('addMessage') > -1) {
         //  路由是addMessage
         for (let i in this.params) {
@@ -139,29 +135,36 @@ export default {
             smMssageId: this.$route.params.smMssageId
           })
           .then(data => {
-            console.log(data)
             for (let i in this.params) {
-              this.params[i] = data[i]
+              if (i !== 'types') {
+                this.params[i] = data[i]
+              }
             }
-            this.filterTypes(this.params.types)
+
+            if (data.types === 3) {
+              this.params.msgType = 2
+            }
+
             let date = new Date(this.params.pushTimeStr)
             this.singleParams = {
               year: date.getFullYear(),
               month: date.getMonth() + 1,
               day: date.getDate(),
-              hour: date.getHours() + 1,
+              hour: date.getHours(),
               minutes: date.getMinutes(),
               days: 0
             }
-            console.log(this.singleParams)
           })
       }
     },
     //  确定
     addSingleInfo() {
+      if (this.params.types === 3) {
+        this.params.msgType = 1
+      }
       //  时间拼接
       this.singleParams.month =
-        this.singleParams.hour < 10
+        this.singleParams.month < 10
           ? `0${this.singleParams.month}`
           : this.singleParams.month
 
@@ -194,18 +197,29 @@ export default {
         }
       }
       if (this.$route.path.indexOf('addMessage') > -1) {
+        if (this.params.types === 3 && this.params.msgType === 2) {
+          this.params.msgType = 1
+        }
         //  添加消息
-        http.addSingleInfo(this.params).then(data => {
-          this.resetSingleInfo()
-        })
-      } else if (this.$route.path.indexOf('edit')) {
+        console.log(this.params)
+        http
+          .addSingleInfo(this.params)
+          .then(data => {
+            this.resetSingleInfo()
+          })
+          .catch(err => {
+            this.$router.go(-1)
+          })
+      } else if (this.$route.path.indexOf('toEidt')) {
+        this.params.smMssageId = this.$route.params.smMssageId
+
         http
           .putSingleInfo({
-            smMssageId: this.$route.params.smMssageId,
             params: this.params
           })
           .then(data => {
             console.log(data)
+            this.$router.go(-1)
           })
       }
     }
