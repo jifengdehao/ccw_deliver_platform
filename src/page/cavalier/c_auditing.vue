@@ -82,7 +82,6 @@ export default {
         },
         {
           title: '用户ID',
-          width: '100',
           key: 'psDeliverApplyId',
           align: 'center'
         },
@@ -112,7 +111,10 @@ export default {
         {
           title: '出生年月日',
           key: 'birthday',
-          align: 'center'
+          align: 'center',
+          render: (h, params) => {
+            return 'span', this.formatTime(params.row.birthday)
+          }
         },
         {
           title: '身份证号码',
@@ -317,6 +319,21 @@ export default {
     changePage(page) {
       this.params.pageNumber = page
       this.getAuditManager()
+    },
+    //  时间过滤
+    formatTime(time) {
+      let date = new Date(time)
+      let month =
+        date.getMonth() + 1 >= 10
+          ? date.getMonth() + 1
+          : '0' + date.getMonth() + 1
+      let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
+      let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
+      // let minutes =
+      //   date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()
+      // let seconds =
+      //   date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()
+      return `${date.getFullYear()}年${month}月${day}日`
     }
   }
 }
