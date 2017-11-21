@@ -32,8 +32,9 @@
             <span>菜市场电话：</span>
             <Input v-model="marketData.mobileno"  style="width:200px"></Input>
             <span>配送时间段：</span>
-            <TimePicker v-model="marketData.beginTime" type="time" placeholder="Select time" style="width: 95px"></TimePicker> - 
-            <TimePicker v-model="marketData.endTime" type="time" placeholder="Select time" style="width: 95px"></TimePicker>
+            <!-- <TimePicker :value="beginTime" format="HH:mm:ss" placeholder="Select time" style="width: 95px"></TimePicker> -->
+            <TimePicker v-model="marketData.beginTime" :value="marketData.beginTime"  placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker> - 
+            <TimePicker v-model="marketData.endTime" :value="marketData.endTime" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker>
             <br>
             <span>自提点电话：</span>            
             <Input v-model="marketData.self_pick_address_number" style="width:200px" ></Input> 
@@ -58,6 +59,8 @@ export default {
   data() {
     return {
       marketData: {},
+      // beginTime: this.marketData.beginTime,
+      // endTime: '',
       marketName: '',
       current: 0,
       marketPath: []
@@ -84,6 +87,8 @@ export default {
     getQuInfo() {
       api.getMarketInfo(this.marketId).then(response => {
         this.marketData = response
+        // this.beginTime = response.beginTime
+        // this.endTime = response.endTime
         this.marketName = response.marketName
         this.init()
       })
@@ -130,7 +135,7 @@ export default {
         this.$Message.info('修改菜市场成功')
       })
     },
-    goback(){
+    goback() {
       window.history.go(-1)
     }
   }

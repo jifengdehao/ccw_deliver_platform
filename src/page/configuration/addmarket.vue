@@ -32,8 +32,8 @@
             <span>菜市场电话：</span>
             <Input v-model="formItem.mobileno" style="width:200px" required></Input>
             <span>配送时间段：</span>
-            <TimePicker v-model="formItem.beginTime" type="time" placeholder="Select time" style="width: 95px"></TimePicker> - 
-            <TimePicker v-model="formItem.endTime" type="time" placeholder="Select time" style="width: 95px"></TimePicker>
+            <TimePicker v-model="formItem.beginTime" type="time" format="HH:mm" placeholder="Select time" style="width: 95px"></TimePicker> - 
+            <TimePicker v-model="formItem.endTime" type="time" format="HH:mm" placeholder="Select time" style="width: 95px"></TimePicker>
             <br>
             <span>自提点电话：</span>            
             <Input v-model="formItem.self_pick_address_number" style="width:200px" required></Input> 
