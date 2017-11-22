@@ -21,7 +21,7 @@
         <li><span>审核结果</span><span>通过</span></li>
         <li><span>新人培训结果</span><span>通过</span></li>
         <li><span>身份证正反面</span></li>
-        <li><img :src="PositiveImg" alt=""><img :src="negativeImg" alt=""></li>
+        <li><img :src="PositiveImg" alt=""><img :src="negativeImg" alt=""><img :src="inHandImg" alt=""></li>
       </ul>
 
        <ul class="content2">
@@ -69,7 +69,7 @@
           </span>
         </li>
         <li><span>健康证</span></li>
-        <li><img :src="HealthImg" alt=""></li>
+        <li><img :src="HealthImg" alt=""><img :src="contraryImg" alt=""></li>
       </ul>
 
        <ul class="content3">
@@ -103,7 +103,9 @@ export default {
       DeliverInfo: [], // 用户数据
       PositiveImg: '', // 正面身份证
       negativeImg: '', // 反面身份证
+      inHandImg: '', // 手持身份证
       HealthImg: '', // 健康证
+      contraryImg: '', // 反面健康证
       deployManager: [], // 省区下拉框数据
       provinceData: '', // 获取初始化省区数据
       showCity: true, // 可否点击市区下拉框
@@ -150,8 +152,14 @@ export default {
                 case 5:
                   this.negativeImg = item.picUrl
                   break
+                case 7: // 手持身份证
+                  this.inHandImg = item.picUrl
+                  break
                 case 8:
                   this.HealthImg = item.picUrl
+                  break
+                case 9: // 健康证反面
+                  this.contraryImg = item.picUrl
               }
             }, this)
           }

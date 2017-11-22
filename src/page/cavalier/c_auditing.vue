@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="c_auditing_list">
-      <Table ref="selection" :columns="columns4" :data="examineData" @on-selection-change="changeSelect"></Table>
+      <Table border  ref="selection" :columns="columns4" :data="examineData" @on-selection-change="changeSelect"></Table>
     </div>
     <div class="c_auditing_button" v-if="examineData && examineData.length > 0">
       <Button type="ghost" size="large" @click="onSelect(true)">全选</Button>
@@ -35,14 +35,16 @@
       </Modal>
     </div>
     <div>
-       <Modal title="查看图片" v-model="visible">
-          <img :src="PositiveImg" style="width: 100%; height: 325px;">
-          <img :src="negativeImg" style="width: 100%; height: 325px;">
+       <Modal title="查看图片" v-model="visible" width="1224">
+          <img :src="PositiveImg" style="width: 388px; height: 325px; float: left; margin-right: 10px">
+          <img :src="negativeImg" style="width: 390px; height: 325px; margin-right: 10px">
+          <img :src="inHandImg" style="width: 390px; height: 325px;">
        </Modal>
     </div>
     <div>
-       <Modal title="查看图片" v-model="visibleHealth">
-          <img :src="HealthImg" style="width: 100%; height: 325px;">
+       <Modal title="查看图片" v-model="visibleHealth" width="840">
+          <img :src="HealthImg" style="width: 395px; height: 325px; margin-right: 10px;">
+          <img :src="contraryImg" style="width: 395px; height: 325px;">
        </Modal>
     </div>
   </div>
@@ -59,7 +61,9 @@ export default {
       ModalTitle: '', // 弹框title
       PositiveImg: '', // 正面身份证
       negativeImg: '', // 反面身份证
+      inHandImg: '', // 手持身份证
       HealthImg: '', // 健康证
+      contraryImg: '', // 反面健康证
       selectData: [], // 保存选中数据
       paramsData: [], // 身份证信息
       searchData: '', // 搜索值
@@ -70,18 +74,19 @@ export default {
       columns4: [
         {
           type: 'selection',
-          width: '80',
+          width: '60',
           align: 'center'
         },
         {
           title: '序号',
           key: 'ID',
           type: 'index',
-          width: '80',
+          width: '70',
           align: 'center'
         },
         {
           title: '用户ID',
+          width: '90',
           key: 'psDeliverApplyId',
           align: 'center'
         },
@@ -94,13 +99,13 @@ export default {
         {
           title: '学历',
           key: 'educationStr',
-          width: '130',
+          width: '90',
           align: 'center'
         },
         {
           title: '性别',
           key: 'sexStr',
-          width: '100',
+          width: '70',
           align: 'center'
         },
         {
@@ -132,19 +137,18 @@ export default {
                 {
                   on: {
                     click: () => {
+                      this.visible = true
                       this.paramsData = params.row.pictureList
                       this.paramsData.forEach(function(item, index) {
                         switch (item.picType) {
                           case 4:
                             this.PositiveImg = item.picUrl
-                            this.visible = true
                             break
                           case 5:
                             this.negativeImg = item.picUrl
-                            this.visible = true
                             break
-                          case 8:
-                            this.HealthImg = item.picUrl
+                          case 7: // 手持身份证
+                            this.inHandImg = item.picUrl
                         }
                       }, this)
                     }
@@ -170,8 +174,11 @@ export default {
                       this.visibleHealth = true
                       this.paramsData.forEach(function(item, index) {
                         switch (item.picType) {
-                          case 2:
+                          case 8:
                             this.HealthImg = item.picUrl
+                            break
+                          case 9:
+                            this.contraryImg = item.picUrl
                         }
                       }, this)
                     }
@@ -185,6 +192,7 @@ export default {
         {
           title: '操作',
           key: 'operation',
+          width: '170',
           align: 'center',
           render: (h, params) => {
             return h('div', [
@@ -196,15 +204,8 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.selectData.forEach(function(item) {
-                        if (
-                          params.row.psDeliverApplyId === item.psDeliverApplyId
-                        ) {
-                          // 点击判断选择ID跟点击ID是否一致
-                          this.ModalTitle = '是否确认此用户通过'
-                          this.showModal = true
-                        }
-                      }, this)
+                      this.ModalTitle = '是否确认此用户通过'
+                      this.showModal = true
                     }
                   }
                 },
@@ -215,15 +216,8 @@ export default {
                 {
                   on: {
                     click: () => {
-                      this.selectData.forEach(function(item) {
-                        if (
-                          params.row.psDeliverApplyId === item.psDeliverApplyId
-                        ) {
-                          // 点击判断选择ID跟点击ID是否一致
-                          this.ModalTitle = '是否确认此用户不通过'
-                          this.showModal = true
-                        }
-                      }, this)
+                      this.ModalTitle = '是否确认此用户不通过'
+                      this.showModal = true
                     }
                   }
                 },
@@ -263,7 +257,7 @@ export default {
     },
     // 通过/ 未通过
     auditUser(index) {
-      if (this.selectData.length === this.examineData.length) {
+      if (this.selectData.length > 0) {
         this.showModal = true
         switch (index) {
           case '1':
