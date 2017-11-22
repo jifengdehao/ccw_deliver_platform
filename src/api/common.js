@@ -61,7 +61,7 @@ export const putDeliver = (orderId, params) => {
   return ax.u(`/orderManager/${orderId}/${params}`)
 }
 
-export const getMenu = (params) => {
+export const getMenu = params => {
   return ax.g('/User/menuList', params)
 }
 
@@ -198,7 +198,7 @@ export const getDeliverInfo = id => {
 }
 
 // 配送人员 查看用户 修改数据/deliverManager/deliver/updateDeliver
-export const getUpdateDeliver = (params) => {
+export const getUpdateDeliver = params => {
   return ax.u('/deliverManager/deliver/updateDeliver', params)
 }
 
@@ -348,7 +348,7 @@ export const addSingleInfo = params => {
  * 更新单个消息
  */
 export const putSingleInfo = params => {
-  return ax.u(`/settingCentre/info/${params.smMssageId}`, params.params)
+  return ax.u(`/settingCentre/info`, params.params)
 }
 
 /**

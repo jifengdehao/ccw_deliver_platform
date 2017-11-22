@@ -74,8 +74,8 @@
 
        <ul class="content3">
         <li v-if="DeliverInfo.starLevel"><span>星级</span><span>{{ DeliverInfo.starLevel }}</span></li>
-        <li v-if="DeliverInfo.regularDate"><span>转正时间</span><span>{{ DeliverInfo.regularDate }}</span></li>
-        <li v-if="DeliverInfo.leaveDate"><span>离职时间</span><span>{{ DeliverInfo.leaveDate }}</span></li>
+        <li v-if="DeliverInfo.regularDate"><span>转正时间</span><span>{{ formatTime(DeliverInfo.regularDate) }}</span></li>
+        <li v-if="DeliverInfo.leaveDate"><span>离职时间</span><span>{{ formatTime(DeliverInfo.leaveDate) }}</span></li>
         <li v-if="psDeliverIncomeData.allIncome"><span>总收入(元)</span><span>{{ psDeliverIncomeData.allIncome }}</span></li>
         <li v-if="psDeliverIncomeData.monthIncome"><span>本月收入(元)</span><span>{{ psDeliverIncomeData.monthIncome }}</span></li>
         <li v-if="psDeliverIncomeData.monthDeliverIncome"><span>本月提成(元)</span><span>{{ psDeliverIncomeData.monthDeliverIncome }}</span></li>
@@ -228,6 +228,21 @@ export default {
             }
           })
       }
+    },
+    //  时间过滤
+    formatTime(time) {
+      let date = new Date(time)
+      let month =
+        date.getMonth() + 1 >= 10
+          ? date.getMonth() + 1
+          : '0' + date.getMonth() + 1
+      let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
+      let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
+      // let minutes =
+      //   date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()
+      // let seconds =
+      //   date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()
+      return `${date.getFullYear()}/${month}/${day}`
     }
   }
 }
