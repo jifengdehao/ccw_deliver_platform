@@ -32,8 +32,8 @@
             <span>菜市场电话：</span>
             <Input v-model="formItem.mobileno" style="width:200px" required></Input>
             <span>配送时间段：</span>
-            <TimePicker v-model="formItem.beginTime" type="time" placeholder="Select time" style="width: 95px"></TimePicker> - 
-            <TimePicker v-model="formItem.endTime" type="time" placeholder="Select time" style="width: 95px"></TimePicker>
+            <TimePicker @on-change="getbeginTime" format="HH:mm" placeholder="Select time" style="width: 95px"></TimePicker> - 
+            <TimePicker @on-change="getendTime" format="HH:mm" placeholder="Select time" style="width: 95px"></TimePicker>
             <br>
             <span>自提点电话：</span>            
             <Input v-model="formItem.self_pick_address_number" style="width:200px" required></Input> 
@@ -147,10 +147,21 @@ export default {
         })
       })
     },
+    // 获取时间
+    getbeginTime(time) {
+      this.formItem.beginTime = time
+    },
+    getendTime(time) {
+      this.formItem.endTime = time
+    },
     // 添加菜市场
     addMarket() {
       this.formItem.areaCoordinate = this.path
-      if (this.current === 1 && this.formItem.marketName) {
+      if (
+        this.current === 1 &&
+        this.formItem.marketName &&
+        this.formItem.latitude !== 0
+      ) {
         let params = {
           areaId: this.areaData.areaId,
           market: this.formItem,
@@ -165,11 +176,12 @@ export default {
             this.$Message.info('添加菜市场失败' + err)
           })
       } else {
-        this.$Message.info('请划定菜市场区域或输入菜市场名称')
+        this.$Message.info('请划定菜市场区域,输入菜市场名称,选择菜市场地址')
       }
     },
     // 取消按钮
     goback() {
+      this.formItem = {}
       this.getQuInfo()
     }
   }
