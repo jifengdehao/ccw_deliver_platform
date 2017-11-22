@@ -34,7 +34,7 @@ export default {
           title: '发布类型',
           key: 'pushType',
           render: (h, params) => {
-            return h('span', params.row.pushType == 7 ? '平台消息' : '应用消息')
+            return h('span', params.row.msgType === 7 ? '平台消息' : '应用消息')
           }
         },
         {
@@ -141,7 +141,7 @@ export default {
       let month =
         date.getMonth() + 1 >= 10
           ? date.getMonth() + 1
-          : '0' + date.getMonth() + 1
+          : '0' + (date.getMonth() + 1)
       let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
       let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
       let minutes =

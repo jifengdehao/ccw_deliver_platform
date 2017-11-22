@@ -42,7 +42,7 @@ export default {
         },
         {
           title: '姓名',
-          key: 'name'
+          key: 'userName'
         },
         {
           title: '联系方式',
