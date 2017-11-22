@@ -40,8 +40,8 @@
 import * as api from '@/api/common'
 export default {
   components: {},
-  name: "component_name",
-  data () {
+  name: 'component_name',
+  data() {
     return {
       id: (() => {
         return this.$route.params.id
@@ -99,12 +99,18 @@ export default {
         {
           title: '配送时间',
           key: 'startTime',
-          align: 'center'
+          align: 'center',
+          render: (h, params) => {
+            return 'span', this.formatTime(params.row.startTime)
+          }
         },
         {
           title: '送达时间',
           key: 'endTime',
-          align: 'center'
+          align: 'center',
+          render: (h, params) => {
+            return 'span', this.formatTime(params.row.endTime)
+          }
         }
       ], // table 数据
       seeFinanceData: [], // 列表数据
@@ -116,7 +122,7 @@ export default {
         pageNumber: 1
       }, // 搜索 获取列表数据
       exportModal: false, // 导出弹框默认隐藏
-      total: '', // 总页数
+      total: '' // 总页数
     }
   },
   created: function() {
@@ -131,7 +137,7 @@ export default {
         this.total = data.total
       })
     },
-    // 默认打开弹框 清空数据 
+    // 默认打开弹框 清空数据
     onExport() {
       this.exportModal = true
       this.startTimeStr = ''
@@ -156,7 +162,7 @@ export default {
     },
     // 结束选择搜索时间
     changeEndTime(data) {
-      if (this.params.beginTime && this.params.beginTime  != '') {
+      if (this.params.beginTime && this.params.beginTime != '') {
         this.params.endTime = data
         this.getFinanceOrderList()
       }
@@ -165,6 +171,21 @@ export default {
     changePage(page) {
       this.params.pageNumber = page
       this.getFinanceOrderList()
+    },
+    //  时间过滤
+    formatTime(time) {
+      let date = new Date(time)
+      let month =
+        date.getMonth() + 1 >= 10
+          ? date.getMonth() + 1
+          : '0' + date.getMonth() + 1
+      let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
+      let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
+      // let minutes =
+      //   date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()
+      // let seconds =
+      //   date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()
+      return `${date.getFullYear()}/${month}/${day}`
     }
   }
 }
