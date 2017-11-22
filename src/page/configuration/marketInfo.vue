@@ -33,8 +33,8 @@
             <Input v-model="marketData.mobileno"  style="width:200px"></Input>
             <span>配送时间段：</span>
             <!-- <TimePicker :value="beginTime" format="HH:mm:ss" placeholder="Select time" style="width: 95px"></TimePicker> -->
-            <TimePicker v-model="marketData.beginTime" :value="marketData.beginTime"  placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker> - 
-            <TimePicker v-model="marketData.endTime" :value="marketData.endTime" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker>
+            <TimePicker @on-change="getbeginTime" :value="marketData.beginTime"  placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker> - 
+            <TimePicker  @on-change="getendTime" :value="marketData.endTime" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker>
             <br>
             <span>自提点电话：</span>            
             <Input v-model="marketData.self_pick_address_number" style="width:200px" ></Input> 
@@ -124,6 +124,14 @@ export default {
         })
       })()
       map.setFitView() //地图自适应
+    },
+    // 获取选择框的时间
+   // 获取时间
+    getbeginTime(time) {
+      this.marketData.beginTime = time
+    },
+    getendTime(time) {
+      this.marketData.endTime = time
     },
     // 修改菜市场信息
     modifyMarket() {

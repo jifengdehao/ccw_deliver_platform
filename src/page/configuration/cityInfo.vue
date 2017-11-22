@@ -20,12 +20,19 @@
             <div class="map" id="container">
                 当前市地图
             </div>
-            <div class="setprice" v-model="cityData">
-                <p>城市配送价</p>
-                <p>
-                    <span>运费(元):</span> <input type="number" v-model="cityData.expense" :value="cityData.expense"></p>
-                <p>
-                    <span>即时配送价(元):</span><input type="number" v-model="cityData.instantExpense" :value="cityData.instantExpense"></p>
+            <div class="setprice" >
+              <Form v-model="cityData" inline>
+                <FormItem prop="user">
+                  <span>运费(元):</span> 
+                  <Input  v-model="cityData.expense"  placeholder="请输入运费" style="width:80px">
+                  </Input>
+                </FormItem>
+                <FormItem>
+                  <span>即时配送价(元):</span>
+                  <Input v-model="cityData.instantExpense" placeholder="请输入即时配送价" style="width:80px">
+                  </Input>
+                </FormItem>
+              </Form>
             </div>
         </section>
          <section class="cityInfo_button">
@@ -42,7 +49,10 @@ export default {
   name: 'component_name',
   data() {
     return {
-      cityData: {}
+      cityData: {
+        expense: 0,
+        instantExpense: 0
+      }
     }
   },
   mounted() {
@@ -54,6 +64,7 @@ export default {
     getCityInfo(adcode) {
       api.getCityInfo(adcode).then(response => {
         this.cityData = response
+        // console.log(response)
       })
     },
     initMap: function() {
@@ -103,12 +114,15 @@ export default {
       })
     },
     nodifyCityInfo(cityData) {
-      let params = {
-        expenseConfig: cityData
-      }
-      api.modfiyCityMessage(params).then(response => {})
+      cityData.cityId = this.adcode
+      // let params = {
+      //   expenseConfig: cityData
+      // }
+      api.modfiyCityMessage(cityData).then(response => {
+        this.$Message.info('修改成功')
+      })
     },
-    goback(){
+    goback() {
       window.history.go(-1)
     }
   },
