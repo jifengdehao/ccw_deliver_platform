@@ -10,9 +10,9 @@
     <!-- 头部 -->
     <div class="header">
       <h2>财务对账</h2>
-      <div class="header-search" v-if="finance && finance.length > 0">
+      <div class="header-search">
         <DatePicker type="date" placeholder="请输入开始时间" style="width: 200px" @on-change="changeStartTime"></DatePicker>
-        <DatePicker type="date" placeholder="请输入结束时间" style="width: 200px" @on-change="changeTime"></DatePicker>
+        <DatePicker type="date" v-model="params.endTime" placeholder="请输入结束时间" style="width: 200px" @on-change="changeTime"></DatePicker>
         <Button @click="onExport">导出</Button>
       </div>
     </div>
@@ -266,7 +266,6 @@ export default {
     // 获取开始时间
     changeStartTime(data) {
       this.params.beginTime = data
-      console.log(this.params.beginTime)
     },
     // 获取结束时间
     changeTime(data) {
