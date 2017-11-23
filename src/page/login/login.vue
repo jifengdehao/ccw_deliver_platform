@@ -45,6 +45,7 @@
 </template>
 <script type="text/ecmascript-6">
   import * as api from '@/api/common'
+  import hash from 'js-md5'
 
   export default {
     name: 'login',
@@ -60,7 +61,8 @@
         },
         formLoginRules: {
           mobileno: [
-            {required: true, message: '请填写手机号', trigger: 'blur'}
+            {required: true, message: '请填写手机号', trigger: 'blur'},
+            {type: 'string', min: 11, message: '手机号不能小于11位', trigger: 'blur'}
           ],
           password: [
             {required: true, message: '请填写密码', trigger: 'blur'},
@@ -77,6 +79,7 @@
       handleSubmit(name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
+            this.formLogin.password = hash(this.formLogin.password)
             this.login(this.formLogin)
           } else {
             this.$Message.error('表单验证失败!')
@@ -126,6 +129,10 @@
             console.log(res)
             sessionStorage.setItem('userInfo', JSON.stringify(res))
             this.$router.push('/')
+          } else {
+            this.$Notice.error({
+              title: '密码或验证码不对'
+            });
           }
         })
       }
