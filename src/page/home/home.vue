@@ -58,21 +58,21 @@
         <Card class="H-card" dis-hover>
           <h3>审核概览</h3>
           <ul v-if="knight">
-            <li>
+            <router-link to="/cAuditing" tag="li">
               骑士身份信息审核
               <span class="fr">{{knight.identityExam}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
-            <li>
+            </router-link>
+            <router-link tag="li" to="cTrain">
               骑士首次培训审核
               <span class="fr">{{knight.firstTrainExam}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
-            <li>
+            </router-link>
+            <router-link tag="li" to="cTrain">
               骑士星级培训审核
               <span class="fr">{{knight.starTrainExam}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
+            </router-link>
           </ul>
         </Card>
         </Col>
@@ -82,31 +82,31 @@
         <Card class="H-card" dis-hover>
           <h3>实时监控</h3>
           <ul v-if="monitoring">
-            <li>
+            <router-link tag="li" to="/order">
               需要手工派单
               <span class="H-card-border">{{monitoring.needExpressOrder}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
-            <li>
+            </router-link>
+            <router-link tag="li" to="/order">
               新订单
               <span class="H-card-border">{{monitoring.newOrder}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
-            <li>
+            </router-link>
+            <router-link tag="li" to="/order">
               已送达订单
               <span class="H-card-border">{{monitoring.reachedOrder}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
-            <li>
+            </router-link>
+            <router-link tag="li" to="/order">
               异常订单
               <span class="H-card-border">{{monitoring.needExpressOrder}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
-            <li>
+            </router-link>
+            <router-link tag="li" to="/cPersonal">
               骑手上班/休息
               <span class="H-card-border">{{monitoring.deliverOnlineAndRest}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
+            </router-link>
           </ul>
         </Card>
         </Col>

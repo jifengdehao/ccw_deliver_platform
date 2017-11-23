@@ -37,6 +37,9 @@
         return JSON.parse(sessionStorage.getItem('userInfo')).userName
       }
     },
+    created() {
+      this.getSysMsg()
+    },
     methods: {
       logout() {
         api.logout().then((res) => {
@@ -49,6 +52,18 @@
       },
       goToMsg() {
         this.$router.push('/s_message')
+      },
+      // 获取系统消息
+      getSysMsg() {
+        let params={
+          pageSize: 10,
+          pageNumber: 1
+        }
+        api.getManageMsgList(params).then((res) => {
+          if (res) {
+            console.log(res)
+          }
+        })
       }
     }
   }
