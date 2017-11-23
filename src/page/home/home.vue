@@ -48,7 +48,7 @@
           <h3>系统消息</h3>
           <ul v-if="sysMsg.length>0">
             <li v-for="(item,index) in sysMsg" :key="index" @click="linkMsg(item.smMssageId)">
-              {{item.createdAt}}&nbsp;&nbsp;{{item.title}}
+              {{item.pushTime | filterTime}}&nbsp;&nbsp;{{item.title}}
               <Icon type="chevron-right"></Icon>
             </li>
           </ul>
@@ -149,7 +149,7 @@
     </div>
   </div>
 </template>
-<script>
+<script type="text/ecmascript-6">
   import * as api from '@/api/common'
   import * as time from '@/until/time'
 
@@ -162,21 +162,26 @@
         knight: {}, // 骑士审核
         monitoring: {}, //实时监控
         data: {}, // 数据看板
-        provinceData: [], // 省或直轄市数据集
-        province: '', // 省或直轄市
+        province: '', // 省
         city: '', // 市
+        area: '', // 区
+        market: '', // 市场
+        provinceData: [], // 省或直轄市数据集
         cityData: [], // 市数据集
         showCity: true, // 是否允许选择城市 true ===>不允许 false 允许
         areaData: [], // 区域数据集
-        area: '', // 区域
         showArea: true, // 是否允许选择区域  true ===>不允许 false 允许
-        market: '', // 市场
         marketData: [], // 市场数据集
         showMarket: true  // 是否允许选择市场  true ===>不允许 false 允许
       }
     },
     created() {
       this.getProvinceData()
+    },
+    filters: {
+      filterTime(value) {
+        return time.formatDateTime(value)
+      }
     },
     methods: {
       // 获取省市数据
@@ -188,8 +193,8 @@
         })
       },
       // 选择城市或省
-      changeProvince() {
-        this.getCityData(this.province)
+      changeProvince(province) {
+        this.getCityData(province)
       },
       // 获取市的数据
       getCityData(proId) {
@@ -201,8 +206,8 @@
         })
       },
       // 选择城市
-      changeCity() {
-        this.getAreaData(this.city)
+      changeCity(city) {
+        this.getAreaData(city)
       },
       // 获取区域的数据
       getAreaData(areaId) {
@@ -214,8 +219,8 @@
         })
       },
       // 选择区域
-      changeArea() {
-        this.getMarketData(this.area)
+      changeArea(area) {
+        this.getMarketData(area)
       },
       // 获取菜市场数据
       getMarketData(areaId) {
@@ -227,22 +232,24 @@
         })
       },
       // 选择菜市场
-      changeMarket() {
-        // 获取首页数据
-        api.getIndeData(this.market).then((res) => {
-          console.log(res)
-          if (res) {
-            this.indexData = true
-            this.sysMsg = (res.custSysMsgList).map((item, index) => {
-              item.createdAt = time.formatDateTime(item.createdAt)
-              return item
-            })
-            this.statistics = res.head
-            this.knight = res.depliverData
-            this.monitoring = res.monitor
-            this.data = res.orderDataBlack
-          }
-        })
+      changeMarket(marketId) {
+        if (marketId) {
+          // 获取首页数据
+          api.getIndeData(marketId).then((res) => {
+            console.log(res)
+            if (res) {
+              this.indexData = true
+              this.sysMsg = (res.custSysMsgList).map((item, index) => {
+                item.createdAt = time.formatDateTime(item.createdAt)
+                return item
+              })
+              this.statistics = res.head
+              this.knight = res.depliverData
+              this.monitoring = res.monitor
+              this.data = res.orderDataBlack
+            }
+          })
+        }
       },
       linkMsg(id) {
         this.$router.push('/setting_message/' + id)

@@ -43,10 +43,10 @@
       <TabPane label="全部" name="5">
         <Row class="O_cava" v-show="showResult">
           <Col span="2">
-          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
+          <ul class="textCenter O_cava_name">
             <li>姓名</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
-                :class="{active:item.psDeliverId === deliverId} ">
+                :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
             </li>
           </ul>
@@ -68,10 +68,10 @@
       <TabPane label="新订单" name="0">
         <Row class="O_cava" v-show="showResult">
           <Col span="2">
-          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
+          <ul class="textCenter O_cava_name">
             <li>姓名</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
-                :class="{active:item.psDeliverId === deliverId} ">
+                :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
             </li>
           </ul>
@@ -95,10 +95,10 @@
       <TabPane label="配送中" name="1">
         <Row class="O_cava" v-show="showResult">
           <Col span="2">
-          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
+          <ul class="textCenter O_cava_name">
             <li>姓名</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
-                :class="{active:item.psDeliverId === deliverId} ">
+                :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
             </li>
           </ul>
@@ -120,10 +120,10 @@
       <TabPane label="配送完成" name="2">
         <Row class="O_cava" v-show="showResult">
           <Col span="2">
-          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
+          <ul class="textCenter O_cava_name">
             <li>姓名</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
-                :class="{active:item.psDeliverId === deliverId} ">
+                :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
             </li>
           </ul>
@@ -145,10 +145,10 @@
       <TabPane label="配送异常" name="3">
         <Row class="O_cava" v-show="showResult">
           <Col span="2">
-          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
+          <ul class="textCenter O_cava_name">
             <li>姓名</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
-                :class="{active:item.psDeliverId === deliverId} ">
+                :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
             </li>
           </ul>
@@ -269,8 +269,8 @@
         })
       },
       // 选择城市或省
-      changeProvince() {
-        this.getCityData(this.province)
+      changeProvince(province) {
+        this.getCityData(province)
       },
       // 获取市的数据
       getCityData(proId) {
@@ -282,8 +282,8 @@
         })
       },
       // 选择城市
-      changeCity() {
-        this.getAreaData(this.city)
+      changeCity(city) {
+        this.getAreaData(city)
       },
       // 获取区域的数据
       getAreaData(areaId) {
@@ -295,8 +295,8 @@
         })
       },
       // 选择区域
-      changeArea() {
-        this.getMarketData(this.area)
+      changeArea(area) {
+        this.getMarketData(area)
       },
       // 获取菜市场数据
       getMarketData(areaId) {
