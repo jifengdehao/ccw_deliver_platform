@@ -9,7 +9,7 @@
     <!-- 头部 -->
     <div class="header">
       <h2>财务对账</h2>
-      <div class="header-search" v-if="seeFinanceData && seeFinanceData.length > 0">
+      <div class="header-search">
         <DatePicker format="yyyy-MM-dd" type="date" placeholder="请输入开始时间" style="width: 200px" @on-change="changeStartTime"></DatePicker>
         <DatePicker format="yyyy-MM-dd" type="date" placeholder="请输入结束时间" style="width: 200px" @on-change="changeEndTime"></DatePicker>
         <Button @click="onExport">导出</Button>
