@@ -69,7 +69,6 @@
       <!--<Icon type="person-stalker" :size="iconSize"></Icon>-->
       <!--<span class="layout-text">财务对账</span>-->
     <!--</MenuItem>-->
-
   </Menu>
 </template>
 <script type='text/ecmascript-6'>
