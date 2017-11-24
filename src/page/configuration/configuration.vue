@@ -20,7 +20,7 @@
         </div>
         <ul class="configuration_quyu_content" v-for="(item,index) in shengs" :key="index">
           <li >
-            <span @click="showCity(item.provinceId,item.provinceName)"> {{item.provinceName}}</span>
+            <span @click="showCity(item.provinceId,item.provinceName,index)" :class="{current:shengSelected==index}"> {{item.provinceName}}</span>
             <Button type="info" size="small" class="fr" style="border: none" @click="seeThisSheng(item.provinceId,item.provinceName)">查看</Button>
           </li>
         </ul>
@@ -32,7 +32,7 @@
         </div>
         <ul class="configuration_quyu_content" v-for="(item,index) in citys" :key="index">
           <li>
-            <span @click="showQu(item.cityId,item.cityName)"> {{item.cityName}}</span>
+            <span @click="showQu(item.cityId,item.cityName,index)" :class="{current:citySelected === index}"> {{item.cityName}}</span>
             <Button type="info" size="small" class="fr" style="border: none" @click="seeThisCity(item.cityId,item.cityName)">查看</Button>
           </li>
         </ul>
@@ -45,7 +45,7 @@
         </div>
         <ul class="configuration_quyu_content" v-for="(item,index) in qus" :key="index">
           <li>
-            <span @click="showMarket(item.areaId,item.areaName)"> {{item.areaName}}</span>
+            <span @click="showMarket(item.areaId,item.areaName,index)" :class="{current:areaSelected==index}"> {{item.areaName}}</span>
             <Button type="ghost" size="small" class="fr" style="color: red;border: none;" @click="delQu(index)">删除</Button>
             <Button type="info" size="small" class="fr" style="border: none;" @click="seeThisQu(item.areaId,item.areaName)">查看</Button>
           </li>
@@ -74,10 +74,13 @@ export default {
   components: {},
   data() {
     return {
+      shengSelected: Number, // 点击省区选择
+      citySelected: Number, // 点击城市
+      areaSelected: Number, // 点击区域
       showCitys: true,
       addQu: false,
       addMarket: false,
-      provinceName:'',
+      provinceName: '',
       cityName: '',
       areaName: '',
       cityId: '',
@@ -97,50 +100,93 @@ export default {
   methods: {
     // 新增 区  菜市场
     addregion() {
-      this.$router.push('/addregion?provinceName=' + this.provinceName + '&cityName=' + this.cityName + '&cityId=' + this.cityId)
+      this.$router.push(
+        '/addregion?provinceName=' +
+          this.provinceName +
+          '&cityName=' +
+          this.cityName +
+          '&cityId=' +
+          this.cityId
+      )
     },
     addmarket() {
-      this.$router.push('/addmarket?provinceName=' + this.provinceName + '&cityName=' + this.cityName + '&areaId=' + this.areaId)
+      this.$router.push(
+        '/addmarket?provinceName=' +
+          this.provinceName +
+          '&cityName=' +
+          this.cityName +
+          '&areaId=' +
+          this.areaId
+      )
     },
     // 删除
     delQu(index) {
       let id = this.qus[index].areaId
       api.delQu(id).then(response => {
-         this.$Message.success('删除成功');
+        this.$Message.success('删除成功')
         this.qus.splice(index, 1)
       })
     },
     delMarket(index) {
       let id = this.markets[index].marketId
       api.delMarket(id).then(response => {
-         this.$Message.success('添加成功');
+        this.$Message.success('添加成功')
         this.markets.splice(index, 1)
       })
     },
     // 查看
     seeThisSheng(provinceId, provinceName) {
-
-      this.$router.push('/shengInfo?provinceName=' + provinceName + '&provinceId=' + provinceId)
+      this.$router.push(
+        '/shengInfo?provinceName=' + provinceName + '&provinceId=' + provinceId
+      )
     },
     seeThisCity(cityId, cityName) {
-
-      this.$router.push('/cityInfo?cityName=' + cityName + '&provinceName=' + this.provinceName + '&cityId=' + cityId)
+      this.$router.push(
+        '/cityInfo?cityName=' +
+          cityName +
+          '&provinceName=' +
+          this.provinceName +
+          '&cityId=' +
+          cityId
+      )
     },
     seeThisQu(areaId) {
       this.areaId = areaId
-      this.$router.push('/quInfo?areaId=' + areaId + '&provinceName=' + this.provinceName + '&cityName=' + this.cityName)
+      this.$router.push(
+        '/quInfo?areaId=' +
+          areaId +
+          '&provinceName=' +
+          this.provinceName +
+          '&cityName=' +
+          this.cityName
+      )
     },
     seeThisMarket(marketId) {
-      this.$router.push('/marketInfo?marketId=' + marketId + '&provinceName=' + this.provinceName + '&cityName=' + this.cityName + '&areaName=' + this.areaName)
+      this.$router.push(
+        '/marketInfo?marketId=' +
+          marketId +
+          '&provinceName=' +
+          this.provinceName +
+          '&cityName=' +
+          this.cityName +
+          '&areaName=' +
+          this.areaName
+      )
     },
     // 获取下级列表
-    showCity(provinceId,provinceName) {
+    showCity(provinceId, provinceName, index) {
+      this.shengSelected = index
+      this.citySelected = null
+      this.areaSelected = null      
+      console.log(index)
       this.provinceName = provinceName
       api.getCitys(provinceId).then(response => {
         this.citys = response
       })
     },
-    showQu(cityId,cityName) {
+    showQu(cityId, cityName,index) {
+      this.citySelected = index
+      this.areaSelected = null
       this.cityName = cityName
       this.cityId = cityId
       api.getQus(cityId).then(response => {
@@ -148,7 +194,8 @@ export default {
       })
       this.addQu = true
     },
-    showMarket(areaId,areaName) {
+    showMarket(areaId, areaName,index) {
+      this.areaSelected = index
       this.areaId = areaId
       this.areaName = areaName
       api.getMarkets(areaId).then(response => {
@@ -202,6 +249,10 @@ export default {
         border-radius: 5px;
         text-align: center;
         overflow: auto;
+      }
+      .current {
+        background-color: #eee;
+;
       }
     }
   }
