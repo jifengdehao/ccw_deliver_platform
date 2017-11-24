@@ -1,42 +1,57 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2017-11-07 16:04:45 
- * DeveloperMailbox:   wufengliang@ccw163.com 
- * FunctionPoint: 消息详情
- */
- <template>
-   <div>
+* @Author: WuFengliang
+* @Date: 2017-11-07 16:04:45
+* DeveloperMailbox:   wufengliang@ccw163.com
+* FunctionPoint: 消息详情
+*/
+<template>
+  <div>
     <!-- 头部 -->
     <div class="header">
       <h2>查看</h2>
     </div>
     <ul v-if="singleData">
-      <li><span>消息时间:</span>{{singleData.createdAt}}</li>
+      <li><span>消息时间:</span>{{singleData.pushTime | filterTime}}</li>
       <li><span>发布类型:</span>{{filterMsgType(singleData.msgType)}}</li>
       <li><span>消息标题:</span>{{singleData.title}}</li>
       <li><span>消息内容:</span>{{singleData.content}}</li>
     </ul>
-   </div>
- </template>
- <script>
+  </div>
+</template>
+<script type="text/ecmascript-6">
 import * as http from '@/api/common'
+import * as time from '@/until/time'
+
 export default {
   name: 'settingMessageDetail',
   data() {
     return {
+      id: (() => {
+        return this.$route.params.smMssageId
+      })(),
       singleData: null
     }
   },
   created() {
     this.getSingleData()
   },
+  filters: {
+    filterTime(value) {
+      return time.formatDateTime(value)
+    }
+  },
+  watch: {
+    $route(to, go) {
+      if (to.path !== go.path) {
+        this.getSingleData()
+      }
+    }
+  },
   methods: {
     //  获取单个信息
     getSingleData() {
       http
-        .getSingleInfo({
-          smMssageId: this.$route.params.smMssageId
-        })
+        .getSingleInfo({ smMssageId: this.$route.params.smMssageId })
         .then(data => {
           this.singleData = data
         })
@@ -72,7 +87,7 @@ export default {
   }
 }
 </script>
- <style lang="css" scoped>
+<style lang="css" scoped>
 .header {
   height: 40px;
   line-height: 40px;
