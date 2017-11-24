@@ -3,7 +3,6 @@
     <mainHeader :title="title">
       <div class="close" @click="close">
         <Icon type="close"/>
-        <!--<Button type="text" icon="close"></Button>-->
       </div>
     </mainHeader>
     <div class="o_checkorder_map" id="container"></div>
@@ -198,11 +197,6 @@
   #o_checkorder {
     position: relative;
     .close {
-      /*position: absolute;*/
-      /*top: 0;*/
-      /*right: 0;*/
-      /*z-index: 10;*/
-      /**/
       height: 40px;
       line-height: 40px;
       color: #ffffff;
