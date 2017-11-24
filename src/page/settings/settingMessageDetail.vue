@@ -11,7 +11,7 @@
       <h2>查看</h2>
     </div>
     <ul v-if="singleData">
-      <li><span>消息时间:</span>{{singleData.createdAt}}</li>
+      <li><span>消息时间:</span>{{formatTime(singleData.pushTime)}}</li>
       <li><span>发布类型:</span>{{filterMsgType(singleData.msgType)}}</li>
       <li><span>消息标题:</span>{{singleData.title}}</li>
       <li><span>消息内容:</span>{{singleData.content}}</li>
@@ -68,6 +68,24 @@ export default {
           break
       }
       return str
+    },
+    //  时间过滤
+    formatTime(time) {
+      if (!time) {
+        return
+      }
+      let date = new Date(time)
+      let month =
+        date.getMonth() + 1 >= 10
+          ? date.getMonth() + 1
+          : '0' + (date.getMonth() + 1)
+      let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
+      let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
+      let minutes =
+        date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()
+      let seconds =
+        date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()
+      return `${date.getFullYear()}/${month}/${day} ${hour}:${minutes}:${seconds}`
     }
   }
 }
