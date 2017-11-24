@@ -193,51 +193,61 @@
         })
       },
       // 选择城市或省
-      changeProvince(province) {
-        this.getCityData(province)
+      changeProvince(value) {
+        this.cityData = []
+        this.getCityData(value)
       },
       // 获取市的数据
-      getCityData(proId) {
-        api.getProvinceIndex(proId).then((res) => {
-          if (res) {
-            this.showCity = false
-            this.cityData = res
-          }
-        })
+      getCityData(value) {
+        if (value && value != '') {
+          api.getProvinceIndex(value).then((res) => {
+            if (res) {
+              console.log(res)
+              this.showCity = false
+              this.cityData = res
+            }
+          })
+        }
       },
       // 选择城市
-      changeCity(city) {
-        this.getAreaData(city)
+      changeCity(value) {
+        this.areaData = []
+        this.getAreaData(value)
       },
       // 获取区域的数据
-      getAreaData(areaId) {
-        api.getCityManager(areaId).then((res) => {
-          if (res) {
-            this.showArea = false
-            this.areaData = res
-          }
-        })
+      getAreaData(value) {
+        if (value && value != '') {
+          api.getCityManager(value).then((res) => {
+            if (res) {
+              this.showArea = false
+              this.areaData = res
+            }
+          })
+        }
       },
       // 选择区域
-      changeArea(area) {
-        this.getMarketData(area)
+      changeArea(value) {
+        this.marketData = []
+        this.getMarketData(value)
       },
       // 获取菜市场数据
-      getMarketData(areaId) {
-        api.getAreaMarket(areaId).then((res) => {
-          if (res) {
-            this.showMarket = false
-            this.marketData = res
-          }
-        })
+      getMarketData(value) {
+        if (value && value != '') {
+          api.getAreaMarket(value).then((res) => {
+            if (res) {
+              this.showMarket = false
+              this.marketData = res
+            }
+          })
+        }
       },
       // 选择菜市场
-      changeMarket(marketId) {
-        if (marketId) {
+      changeMarket(value) {
+        if (value && value != '') {
           // 获取首页数据
-          api.getIndeData(marketId).then((res) => {
-            console.log(res)
+          api.getIndeData(this.market).then((res) => {
             if (res) {
+              console.log(res)
               this.indexData = true
               this.sysMsg = (res.custSysMsgList).map((item, index) => {
                 item.createdAt = time.formatDateTime(item.createdAt)

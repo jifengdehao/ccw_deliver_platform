@@ -46,7 +46,7 @@
           <ul class="textCenter O_cava_name">
             <li>姓名</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
-                :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
+                :class="{active:item.psDeliverId === deliverId}" v-if="item">
               {{item.name}}
             </li>
           </ul>
@@ -269,43 +269,52 @@
         })
       },
       // 选择城市或省
-      changeProvince(province) {
-        this.getCityData(province)
+      changeProvince(value) {
+        this.cityData = []
+        this.getCityData(value)
       },
       // 获取市的数据
-      getCityData(proId) {
-        api.getProvinceIndex(proId).then((res) => {
-          if (res) {
-            this.showCity = false
-            this.cityData = res
-          }
-        })
+      getCityData(value) {
+        if (value && value !== '') {
+          api.getProvinceIndex(value).then((res) => {
+            if (res) {
+              this.showCity = false
+              this.cityData = res
+            }
+          })
+        }
       },
       // 选择城市
-      changeCity(city) {
-        this.getAreaData(city)
+      changeCity(value) {
+        this.areaData = []
+        this.getAreaData(value)
       },
       // 获取区域的数据
-      getAreaData(areaId) {
-        api.getCityManager(areaId).then((res) => {
-          if (res) {
-            this.showArea = false
-            this.areaData = res
-          }
-        })
+      getAreaData(value) {
+        if (value && value !== '') {
+          api.getCityManager(value).then((res) => {
+            if (res) {
+              this.showArea = false
+              this.areaData = res
+            }
+          })
+        }
       },
       // 选择区域
-      changeArea(area) {
-        this.getMarketData(area)
+      changeArea(value) {
+        this.marketData = []
+        this.getMarketData(value)
       },
       // 获取菜市场数据
-      getMarketData(areaId) {
-        api.getAreaMarket(areaId).then((res) => {
-          if (res) {
-            this.showMarket = false
-            this.marketData = res
-          }
-        })
+      getMarketData(value) {
+        if (value && value !== '') {
+          api.getAreaMarket(value).then((res) => {
+            if (res) {
+              this.showMarket = false
+              this.marketData = res
+            }
+          })
+        }
       },
       // 选择菜市场
       changeMarket() {
@@ -318,7 +327,7 @@
           state: this.state
         }
         console.log(params)
-        if (params.marketId) {
+        if (params.marketId && params.marketId !== '') {
           api.getOrderData(params).then((res) => {
             if (res) {
               console.log(res)
@@ -337,7 +346,7 @@
       },
       // 切换
       selectTab(name) {
-        this.state = name
+        this.state = parseInt(name)
         this.pageNumber = 1
         this.changeMarket()
       },
