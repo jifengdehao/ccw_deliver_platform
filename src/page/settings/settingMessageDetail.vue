@@ -42,6 +42,7 @@ export default {
   },
   watch: {
     $route(to, go) {
+      console.log(go)
       if (to.path !== go.path) {
         this.getSingleData()
       }
@@ -50,6 +51,9 @@ export default {
   methods: {
     //  获取单个信息
     getSingleData() {
+      if (!this.$route.params.smMssageId) {
+        return
+      }
       http
         .getSingleInfo({ smMssageId: this.$route.params.smMssageId })
         .then(data => {
