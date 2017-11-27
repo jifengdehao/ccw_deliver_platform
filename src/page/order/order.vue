@@ -2,7 +2,7 @@
   <div id="order">
     <!--内容头部-->
     <div class="top clearfix">
-      <h2 class="fl">订单指派</h2>
+      <h2 class="fl">订单管理</h2>
       <div class="search-bar fr">
         <Input v-model="expressId"
                icon="search"
@@ -175,6 +175,7 @@
   import * as time from '@/until/time'
 
   export default {
+    name: 'order',
     data() {
       return {
         provinceData: [], // 省或直轄市数据集
@@ -346,7 +347,7 @@
       },
       // 切换
       selectTab(name) {
-        this.state = parseInt(name)
+        this.state = name
         this.pageNumber = 1
         this.changeMarket()
       },

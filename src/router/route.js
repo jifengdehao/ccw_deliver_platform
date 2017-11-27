@@ -96,7 +96,7 @@ const dataDeliverDetails = resolve => {
   })
 }
 // 骑士管理
-const Cavalier = resolve=>{
+const Cavalier = resolve => {
   import('@/page/cavalier/cavalier').then(module => {
     resolve(module)
   })
@@ -279,11 +279,15 @@ export default [
     children: [
       {
         path: '/home',
-        component: Home
+        name: 'home',
+        component: Home,
+        meta: {keepAlive: true}
       },
       {
         path: '/order',
-        component: Order
+        name: 'order',
+        component: Order,
+        meta: {keepAlive: true}
       },
       {
         path: '/order/:id',
