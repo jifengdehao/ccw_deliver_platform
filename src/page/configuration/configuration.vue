@@ -252,7 +252,6 @@ export default {
       }
       .current {
         background-color: #eee;
-;
       }
     }
   }

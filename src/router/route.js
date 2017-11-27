@@ -347,7 +347,8 @@ export default [
       },
       {
         path: '/configuration',
-        component: configuration
+        component: configuration,
+        meta: { keepAlive: true }
       },
       {
         path: '/addregion',
