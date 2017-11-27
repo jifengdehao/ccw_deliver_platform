@@ -11,6 +11,7 @@
       <Table :columns="columns" :data="data"></Table>
       </Col>
     </Row>
+    <div id="panel"></div>
     <!--<Row>-->
     <!--<Col span="6">-->
     <!--<h3>用户信息</h3><br/>-->
@@ -90,15 +91,12 @@
             title: '所属菜市场',
             key: 'marketName',
             align: 'center'
-          }
-          /*
-          ,
+          },
           {
-            title: '工作状态',
-            key: 'personStatus',
+            title: '状态',
+            key: 'personStatusStr',
             align: 'center'
           }
-          */
         ],
         data: [],
         orderId: (() => {
@@ -112,8 +110,8 @@
     methods: {
       getOrderData() {
         api.getOrderDetails(this.orderId).then((res) => {
-          console.log(res)
           if (res) {
+            console.log(res)
             this.title = res.title
             this.data = res.deliverList
             //基本地图加载
@@ -128,34 +126,97 @@
               //TODO: 使用driving对象调用驾车路径规划相关的功能
               //构造路线导航类
               const driving = new AMap.Driving({
-                map: map
+                map: map,
+                panel: "panel"
               })
               // 根据起终点经纬度规划驾车导航路线
-              driving.search(new AMap.LngLat(res.market[0], res.market[1]), new AMap.LngLat(res.userAddress[0], res.userAddress[1]))
+              driving.search(new AMap.LngLat(res.market[0], res.market[1]), new AMap.LngLat(res.userAddress[0], res.userAddress[1]), function (status, result) {
+                if(res.status === 1) {
+                  let path = []
+                  result.routes[0].steps.forEach((item) => {
+                    if (item.path) {
+                      item.path.forEach((i) => {
+                        path.push([i.lng, i.lat])
+                      })
+                    }
+                  })
+                  AMapUI.load(['ui/misc/PathSimplifier', 'lib/$'], function(PathSimplifier, $) {
+                    if (!PathSimplifier.supportCanvas) {
+                      alert('当前环境不支持 Canvas！');
+                      return;
+                    }
+                    var pathSimplifierIns = new PathSimplifier({
+                      zIndex: 300,
+                      autoSetFitView:false,
+                      map: map, //所属的地图实例
+                      getPath: function(pathData, pathIndex) {
+                        return pathData.path;
+                      },
+                      getHoverTitle: function(pathData, pathIndex, pointIndex) {
+                        if (pointIndex >= 0) {
+                          //point
+                          return pathData.name + '，点：' + pointIndex + '/' + pathData.path.length;
+                        }
+                        return pathData.name + '，点数量' + pathData.path.length;
+                      },
+                      renderOptions: {
+                        renderAllPointsIfNumberBelow: 100, //绘制路线节点，如不需要可设置为-1
+                        //轨迹线的样式
+                        pathLineStyle: {
+                          strokeStyle: 'red',
+                          lineWidth: 6,
+                          dirArrowStyle: true
+                        }
+                      }
+                    });
+                    window.pathSimplifierIns = pathSimplifierIns;
+                    //设置数据
+                    pathSimplifierIns.setData([{
+                      name: '路线',
+                      path: path
+                    }]);
+
+                    //对第一条线路（即索引 0）创建一个巡航器
+                    var navg1 = pathSimplifierIns.createPathNavigator(0, {
+                      loop: true, //循环播放
+                      speed: 1000, //巡航速度，单位千米/小时
+                      pathNavigatorStyle: {
+                        width: 16,
+                        height: 32,
+                      //使用图片
+                        content: PathSimplifier.Render.Canvas.getImageContent('http://webapi.amap.com/ui/1.0/ui/misc/PathSimplifier/examples/imgs/car.png', onload, onerror)
+                      }
+                    });
+                    navg1.start();
+                  })
+                }
+              })
             })
             const infoWindow = new AMap.InfoWindow(
               {
                 offset: new AMap.Pixel(0, -22) //-113, -140
               }
             );
-            for (var i = 0, marker; i < this.data.length; i++) {
-              marker = new AMap.Marker({
-                position: [this.data[i].longitude, this.data[i].latitude],
-                map: map
-              });
-              let deliver = this.data[i].psDeliverId
-              console.log(deliver)
-              marker.content = '<a href="javascript:void(0);" onclick="goAssign(this);" data-deliver="' + deliver + '">指派</a>';
-              //给Marker绑定单击事件
-              if (res.isShow !== 0) {
-                marker.on('click', markerClick);
+            if (res.status === 0) {
+              for (var i = 0, marker; i < this.data.length; i++) {
+                marker = new AMap.Marker({
+                  position: [this.data[i].longitude, this.data[i].latitude],
+                  map: map,
+                  iconLabel: 'A',
+                });
+                let deliver = this.data[i].psDeliverId
+                marker.content = '<a href="javascript:void(0);" onclick="goAssign(this)" data-deliver="' + deliver + '">指派</a>';
+                //给Marker绑定单击事件
+                if (res.isShow !== 0) {
+                  marker.on('click', markerClick);
+                }
+                marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
+                  offset: new AMap.Pixel(0, -22),//修改label相对于maker的位置
+                  content: this.data[i].deliverMsg
+                });
               }
-              marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
-                offset: new AMap.Pixel(0, -22),//修改label相对于maker的位置
-                content: this.data[i].deliverMsg
-              });
+              map.setFitView();
             }
-            map.setFitView();
 
             function markerClick(e) {
               infoWindow.setContent(e.target.content);
@@ -194,6 +255,16 @@
   }
 </script>
 <style lang="less" scoped type="text/less">
+  #panel {
+    position: absolute;
+    background-color: white;
+    max-height: 450px;
+    overflow-y: auto;
+    top: 60px;
+    right: 0;
+    width: 280px;
+  }
+
   #o_checkorder {
     position: relative;
     .close {

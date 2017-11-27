@@ -154,6 +154,7 @@
   import * as time from '@/until/time'
 
   export default {
+    name: 'home',
     data() {
       return {
         indexData: false,// 首页展示数据
