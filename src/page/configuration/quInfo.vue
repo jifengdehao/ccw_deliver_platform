@@ -24,7 +24,7 @@
         </section>
         <section class="quInfo_button">
             <Button size="large" style="width: 200px;" @click="goback">取消</Button>
-            <Button size="large" style="width: 200px;" @click="test">确定</Button>
+            <Button size="large" style="width: 200px;">确定</Button>
         </section>
     </div>
 </template>
@@ -49,18 +49,16 @@ export default {
     provinceName() {
       return this.$route.query.provinceName
     }
-    
   },
   created() {
     this.getQuInfo()
   },
-  beforeUpdate() {
-    this.init()
-  },
+  beforeUpdate() {},
   methods: {
     getQuInfo() {
       api.getQuInfo(this.areaId).then(response => {
         this.areaData = response
+        this.init()
       })
     },
     init: function() {
@@ -68,7 +66,7 @@ export default {
         resizeEnable: true,
         zoom: 12
       })
-       AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
+      AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
         map.addControl(new AMap.ToolBar())
         map.addControl(new AMap.Scale())
       })
@@ -85,13 +83,10 @@ export default {
           fillColor: '#f5deb3',
           fillOpacity: 0.5
         })
-       
-      })() 
+      })()
       map.setFitView() //地图自适应
     },
-    test() {
-    },
-    goback(){
+    goback() {
       window.history.go(-1)
     }
   }

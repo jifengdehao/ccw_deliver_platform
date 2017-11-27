@@ -22,21 +22,21 @@
             </div>
             <div class="setprice" >
               <Form v-model="cityData" inline>
-                <FormItem prop="user">
+                <FormItem >
                   <span>运费(元):</span> 
-                  <Input  v-model="cityData.expense"  placeholder="请输入运费" style="width:80px">
-                  </Input>
+                  <Input-number  v-model="cityData.expense"  placeholder="请输入运费" style="width:80px">
+                  </Input-number>
                 </FormItem>
                 <FormItem>
                   <span>即时配送价(元):</span>
-                  <Input v-model="cityData.instantExpense" placeholder="请输入即时配送价" style="width:80px">
-                  </Input>
+                  <Input-number v-model="cityData.instantExpense" placeholder="请输入即时配送价" style="width:80px">
+                  </Input-number>
                 </FormItem>
               </Form>
             </div>
         </section>
          <section class="cityInfo_button">
-            <Button size="large" style="width: 200px;background-color: #fff;" @click="goback">取消</Button>
+            <Button size="large" style="width: 200px;background-color: #fff;" @click="goback">返回</Button>
             <Button size="large" style="width: 200px;background-color: #fff;" @click="nodifyCityInfo(cityData)">确定</Button>
         </section>
     </div>
@@ -114,10 +114,15 @@ export default {
       })
     },
     nodifyCityInfo(cityData) {
+      if(!cityData.expense){
+        this.$Message.erroe('请填写运费')
+        return false
+      }
+      if(!cityData.instantExpense){
+        this.$Message.erroe('请填写及时配送价')
+        return false
+      }
       cityData.cityId = this.adcode
-      // let params = {
-      //   expenseConfig: cityData
-      // }
       api.modfiyCityMessage(cityData).then(response => {
         this.$Message.info('修改成功')
       })

@@ -135,6 +135,26 @@ export default {
     },
     // 修改菜市场信息
     modifyMarket() {
+      if (!this.marketData.marketName) {
+        this.$Message.error('菜市场名称必填')
+        return false
+      }
+      if (!this.marketData.beginTime || !this.marketData.endTime) {
+        this.$Message.error('配送时间端必填')
+        return false
+      }
+      if (!this.marketData.mobileno || isNaN(this.marketData.mobileno)) {
+        this.$Message.error('请填写正确的电话号码')
+        return false
+      }
+      if (!this.marketData.selfPickAddress) {
+        this.$Message.error('自提点必填')
+        return false
+      }
+      if (!this.marketData.address) {
+        this.$Message.error('菜市场地址必填')
+        return false
+      }
       let params = {
         marketId: this.marketId,
         marketinfo: this.marketData

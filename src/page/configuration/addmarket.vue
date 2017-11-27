@@ -16,6 +16,7 @@
         <BreadcrumbItem>{{cityName}}</BreadcrumbItem>
         <BreadcrumbItem href="/addregion">{{areaData.areaName}}</BreadcrumbItem>
         <!-- <BreadcrumbItem>{{formItem.marketName}}</BreadcrumbItem> -->
+        <p>提示： 单击右键开始规划菜市场区域，点击左键结束规划区域。双击选择菜市场地址。</p>
       </Breadcrumb>
     </section>
     <!-- 地图内容 -->
@@ -30,7 +31,7 @@
             <span>菜市场名称：</span>
             <Input v-model="formItem.marketName" style="width:200px" required></Input>
             <span>菜市场电话：</span>
-            <Input v-model="formItem.mobileno" style="width:200px" required></Input>
+            <Input :maxlength="11" v-model="formItem.mobileno" style="width:200px" required></Input>
             <span>配送时间段：</span>
             <TimePicker @on-change="getbeginTime" format="HH:mm" placeholder="Select time" style="width: 95px"></TimePicker> - 
             <TimePicker @on-change="getendTime" format="HH:mm" placeholder="Select time" style="width: 95px"></TimePicker>
@@ -156,28 +157,46 @@ export default {
     },
     // 添加菜市场
     addMarket() {
-      this.formItem.areaCoordinate = this.path
-      if (
-        this.current === 1 &&
-        this.formItem.marketName &&
-        this.formItem.latitude !== 0
-      ) {
-        let params = {
-          areaId: this.areaData.areaId,
-          market: this.formItem,
-          marketId: this.marketId
-        }
-        api
-          .addMarket(params)
-          .then(response => {
-            this.$Message.info('添加菜市场成功')
-          })
-          .catch(err => {
-            this.$Message.info('添加菜市场失败' + err)
-          })
-      } else {
-        this.$Message.info('请划定菜市场区域,输入菜市场名称,选择菜市场地址')
+      if (!this.formItem.marketName) {
+        this.$Message.error('菜市场名称必填')
+        return false
       }
+      if (!this.formItem.beginTime || !this.formItem.endTime) {
+        this.$Message.error('配送时间端必填')
+        return false
+      }
+      if (!this.formItem.mobileno || isNaN(this.formItem.mobileno)) {
+        this.$Message.error('请填写正确的电话号码')
+        return false
+      }
+      if (!this.formItem.selfPickAddress) {
+        this.$Message.error('自提点必填')
+        return false
+      }
+      if (!this.formItem.address) {
+        this.$Message.error('菜市场地址必填')
+        return false
+      }
+      if (!this.path[0]) {
+        this.$Message.error('单击地图规划菜市场配送范围')
+        return false
+      }
+      if(!this.formItem.latitude){
+        this.$Message.error('双击选择菜市场地址')
+        return false
+      }
+      this.formItem.areaCoordinate = this.path
+      let params = {
+        areaId: this.areaData.areaId,
+        market: this.formItem,
+        marketId: this.marketId
+      }
+      api
+        .addMarket(params)
+        .then(response => {
+          this.$Message.success('添加菜市场成功')
+          this.$router.push('/configuration')
+        })
     },
     // 取消按钮
     goback() {
@@ -214,6 +233,7 @@ export default {
     background-color: #caeee9;
   }
   .addmarket_marketinfo {
+    min-width: 1100px;
     margin: 0 auto;
     form {
       text-align: center;
