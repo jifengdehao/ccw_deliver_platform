@@ -42,7 +42,6 @@ export default {
   },
   watch: {
     $route(to, go) {
-      console.log(go)
       if (to.path !== go.path) {
         this.getSingleData()
       }

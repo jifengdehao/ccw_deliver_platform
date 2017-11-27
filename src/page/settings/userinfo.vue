@@ -139,6 +139,9 @@ export default {
     //  获取用户信息  ||  重置
     getUserInfoData() {
       this.params.psUserId = this.$route.params.psUserId
+      if (!this.params.psUserId) {
+        return
+      }
       http.lookUser(this.params).then(data => {
         this.data = data
         this.chooseProvince(this.data.user.provinceId) //  获取市
@@ -166,6 +169,14 @@ export default {
       http.addOrPutUserInfo(data).then(data => {
         this.getUserInfoData()
       })
+    }
+  },
+  watch: {
+    $route(newVal, oldVal) {
+      if (newVal.path !== oldVal.path) {
+        this.data = ''
+        this.getUserInfoData()
+      }
     }
   }
 }
