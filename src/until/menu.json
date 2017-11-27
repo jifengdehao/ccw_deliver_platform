@@ -6,13 +6,77 @@
       "menu": "home",
       "icon": "home",
       "name": "首页",
-      "noDropdown": true
+      "noDropdown": true,
+      "permissionList": [
+        {
+          "permissionName": "获取首页数据",
+          "api": "/User/index/{marketId}",
+          "method": "GET"
+        },
+        {
+          "permissionName": "获取省数据",
+          "api": "/deployManager/index",
+          "method": "GET"
+        },
+        {
+          "permissionName": "获取市数据",
+          "api": "/deployManager/province/{provinceId}",
+          "method": "GET"
+        },
+        {
+          "permissionName": "获取区域数据",
+          "api": "/deployManager/city/{cityId}",
+          "method": "GET"
+        },
+        {
+          "permissionName": "获取菜市场数据",
+          "api": "/deployManager/areaMarket/{areaId}",
+          "method": "GET"
+        }
+      ]
     },
     {
       "menu": "order",
       "icon": "ios-paper",
       "name": "订单管理",
-      "noDropdown": true
+      "noDropdown": true,
+      "permissionList": [
+        {
+          "permissionName": "获取省数据",
+          "api": "/deployManager/index",
+          "method": "GET"
+        },
+        {
+          "permissionName": "获取市数据",
+          "api": "/deployManager/province/{provinceId}",
+          "method": "GET"
+        },
+        {
+          "permissionName": "获取区域数据",
+          "api": "/deployManager/city/{cityId}",
+          "method": "GET"
+        },
+        {
+          "permissionName": "获取菜市场数据",
+          "api": "/deployManager/areaMarket/{areaId}",
+          "method": "GET"
+        },
+        {
+          "permissionName": "获取订单列表",
+          "api": "/orderManager",
+          "method": "GET"
+        },
+        {
+          "permissionName": "获取订单详情(查看)",
+          "api": "/orderManager/{orderId}",
+          "method": "GET"
+        },
+        {
+          "permissionName": "订单指派",
+          "api": "/orderManager/{orderId}/{deliverId}",
+          "method": "PUT"
+        }
+      ]
     },
     {
       "menu": "",
@@ -93,13 +157,13 @@
       ]
     },
     {
-      "menu":"",
-      "icon":"person-stalker",
-      "name":"分销管理",
+      "menu": "",
+      "icon": "person-stalker",
+      "name": "分销管理",
       "noDropdown": false,
       "submenu": [
         {
-          "menu":"d_extend",
+          "menu": "d_extend",
           "name": "推广列表"
         },
         {
@@ -109,9 +173,9 @@
       ]
     },
     {
-      "menu":"finance",
-      "icon":"person-stalker",
-      "name":"财务对账",
+      "menu": "finance",
+      "icon": "person-stalker",
+      "name": "财务对账",
       "noDropdown": true
     }
   ]

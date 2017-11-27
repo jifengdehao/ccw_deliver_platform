@@ -1,8 +1,10 @@
 <template>
   <div id="o_checkorder">
-    <div class="close" @click="close">
-      <Button type="text" icon="close"></Button>
-    </div>
+    <mainHeader :title="title">
+      <div class="close" @click="close">
+        <Icon type="close"/>
+      </div>
+    </mainHeader>
     <div class="o_checkorder_map" id="container"></div>
     <Row style="margin-top: 20px;margin-bottom: 20px;">
       <Col span="24">
@@ -57,10 +59,12 @@
 <script type="text/ecmascript-6">
   import AMap from 'AMap'   //在页面中引入高德地图
   import * as api from '@/api/common'
+  import mainHeader from '@/components/header/main_header.vue'
 
   export default {
     data() {
       return {
+        title: '',
         columns: [
           {
             title: '序号',
@@ -103,7 +107,6 @@
       }
     },
     created() {
-      console.log(this.orderId)
       this.getOrderData()
     },
     methods: {
@@ -111,6 +114,7 @@
         api.getOrderDetails(this.orderId).then((res) => {
           console.log(res)
           if (res) {
+            this.title = res.title
             this.data = res.deliverList
             //基本地图加载
             const map = new AMap.Map("container", {
@@ -143,7 +147,7 @@
               console.log(deliver)
               marker.content = '<a href="javascript:void(0);" onclick="goAssign(this);" data-deliver="' + deliver + '">指派</a>';
               //给Marker绑定单击事件
-              if(res.isShow !==0){
+              if (res.isShow !== 0) {
                 marker.on('click', markerClick);
               }
               marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
@@ -180,21 +184,25 @@
           }
         })
       },
-      close(){
+      close() {
         this.$router.back()
       }
+    },
+    components: {
+      mainHeader
     }
   }
 </script>
 <style lang="less" scoped type="text/less">
   #o_checkorder {
     position: relative;
-    .close{
-      position: absolute;
-      top: 0;
-      right: 0;
-      z-index: 10;
-      background-color: #ffffff;
+    .close {
+      height: 40px;
+      line-height: 40px;
+      color: #ffffff;
+      width: 50px;
+      text-align: center;
+      cursor: pointer;
     }
     .o_checkorder_map {
       height: 450px;

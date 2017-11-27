@@ -95,6 +95,13 @@ const dataDeliverDetails = resolve => {
     resolve(module)
   })
 }
+// 骑士管理
+const Cavalier = resolve=>{
+  import('@/page/cavalier/cavalier').then(module => {
+    resolve(module)
+  })
+}
+
 // 骑士管理 -未提交资料
 const cUncommitted = resolve => {
   import('@/page/cavalier/c_Uncommitted_data').then(module => {
@@ -252,6 +259,7 @@ const settingMessageDetail = resolve => {
     resolve(module)
   })
 }
+
 
 export default [
   {
