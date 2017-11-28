@@ -79,8 +79,12 @@
       handleSubmit() {
         this.$refs.formLogin.validate((valid) => {
           if (valid) {
-            this.formLogin.password = hash(this.formLogin.password)
-            this.login(this.formLogin)
+            let params={
+              password: hash(this.formLogin.password),
+              mobileno: this.formLogin.mobileno,
+              code: this.formLogin.code
+            }
+            this.login(params)
           } else {
             this.$Message.error('表单验证失败!')
           }
