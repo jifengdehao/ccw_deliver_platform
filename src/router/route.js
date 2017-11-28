@@ -280,14 +280,12 @@ export default [
       {
         path: '/home',
         name: 'home',
-        component: Home,
-        meta: {keepAlive: true}
+        component: Home
       },
       {
         path: '/order',
         name: 'order',
-        component: Order,
-        meta: {keepAlive: true}
+        component: Order
       },
       {
         path: '/order/:id',
