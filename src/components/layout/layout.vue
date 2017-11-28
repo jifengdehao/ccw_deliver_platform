@@ -3,13 +3,17 @@
     <m-header></m-header>
     <div class="layout-content">
       <Row type="flex" style="height: 100%;">
-        <Col :span="spanLeft" :class="{'layout-hide-text': spanLeft < 3}" class="sidebar">
+        <Col :class="{'layout-hide-text': spanLeft < 3}" class="sidebar" :xs="spanLeft" :sm="spanLeft" :md="spanLeft" :lg="spanLeft">
         <div class="close-menu" @click="toggleClick()">
           <Icon type="navicon-round" :size="iconSize"></Icon>
         </div>
         <m-menu :spanLeft="spanLeft"></m-menu>
         </Col>
-        <Col :span="spanRight" style="overflow-y: scroll;padding: 40px;">
+        <Col style="overflow-y: scroll;padding: 40px;" :xs="spanRight" :sm="spanRight" :md="spanRight" :lg="spanRight">
+          <!--<keep-alive :include="['home', 'order']">-->
+            <!--<router-view></router-view>-->
+          <!--</keep-alive>-->
+          <!--<router-view></router-view>-->
         <!--缓存想要缓存的页面，实现后退不刷新-->
         <!--加上v-if的判断，可以自定义想要缓存的组件，自定义在router里面-->
         <keep-alive>
@@ -102,8 +106,9 @@
     }
 
     .close-menu {
-      padding: 14px 24px;
-      width: 100%;
+      height: 49px;
+      line-height: 49px;
+      width: auto;
       text-align: center;
       color: #fff;
       cursor: pointer;

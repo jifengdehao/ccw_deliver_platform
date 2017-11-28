@@ -117,7 +117,6 @@ export default {
         this.$Message.error('请规划区域范围')
         return false
       }
-      alert('asd')
 
       let params = {
         cityId: this.adcode,

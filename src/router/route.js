@@ -291,7 +291,9 @@ export default [
       },
       {
         path: '/order/:id',
-        component: OrderDetails
+        name: 'orderDetails',
+        component: OrderDetails,
+        meta: {keepAlive: false}
       },
       {
         path: '/finance',

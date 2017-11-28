@@ -177,11 +177,12 @@ export default {
     showCity(provinceId, provinceName, index) {
       this.shengSelected = index
       this.citySelected = null
-      this.areaSelected = null      
-      console.log(index)
+      this.areaSelected = null  
       this.provinceName = provinceName
       api.getCitys(provinceId).then(response => {
         this.citys = response
+        this.qus = []
+        this.markets = []
       })
     },
     showQu(cityId, cityName,index) {
@@ -191,6 +192,7 @@ export default {
       this.cityId = cityId
       api.getQus(cityId).then(response => {
         this.qus = response
+        this.markets = []
       })
       this.addQu = true
     },
