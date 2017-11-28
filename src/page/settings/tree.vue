@@ -64,11 +64,12 @@ export default {
     },
     //  自定义权限点击
     checkPermission(permission, item, bool) {
-      // console.log(permission)
+      this.parentData.isHave = true
       if (!this.parentData.childMenuList || !this.parentData.permissonList) {
         item.isHave = !permission.isHave ? true : true
         return
       }
+
       this.$emit('permissionCheck', {
         permission: permission,
         item: item,
@@ -77,8 +78,8 @@ export default {
       })
     },
     //  权限点击
-    // permissionCheck(permission, item, bool) {
     permissionCheck(data) {
+      console.log(data)
       data.permission.isHave = !data.bool ? !data.permission.isHave : data.bool
       data.item.isHave = data.permission.isHave
       this.checkPermission(data.item, data.parent, true)
