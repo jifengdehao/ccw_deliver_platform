@@ -1,10 +1,10 @@
 <template>
   <div id="header">
     <Row>
-      <Col span="3">
+      <Col :xs="0" :sm="3" :md="3" :lg="3">
       <div class="logo">菜城科技有限公司</div>
       </Col>
-      <Col span="12">
+      <Col :xs="0" :sm="12" :md="12" :lg="12">
       <div class="message">
         <ul class="scroll-content" :style="{ top }">
           <li v-for="(item,index) in prizeList" @click="goToSysMsgDetails(item.smMssageId)" :key="item.smMssageId">
@@ -13,15 +13,15 @@
         </ul>
       </div>
       </Col>
-      <Col span="3">
+      <Col :xs="12" :sm="3" :md="3" :lg="3">
       <Icon type="android-person" :size="iconSize"></Icon>&nbsp;&nbsp;管理员：{{username}}
       </Col>
-      <Col span="3">
+      <Col :xs="0" :sm="3" :md="3" :lg="3">
       <div @click="goToMsg">
         <Icon type="ios-chatboxes-outline" :size="iconSize"></Icon>&nbsp;&nbsp;消息
       </div>
       </Col>
-      <Col span="3">
+      <Col :xs="12" :sm="3" :md="3" :lg="3">
       <div @click="logout">
         <Icon type="log-out" :size="iconSize"></Icon>&nbsp;&nbsp;安全退出
       </div>
@@ -112,6 +112,11 @@
     cursor: pointer;
     .logo {
       font-size: 16px;
+    }
+    .close-menu{
+      height: 60px;
+      line-height: 60px;
+      text-align: center;
     }
     .message {
       height: 60px;

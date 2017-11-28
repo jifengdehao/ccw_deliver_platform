@@ -88,14 +88,20 @@ export default {
                   },
                   on: {
                     click: () => {
-                      //  删除单条数据
-                      http
-                        .delSingleInfo({
-                          smMssageId: params.row.smMssageId
-                        })
-                        .then(data => {
-                          this.getMsgListData()
-                        })
+                      this.$Modal.confirm({
+                        title: '提示',
+                        content: '<p>是否删除此消息?</p>',
+                        onOk: () => {
+                          //  删除单条数据
+                          http
+                            .delSingleInfo({
+                              smMssageId: params.row.smMssageId
+                            })
+                            .then(data => {
+                              this.getMsgListData()
+                            })
+                        }
+                      })
                     }
                   }
                 },

@@ -21,7 +21,7 @@
     <Page v-if="userData" class="fr" style="margin:20px 0" :total="userData.total" @on-change="reLoadData"></Page>
     <Modal
         v-model="isDelBoolean"
-        title="提醒"
+        title="提示"
         @on-ok="deleteUser">
         <p style="text-align:center;">是否确认删除此用户?</p>
     </Modal>

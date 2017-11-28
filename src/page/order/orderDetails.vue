@@ -63,6 +63,7 @@
   import mainHeader from '@/components/header/main_header.vue'
 
   export default {
+    name:'orderDetails',
     data() {
       return {
         title: '',
@@ -114,24 +115,24 @@
             console.log(res)
             this.title = res.title
             this.data = res.deliverList
-            //基本地图加载
+            let that = this
             const map = new AMap.Map("container", {
               center: res.market,//地图中心点
               zoom: 10, //地图显示的缩放级别
               mapStyle: 'amap://styles/normal'//样式URL
             })
-            // 取件 - 送达
-            AMap.service('AMap.Driving', function () {//回调函数
-              //实例化Driving
-              //TODO: 使用driving对象调用驾车路径规划相关的功能
-              //构造路线导航类
-              const driving = new AMap.Driving({
-                map: map,
-                panel: "panel"
-              })
-              // 根据起终点经纬度规划驾车导航路线
-              driving.search(new AMap.LngLat(res.market[0], res.market[1]), new AMap.LngLat(res.userAddress[0], res.userAddress[1]), function (status, result) {
-                if(res.status === 1) {
+            if(res.status === 1){
+              // 取件 - 送达
+              AMap.service('AMap.Driving', function () {//回调函数
+                //实例化Driving
+                //TODO: 使用driving对象调用驾车路径规划相关的功能
+                //构造路线导航类
+                const driving = new AMap.Driving({
+                  map: map,
+                  panel: "panel"
+                })
+                // 根据起终点经纬度规划驾车导航路线
+                driving.search(new AMap.LngLat(res.deliverList[0].longitude,res.deliverList[0].latitude), new AMap.LngLat(res.userAddress[0], res.userAddress[1]), function (status, result) {
                   let path = []
                   result.routes[0].steps.forEach((item) => {
                     if (item.path) {
@@ -139,20 +140,21 @@
                         path.push([i.lng, i.lat])
                       })
                     }
-                  })
-                  AMapUI.load(['ui/misc/PathSimplifier', 'lib/$'], function(PathSimplifier, $) {
+                  });
+
+                  AMapUI.load(['ui/misc/PathSimplifier', 'lib/$'], function (PathSimplifier, $) {
                     if (!PathSimplifier.supportCanvas) {
                       alert('当前环境不支持 Canvas！');
                       return;
                     }
-                    var pathSimplifierIns = new PathSimplifier({
+                    let pathSimplifierIns = new PathSimplifier({
                       zIndex: 300,
-                      autoSetFitView:false,
+                      autoSetFitView: false,
                       map: map, //所属的地图实例
-                      getPath: function(pathData, pathIndex) {
+                      getPath: function (pathData, pathIndex) {
                         return pathData.path;
                       },
-                      getHoverTitle: function(pathData, pathIndex, pointIndex) {
+                      getHoverTitle: function (pathData, pathIndex, pointIndex) {
                         if (pointIndex >= 0) {
                           //point
                           return pathData.name + '，点：' + pointIndex + '/' + pathData.path.length;
@@ -177,68 +179,68 @@
                     }]);
 
                     //对第一条线路（即索引 0）创建一个巡航器
-                    var navg1 = pathSimplifierIns.createPathNavigator(0, {
+                    let navg1 = pathSimplifierIns.createPathNavigator(0, {
                       loop: true, //循环播放
-                      speed: 1000, //巡航速度，单位千米/小时
+                      speed: 500, //巡航速度，单位千米/小时
                       pathNavigatorStyle: {
                         width: 16,
                         height: 32,
-                      //使用图片
+                        //使用图片
                         content: PathSimplifier.Render.Canvas.getImageContent('http://webapi.amap.com/ui/1.0/ui/misc/PathSimplifier/examples/imgs/car.png', onload, onerror)
                       }
                     });
                     navg1.start();
-                  })
-                }
+                  });
+                })
               })
-            })
-            const infoWindow = new AMap.InfoWindow(
-              {
-                offset: new AMap.Pixel(0, -22) //-113, -140
-              }
-            );
-            if (res.status === 0) {
-              for (var i = 0, marker; i < this.data.length; i++) {
-                marker = new AMap.Marker({
-                  position: [this.data[i].longitude, this.data[i].latitude],
+            }else{
+              AMap.service('AMap.Driving', function () {
+                const driving = new AMap.Driving({
                   map: map,
-                  iconLabel: 'A',
-                });
-                let deliver = this.data[i].psDeliverId
-                marker.content = '<a href="javascript:void(0);" onclick="goAssign(this)" data-deliver="' + deliver + '">指派</a>';
-                //给Marker绑定单击事件
-                if (res.isShow !== 0) {
-                  marker.on('click', markerClick);
+                  panel: "panel"
+                })
+                driving.search(new AMap.LngLat(res.market[0], res.market[1]), new AMap.LngLat(res.userAddress[0], res.userAddress[1]))
+                const infoWindow = new AMap.InfoWindow({
+                    offset: new AMap.Pixel(0, -22) //-113, -140
+                  });
+                for (let i = 0, marker; i < res.deliverList.length; i++) {
+                  marker = new AMap.Marker({
+                    position: [res.deliverList[i].longitude, res.deliverList[i].latitude],
+                    map: map,
+                    iconLabel: 'A',
+                  });
+                  let deliver = res.deliverList[i].psDeliverId
+                  marker.content = '<a href="javascript:void(0);" onclick="goAssign(this)" data-deliver="' + deliver + '">指派</a>';
+                  //给Marker绑定单击事件
+                  if (res.isShow !== 0) {
+                    marker.on('click', markerClick);
+                  }
+                  marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
+                    offset: new AMap.Pixel(0, -22),//修改label相对于maker的位置
+                    content:res.deliverList[i].deliverMsg
+                  });
                 }
-                marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
-                  offset: new AMap.Pixel(0, -22),//修改label相对于maker的位置
-                  content: this.data[i].deliverMsg
-                });
-              }
-              map.setFitView();
-            }
-
-            function markerClick(e) {
-              infoWindow.setContent(e.target.content);
-              infoWindow.open(map, e.target.getPosition());
-            }
-
-            let that = this
-            window.goAssign = function (t) {
-              console.log(t)
-              api.putDeliver(that.orderId, t.getAttribute('data-deliver')).then((res) => {
-                console.log(res)
-                if (res) {
-                  that.$Notice.success({
-                    title: '指派成功！',
-                    onClose: function () {
-                      that.$router.back()
+                map.setFitView();
+                function markerClick(e) {
+                  infoWindow.setContent(e.target.content);
+                  infoWindow.open(map, e.target.getPosition());
+                }
+                window.goAssign = function (t) {
+                  api.putDeliver(that.orderId, t.getAttribute('data-deliver')).then((res) => {
+                    if (res) {
+                      console.log(res)
+                      that.$Notice.success({
+                        title: '指派成功！',
+                        onClose: function () {
+                          that.$router.back()
+                        }
+                      });
+                    } else {
+                      that.$Notice.error({
+                        title: '指派失败！'
+                      });
                     }
-                  });
-                } else {
-                  that.$Notice.error({
-                    title: '指派失败！'
-                  });
+                  })
                 }
               })
             }
