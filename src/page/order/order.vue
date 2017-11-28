@@ -6,7 +6,7 @@
       <div class="search-bar fr">
         <Input v-model="expressId"
                icon="search"
-               placeholder="订单状态/收货人信息/订单号/运单号"
+               placeholder="订单号/运单号"
                style="width: 200px;margin-top: 4px;" @on-click="search"></Input>
       </div>
     </div>
