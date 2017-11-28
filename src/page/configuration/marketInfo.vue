@@ -157,7 +157,7 @@ export default {
       }
       let params = {
         marketId: this.marketId,
-        marketinfo: this.marketData
+        market: this.marketData
       }
       api.addMarket(params).then(response => {
         this.$Message.info('修改菜市场成功')
