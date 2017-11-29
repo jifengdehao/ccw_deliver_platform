@@ -78,11 +78,30 @@ export function base(type, url, params) {
       .then(response => {
         if (response.data.code === 200) {
           resolve(response.data.data)
+        } else if (response.data.code === 9010 || response.data.code === 9030) {
+          this.$Modal.error({
+            title: '提示',
+            content: response.data.msg,
+            onOk: () => {
+              sessionStorage.removeItem('userInfo')
+              this.$router.push('/')
+            }
+          })
+        } else if (response.data.code === 9090) {
+          //  弹框 => 跳登录
+          this.$Modal.error({
+            title: '提示',
+            content: '您已在其他设备登录',
+            onOk: () => {
+              this.$router.push('/')
+            }
+          })
         } else {
           iview.Notice.error({
             title: '操作失败',
-            desc: `<p><span style="color:#ff3300">${response.data
-              .code}</span>&nbsp;&nbsp;${response.data.msg}</p>`
+            desc: `<p><span style="color:#ff3300">${
+              response.data.code
+            }</span>&nbsp;&nbsp;${response.data.msg}</p>`
           })
           reject(response.data.msg)
         }
