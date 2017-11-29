@@ -113,7 +113,7 @@ export default {
       this.getUsersList()
     },
     //  分页加载数据
-    reLoadData() {
+    reLoadData(pageNum) {
       this.params.pageNumber = pageNum
       this.getUsersList()
     }
