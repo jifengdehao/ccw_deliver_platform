@@ -95,7 +95,13 @@ export default {
         return
       }
       http.putRoleInfo(this.putParams).then(data => {
-        this.getRoleInfo()
+        this.$Modal.success({
+          title: '提示',
+          content: '更新成功',
+          onOk: () => {
+            this.getRoleInfo()
+          }
+        })
       })
     }
   }

@@ -136,7 +136,13 @@ export default {
     },
     //  删除用户
     deleteUser() {
-      http.deleteUser(this.singleData).then(this.getUsersList())
+      http.deleteUser(this.singleData).then(data => {
+        this.$Modal.success({
+          title: '提示',
+          content: '删除成功'
+        })
+        this.getUsersList()
+      })
     },
     //  分页页面跳转
     reLoadData(pageNum) {

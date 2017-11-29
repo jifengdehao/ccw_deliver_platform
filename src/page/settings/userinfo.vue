@@ -176,7 +176,13 @@ export default {
         }
       }
       http.addOrPutUserInfo(data).then(data => {
-        this.getUserInfoData()
+        this.$Modal.success({
+          title: '提示',
+          content: '更新成功',
+          onOk: () => {
+            this.getUserInfoData()
+          }
+        })
       })
     }
   },
