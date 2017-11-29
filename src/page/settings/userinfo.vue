@@ -86,8 +86,6 @@ export default {
     }
   },
   created() {
-    this.getRoleList()
-    this.getProvinceList()
     this.getUserInfoData()
   },
   methods: {
@@ -105,7 +103,7 @@ export default {
       })
     },
     //  选择省区 获取市区集合
-    chooseProvince(provinceId) {
+    chooseProvince(provinceId, fn) {
       this.cityList = []
       if (!provinceId) {
         return
@@ -113,10 +111,11 @@ export default {
       http.getProvinceIndex(provinceId).then(data => {
         this.cityList = data
         this.areaList = this.marketList = []
+        fn && fn()
       })
     },
     //  选择市区 获取区域集合
-    chooseCity(cityId) {
+    chooseCity(cityId, fn) {
       this.areaList = []
       if (!cityId) {
         return
@@ -124,6 +123,7 @@ export default {
       http.getCityManager(cityId).then(data => {
         this.areaList = data
         this.marketList = []
+        fn && fn()
       })
     },
     //  选择区域 获取菜市场集合
@@ -132,18 +132,30 @@ export default {
       if (!areaId) {
         return
       }
+
       http.getAreaMarket(areaId).then(data => {
         this.marketList = data
       })
     },
     //  获取用户信息  ||  重置
     getUserInfoData() {
+      this.data = ''
+      this.getRoleList()
+      this.getProvinceList()
       this.params.psUserId = this.$route.params.psUserId
+      if (!this.params.psUserId) {
+        return
+      }
       http.lookUser(this.params).then(data => {
+        this.chooseProvince(String(data.user.provinceId), () => {
+          this.chooseCity(String(data.user.cityId), () => {
+            this.chooseArea(String(data.user.areaId))
+          })
+        })
         this.data = data
-        this.chooseProvince(this.data.user.provinceId) //  获取市
-        this.chooseCity(this.data.user.cityId) //  获取区
-        this.chooseArea(this.data.user.areaId) //  获取菜市场
+        //  获取市
+        // this.chooseCity(this.data.user.cityId) //  获取区
+        // this.chooseArea(this.data.user.areaId) //  获取菜市场
       })
     },
     //  更新用户信息
@@ -164,8 +176,22 @@ export default {
         }
       }
       http.addOrPutUserInfo(data).then(data => {
-        this.getUserInfoData()
+        this.$Modal.success({
+          title: '提示',
+          content: '更新成功',
+          onOk: () => {
+            this.getUserInfoData()
+          }
+        })
       })
+    }
+  },
+  watch: {
+    $route(newVal, oldVal) {
+      if (newVal.path !== oldVal.path) {
+        this.data = ''
+        this.getUserInfoData()
+      }
     }
   }
 }

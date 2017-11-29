@@ -69,7 +69,6 @@
       <!--<Icon type="person-stalker" :size="iconSize"></Icon>-->
       <!--<span class="layout-text">财务对账</span>-->
     <!--</MenuItem>-->
-
   </Menu>
 </template>
 <script type='text/ecmascript-6'>
@@ -106,7 +105,6 @@
       getMenu() {
         api.getMenu().then((res) => {
           if (res) {
-            console.log(res)
             let menuIcom = ['home', 'ios-paper', 'ios-people', 'ios-gear', 'stats-bars','settings', 'person-stalker', 'person-stalker']
             this.menu = res.map((item, index) => {
               if (item.childMenusList.length > 0) {
@@ -129,7 +127,6 @@
                 noDropdown: true
               }
             })
-            console.log(this.menu)
           }
         })
       }

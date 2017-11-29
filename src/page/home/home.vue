@@ -48,7 +48,7 @@
           <h3>系统消息</h3>
           <ul v-if="sysMsg.length>0">
             <li v-for="(item,index) in sysMsg" :key="index" @click="linkMsg(item.smMssageId)">
-              {{item.createdAt}}&nbsp;&nbsp;{{item.title}}
+              {{item.pushTime | filterTime}}&nbsp;&nbsp;{{item.title}}
               <Icon type="chevron-right"></Icon>
             </li>
           </ul>
@@ -58,21 +58,21 @@
         <Card class="H-card" dis-hover>
           <h3>审核概览</h3>
           <ul v-if="knight">
-            <li>
+            <router-link to="/cAuditing" tag="li">
               骑士身份信息审核
               <span class="fr">{{knight.identityExam}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
-            <li>
+            </router-link>
+            <router-link tag="li" to="cTrain">
               骑士首次培训审核
               <span class="fr">{{knight.firstTrainExam}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
-            <li>
+            </router-link>
+            <router-link tag="li" to="cTrain">
               骑士星级培训审核
               <span class="fr">{{knight.starTrainExam}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
+            </router-link>
           </ul>
         </Card>
         </Col>
@@ -82,31 +82,31 @@
         <Card class="H-card" dis-hover>
           <h3>实时监控</h3>
           <ul v-if="monitoring">
-            <li>
+            <router-link tag="li" to="/order">
               需要手工派单
               <span class="H-card-border">{{monitoring.needExpressOrder}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
-            <li>
+            </router-link>
+            <router-link tag="li" to="/order">
               新订单
               <span class="H-card-border">{{monitoring.newOrder}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
-            <li>
+            </router-link>
+            <router-link tag="li" to="/order">
               已送达订单
               <span class="H-card-border">{{monitoring.reachedOrder}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
-            <li>
+            </router-link>
+            <router-link tag="li" to="/order">
               异常订单
               <span class="H-card-border">{{monitoring.needExpressOrder}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
-            <li>
+            </router-link>
+            <router-link tag="li" to="/cPersonal">
               骑手上班/休息
               <span class="H-card-border">{{monitoring.deliverOnlineAndRest}}</span>
               <Icon type="chevron-right"></Icon>
-            </li>
+            </router-link>
           </ul>
         </Card>
         </Col>
@@ -149,11 +149,12 @@
     </div>
   </div>
 </template>
-<script>
+<script type="text/ecmascript-6">
   import * as api from '@/api/common'
   import * as time from '@/until/time'
 
   export default {
+    name: 'home',
     data() {
       return {
         indexData: false,// 首页展示数据
@@ -162,21 +163,26 @@
         knight: {}, // 骑士审核
         monitoring: {}, //实时监控
         data: {}, // 数据看板
-        provinceData: [], // 省或直轄市数据集
-        province: '', // 省或直轄市
+        province: '', // 省
         city: '', // 市
+        area: '', // 区
+        market: '', // 市场
+        provinceData: [], // 省或直轄市数据集
         cityData: [], // 市数据集
         showCity: true, // 是否允许选择城市 true ===>不允许 false 允许
         areaData: [], // 区域数据集
-        area: '', // 区域
         showArea: true, // 是否允许选择区域  true ===>不允许 false 允许
-        market: '', // 市场
         marketData: [], // 市场数据集
         showMarket: true  // 是否允许选择市场  true ===>不允许 false 允许
       }
     },
     created() {
       this.getProvinceData()
+    },
+    filters: {
+      filterTime(value) {
+        return time.formatDateTime(value)
+      }
     },
     methods: {
       // 获取省市数据
@@ -188,61 +194,73 @@
         })
       },
       // 选择城市或省
-      changeProvince() {
-        this.getCityData(this.province)
+      changeProvince(value) {
+        this.cityData = []
+        this.getCityData(value)
       },
       // 获取市的数据
-      getCityData(proId) {
-        api.getProvinceIndex(proId).then((res) => {
-          if (res) {
-            this.showCity = false
-            this.cityData = res
-          }
-        })
+      getCityData(value) {
+        if (value && value != '') {
+          api.getProvinceIndex(value).then((res) => {
+            if (res) {
+              console.log(res)
+              this.showCity = false
+              this.cityData = res
+            }
+          })
+        }
       },
       // 选择城市
-      changeCity() {
-        this.getAreaData(this.city)
+      changeCity(value) {
+        this.areaData = []
+        this.getAreaData(value)
       },
       // 获取区域的数据
-      getAreaData(areaId) {
-        api.getCityManager(areaId).then((res) => {
-          if (res) {
-            this.showArea = false
-            this.areaData = res
-          }
-        })
+      getAreaData(value) {
+        if (value && value != '') {
+          api.getCityManager(value).then((res) => {
+            if (res) {
+              this.showArea = false
+              this.areaData = res
+            }
+          })
+        }
       },
       // 选择区域
-      changeArea() {
-        this.getMarketData(this.area)
+      changeArea(value) {
+        this.marketData = []
+        this.getMarketData(value)
       },
       // 获取菜市场数据
-      getMarketData(areaId) {
-        api.getAreaMarket(areaId).then((res) => {
-          if (res) {
-            this.showMarket = false
-            this.marketData = res
-          }
-        })
+      getMarketData(value) {
+        if (value && value != '') {
+          api.getAreaMarket(value).then((res) => {
+            if (res) {
+              this.showMarket = false
+              this.marketData = res
+            }
+          })
+        }
       },
       // 选择菜市场
-      changeMarket() {
-        // 获取首页数据
-        api.getIndeData(this.market).then((res) => {
-          console.log(res)
-          if (res) {
-            this.indexData = true
-            this.sysMsg = (res.custSysMsgList).map((item, index) => {
-              item.createdAt = time.formatDateTime(item.createdAt)
-              return item
-            })
-            this.statistics = res.head
-            this.knight = res.depliverData
-            this.monitoring = res.monitor
-            this.data = res.orderDataBlack
-          }
-        })
+      changeMarket(value) {
+        if (value && value != '') {
+          // 获取首页数据
+          api.getIndeData(this.market).then((res) => {
+            if (res) {
+              console.log(res)
+              this.indexData = true
+              this.sysMsg = (res.custSysMsgList).map((item, index) => {
+                item.createdAt = time.formatDateTime(item.createdAt)
+                return item
+              })
+              this.statistics = res.head
+              this.knight = res.depliverData
+              this.monitoring = res.monitor
+              this.data = res.orderDataBlack
+            }
+          })
+        }
       },
       linkMsg(id) {
         this.$router.push('/setting_message/' + id)

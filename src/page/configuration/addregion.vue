@@ -32,7 +32,7 @@
     </Form>
     </section>
     <section class="addregion_button">
-      <Button type="ghost" size="large" style="width: 150px" @click="goback">取消</Button>
+      <Button type="ghost" size="large" style="width: 150px" @click="goback">清除</Button>
       <Button type="ghost" size="large" style="width: 150px" @click="addQu()">增加</Button>
     </section>
   </div>
@@ -109,25 +109,30 @@ export default {
     },
     // 添加
     addQu() {
-      if (this.formInline.user&&this.path) {
-        let params = {
-          cityId: this.adcode,
-          areaName: this.formInline.user,
-          areaCoordinate: this.path
-        }
-        api.addQu(params).then(response => {
-          // this.$route.go(-1)
-          this.$Message.success('添加成功')
-        }).catch(err => {
-          this.$Message.success('添加失败'+ err)
-        })
-      }else{
-        this.$Message.success('请输入菜市场名称或者规划区域范围')
+      if (!this.formInline.user) {
+        this.$Message.error('请输入菜市场名称')
+        return false
       }
+      if (!this.path[0]) {
+        this.$Message.error('请规划区域范围')
+        return false
+      }
+
+      let params = {
+        cityId: this.adcode,
+        areaName: this.formInline.user,
+        areaCoordinate: this.path
+      }
+      api
+        .addQu(params)
+        .then(response => {
+          this.$router.push('/configuration')
+          this.$Message.success('添加成功')
+        })
     },
     // 点击取消按钮  返回设置主页
-    goback(){
-    this.initMap()
+    goback() {
+      this.initMap()
     }
   },
   computed: {

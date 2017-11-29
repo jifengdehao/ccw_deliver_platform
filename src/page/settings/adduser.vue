@@ -125,7 +125,13 @@ export default {
     },
     putUserInfo() {
       http.addOrPutUserInfo(this.params).then(data => {
-        this.$router.go(-1)
+        this.$Modal.success({
+          title: '提示',
+          content: '添加成功',
+          onOk: () => {
+            this.$router.go(-1)
+          }
+        })
       })
     }
   }

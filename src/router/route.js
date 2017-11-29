@@ -95,6 +95,13 @@ const dataDeliverDetails = resolve => {
     resolve(module)
   })
 }
+// 骑士管理
+const Cavalier = resolve => {
+  import('@/page/cavalier/cavalier').then(module => {
+    resolve(module)
+  })
+}
+
 // 骑士管理 -未提交资料
 const cUncommitted = resolve => {
   import('@/page/cavalier/c_Uncommitted_data').then(module => {
@@ -253,6 +260,7 @@ const settingMessageDetail = resolve => {
   })
 }
 
+
 export default [
   {
     path: '/login',
@@ -271,15 +279,21 @@ export default [
     children: [
       {
         path: '/home',
-        component: Home
+        name: 'home',
+        component: Home,
+        meta: {keepAlive: true}
       },
       {
         path: '/order',
-        component: Order
+        name: 'order',
+        component: Order,
+        meta: {keepAlive: true}
       },
       {
         path: '/order/:id',
-        component: OrderDetails
+        name: 'orderDetails',
+        component: OrderDetails,
+        meta: {keepAlive: false}
       },
       {
         path: '/finance',

@@ -2,11 +2,11 @@
   <div id="order">
     <!--内容头部-->
     <div class="top clearfix">
-      <h2 class="fl">订单指派</h2>
+      <h2 class="fl">订单管理</h2>
       <div class="search-bar fr">
         <Input v-model="expressId"
                icon="search"
-               placeholder="订单状态/收货人信息/订单号/运单号"
+               placeholder="订单号/运单号"
                style="width: 200px;margin-top: 4px;" @on-click="search"></Input>
       </div>
     </div>
@@ -43,10 +43,10 @@
       <TabPane label="全部" name="5">
         <Row class="O_cava" v-show="showResult">
           <Col span="2">
-          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
+          <ul class="textCenter O_cava_name">
             <li>姓名</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
-                :class="{active:item.psDeliverId === deliverId} ">
+                :class="{active:item.psDeliverId === deliverId}" v-if="item">
               {{item.name}}
             </li>
           </ul>
@@ -68,10 +68,10 @@
       <TabPane label="新订单" name="0">
         <Row class="O_cava" v-show="showResult">
           <Col span="2">
-          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
+          <ul class="textCenter O_cava_name">
             <li>姓名</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
-                :class="{active:item.psDeliverId === deliverId} ">
+                :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
             </li>
           </ul>
@@ -95,10 +95,10 @@
       <TabPane label="配送中" name="1">
         <Row class="O_cava" v-show="showResult">
           <Col span="2">
-          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
+          <ul class="textCenter O_cava_name">
             <li>姓名</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
-                :class="{active:item.psDeliverId === deliverId} ">
+                :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
             </li>
           </ul>
@@ -120,10 +120,10 @@
       <TabPane label="配送完成" name="2">
         <Row class="O_cava" v-show="showResult">
           <Col span="2">
-          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
+          <ul class="textCenter O_cava_name">
             <li>姓名</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
-                :class="{active:item.psDeliverId === deliverId} ">
+                :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
             </li>
           </ul>
@@ -145,10 +145,10 @@
       <TabPane label="配送异常" name="3">
         <Row class="O_cava" v-show="showResult">
           <Col span="2">
-          <ul class="textCenter O_cava_name" v-if="deliverData.length>0">
+          <ul class="textCenter O_cava_name">
             <li>姓名</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
-                :class="{active:item.psDeliverId === deliverId} ">
+                :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
             </li>
           </ul>
@@ -175,6 +175,7 @@
   import * as time from '@/until/time'
 
   export default {
+    name: 'order',
     data() {
       return {
         provinceData: [], // 省或直轄市数据集
@@ -269,43 +270,52 @@
         })
       },
       // 选择城市或省
-      changeProvince() {
-        this.getCityData(this.province)
+      changeProvince(value) {
+        this.cityData = []
+        this.getCityData(value)
       },
       // 获取市的数据
-      getCityData(proId) {
-        api.getProvinceIndex(proId).then((res) => {
-          if (res) {
-            this.showCity = false
-            this.cityData = res
-          }
-        })
+      getCityData(value) {
+        if (value && value !== '') {
+          api.getProvinceIndex(value).then((res) => {
+            if (res) {
+              this.showCity = false
+              this.cityData = res
+            }
+          })
+        }
       },
       // 选择城市
-      changeCity() {
-        this.getAreaData(this.city)
+      changeCity(value) {
+        this.areaData = []
+        this.getAreaData(value)
       },
       // 获取区域的数据
-      getAreaData(areaId) {
-        api.getCityManager(areaId).then((res) => {
-          if (res) {
-            this.showArea = false
-            this.areaData = res
-          }
-        })
+      getAreaData(value) {
+        if (value && value !== '') {
+          api.getCityManager(value).then((res) => {
+            if (res) {
+              this.showArea = false
+              this.areaData = res
+            }
+          })
+        }
       },
       // 选择区域
-      changeArea() {
-        this.getMarketData(this.area)
+      changeArea(value) {
+        this.marketData = []
+        this.getMarketData(value)
       },
       // 获取菜市场数据
-      getMarketData(areaId) {
-        api.getAreaMarket(areaId).then((res) => {
-          if (res) {
-            this.showMarket = false
-            this.marketData = res
-          }
-        })
+      getMarketData(value) {
+        if (value && value !== '') {
+          api.getAreaMarket(value).then((res) => {
+            if (res) {
+              this.showMarket = false
+              this.marketData = res
+            }
+          })
+        }
       },
       // 选择菜市场
       changeMarket() {
@@ -318,7 +328,7 @@
           state: this.state
         }
         console.log(params)
-        if (params.marketId) {
+        if (params.marketId && params.marketId !== '') {
           api.getOrderData(params).then((res) => {
             if (res) {
               console.log(res)

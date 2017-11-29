@@ -56,7 +56,8 @@ export default {
     filterValue(array) {
       array.forEach(item => {
         if (item.isHave) {
-          if (item.permissonList && item.permissonList.length > 0) {
+          if (item.childMenuList.length === 0) {
+            //  单个菜单  (首页)
             item.permissonList.forEach(permissin => {
               let single = {
                 menuId: item.menuId
@@ -67,6 +68,20 @@ export default {
               }
             })
             this.filterValue(item.childMenuList)
+          } else if (item.childMenuList.length > 0) {
+            //  有多个子菜单
+            item.childMenuList.forEach(child => {
+              child.permissonList.forEach(son => {
+                let single = {
+                  menuId: child.menuId
+                }
+                if (son.isHave) {
+                  single.permissionId = son.permissionId
+                  this.putParams.permissionList.push(single)
+                }
+              })
+              this.filterValue(child.childMenuList)
+            })
           }
         }
         console.log(this.putParams.permissionList)
@@ -80,7 +95,13 @@ export default {
         return
       }
       http.putRoleInfo(this.putParams).then(data => {
-        this.getRoleInfo()
+        this.$Modal.success({
+          title: '提示',
+          content: '更新成功',
+          onOk: () => {
+            this.getRoleInfo()
+          }
+        })
       })
     }
   }

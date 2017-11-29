@@ -36,14 +36,10 @@ export const itr = (type, url, params) => {
     token = userInfo.token ? userInfo.token : ''
   }
   var sign = ''
-  if (Object.keys(params).length === 0) {
-    sign = hash(token)
+  if (type === 'get' || type === 'delete') {
+    sign = hash(arg + token)
   } else {
-    if (type === 'get') {
-      sign = hash(arg + token)
-    } else {
-      sign = hash(JSON.stringify(params) + token)
-    }
+    sign = hash(JSON.stringify(params) + token)
   }
   ax.defaults.headers.CCWTOKEN = token
   ax.defaults.headers.sign = sign

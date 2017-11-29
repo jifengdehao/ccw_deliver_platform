@@ -1,8 +1,8 @@
 /**
- * @Author: ZengFanlu 
- * @Date: 2017-10-31 14:27:31 
- * DeveloperMailbox:   zengfanlu@ccw163.com 
- * FunctionPoint: 骑士管理 
+ * @Author: ZengFanlu
+ * @Date: 2017-10-31 14:27:31
+ * DeveloperMailbox:   zengfanlu@ccw163.com
+ * FunctionPoint: 骑士管理
  */
 
 <template>
@@ -349,7 +349,7 @@ export default {
 
 .content-main > div ul > li > span:nth-child(2) {
   margin-left: 274px;
-} 
+}
 
 .content-main > div.data-kanban {
   padding-bottom: 0;
@@ -359,7 +359,7 @@ export default {
   float: left;
   width: 50%;
   height: 105px;
-  text-align: center; 
+  text-align: center;
   display: inline-block;
 }
 .content-main > div.data-kanban ul > li:nth-child(1),
@@ -367,7 +367,7 @@ export default {
   border-bottom: 1px solid #ccc;
 }
 
-.content-main > div.data-kanban ul > li:nth-child(1), 
+.content-main > div.data-kanban ul > li:nth-child(1),
 .content-main > div.data-kanban ul > li:nth-child(3) {
   border-right: 1px solid #ccc;
 }
