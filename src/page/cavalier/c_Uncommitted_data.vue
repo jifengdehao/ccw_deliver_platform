@@ -21,13 +21,23 @@
     <!-- 导出数据Modal -->
     <Modal v-model="exportModal" width="300">
       <div class="vm-textCenter">
-        <DatePicker type="date" v-model="startTime" placeholder="选择日期" style="width: 100%"></DatePicker>
+        <DatePicker type="datetime" @on-change="changeStartTime" placeholder="Select date and time" style="width: 100%"></DatePicker>
+        <!-- <DatePicker type="date" v-model="startTime" placeholder="选择日期" style="width: 100%"></DatePicker> -->
         <div class="mtb10">到</div>
-        <DatePicker type="date" v-model="endTime" placeholder="选择日期" style="width: 100%"></DatePicker>
+        <DatePicker type="datetime" @on-change="changeEndTime" placeholder="Select date and time" style="width: 100%"></DatePicker>
+        <!-- <DatePicker type="date" v-model="endTime" placeholder="选择日期" style="width: 100%"></DatePicker> -->
       </div>
       <div slot="footer">
         <Button type="primary" long @click="getExportData()">确定</Button>
       </div>
+    </Modal>
+    <!-- 删除弹框 -->
+    <Modal
+        v-model="deletaUser"
+        title="提示"
+        @on-ok="deletaUpdate"
+        @on-cancel="cancel">
+        <p>确定删除这个用户吗?</p>
     </Modal>
 
     <div v-if="DeliverManager && DeliverManager.length > 0" class="page">
@@ -64,7 +74,7 @@ export default {
           key: 'registerDt',
           align: 'center',
           render: (h, params) => {
-            return ('span', this.formatTime(params.row.registerDt))
+            return 'span', this.formatTime(params.row.registerDt)
           }
         },
         {
@@ -82,14 +92,8 @@ export default {
                   },
                   on: {
                     click: () => {
-                      // 删某一个未提交资料骑士
-                      api
-                        .deleteUnverified(params.row.psDeliverApplyId)
-                        .then(data => {
-                          if (data === true) {
-                            this.getDeliverManager() // 刷新列表
-                          }
-                        })
+                      this.deletaUser = true
+                      this.DeleteId = params.row.psDeliverApplyId
                     }
                   }
                 },
@@ -101,6 +105,8 @@ export default {
       ],
       DeliverManager: [], // 列表数据
       exportModal: false, // 模态框显影
+      deletaUser: false, // 删除弹框
+      DeleteId: '', // 获取删除ID
       startTime: '', // 获取导出开始时间
       endTime: '', // 获取导出结束时间
       total: '', // 总页数
@@ -127,18 +133,43 @@ export default {
       this.endTime = ''
       this.startTime = ''
     },
+    // 获取导出时间源
+    changeStartTime(data) {
+      this.startTime = data
+    },
+    // 获取导出结束时间源
+    changeEndTime(data) {
+      this.endTime = data
+    },
     // 导出数据
     getExportData() {
-      let parmas = {
-        beginTime: this.startTime,
-        endTime: this.endTime
-      }
-      api.exportUnverified(parmas).then(data => {
-        if (data && data != null) {
-          window.open(data)
+      if (!!this.startTime && !!this.endTime) {
+        let parmas = {
+          beginTime: this.startTime,
+          endTime: this.endTime
         }
-      })
-      this.exportModal = false
+        api.exportUnverified(parmas).then(data => {
+          if (data && data != null) {
+            window.open(data)
+          }
+        })
+        this.exportModal = false
+      }
+    },
+    // 删除某个未提交骑士
+    deletaUpdate() {
+      if (this.DeleteId) {
+        api.deleteUnverified(this.DeleteId).then(data => {
+          if (data === true) {
+            this.$Message.info('删除成功')
+            this.getDeliverManager() // 刷新列表
+          }
+        })
+      }
+    },
+    // 取消删除弹框
+    cancel() {
+      this.$Message.info('取消删除')
     },
     // 点击分页发生变化
     changePage(page) {

@@ -83,10 +83,19 @@
         <li v-if="psDeliverIncomeData.monthDeliverAcount"><span>本月配送单量</span><span>{{ psDeliverIncomeData.monthDeliverAcount }}</span></li>
       </ul>
 
+       <!-- Moadl 弹框 -->
+      <Modal
+          v-model="showModal"
+          title="提醒"
+          @on-ok="onSave"
+          @on-cancel="cancel">
+          <p style="text-align: center">{{ showModalDate }}</p>
+      </Modal>
+
     </div>
     <div class="footer">
-      <Button size="large" type="ghost" @click="onSave('1')">取消</Button>
-      <Button size="large" type="ghost" @click="onSave('2')">确定</Button>
+      <Button size="large" type="ghost" @click="saveOpen('1')">取消</Button>
+      <Button size="large" type="ghost" @click="saveOpen('2')">确定</Button>
     </div>
   </div>
 </template>
@@ -119,7 +128,9 @@ export default {
       marketIdData: '', // 获取菜市场ID数据
       status: '', // 默认上班状态
       psDeliverIncomeData: {}, // 获取收入金额
-      areaValue: '' // 获取市区value
+      areaValue: '', // 获取市区value
+      showModal: false, // 打开修改弹框
+      showModalDate: '' // 弹框内容
     }
   },
   created() {
@@ -206,11 +217,11 @@ export default {
     changeMarkData(value) {
       this.userId = value
     },
-
-    // 保存修改 清空修改
-    onSave(status) {
+    // 打开弹框
+    saveOpen(status) {
       switch (status) {
         case '1':
+          this.$Message.info('取消修改')
           this.cityManager = []
           this.areaManager = []
           this.marketManager = []
@@ -218,24 +229,66 @@ export default {
           this.getDeliverInfo()
           break
         case '2':
-          let saveDate = {
-            personStatus: this.status, // 保存上班状态
-            psDeliverId: this.id, // 保存修改用户ID
-            psDeliverMarket: {
-              // 修改用户地区
-              areaId: this.areaIdData, // 区域ID
-              cityId: this.cityIdIndex, // 市区ID
-              provinceId: this.provinceData, // 省区ID
-              marketId: this.marketIdData // 菜市场ID
-            }
-          } // 修改参数
-          api.getUpdateDeliver(saveDate).then(res => {
-            if (res && res === true) {
-              this.getDeployManager()
-              this.getDeliverInfo()
-            }
-          })
+          this.showModal = true
+          this.showModalDate = '确认修改配送员信息？'
       }
+    },
+    // 保存修改 清空修改
+    onSave() {
+      if (!!this.id) {
+        let saveDate = {
+          personStatus: this.status, // 保存上班状态
+          psDeliverId: this.id, // 保存修改用户ID
+          psDeliverMarket: {
+            // 修改用户地区
+            areaId: this.areaIdData, // 区域ID
+            cityId: this.cityIdIndex, // 市区ID
+            provinceId: this.provinceData, // 省区ID
+            marketId: this.marketIdData // 菜市场ID
+          }
+        } // 修改参数
+        api.getUpdateDeliver(saveDate).then(res => {
+          if (res && res === true) {
+            this.$Message.info('保存修改')
+            this.getDeployManager()
+            this.getDeliverInfo()
+          } else {
+            this.$Message.info('保存失败')
+          }
+        })
+      }
+    },
+    // onSave(status) {
+    //   switch (status) {
+    //     case '1':
+    //       this.cityManager = []
+    //       this.areaManager = []
+    //       this.marketManager = []
+    //       this.getDeployManager()
+    //       this.getDeliverInfo()
+    //       break
+    //     case '2':
+    //       let saveDate = {
+    //         personStatus: this.status, // 保存上班状态
+    //         psDeliverId: this.id, // 保存修改用户ID
+    //         psDeliverMarket: {
+    //           // 修改用户地区
+    //           areaId: this.areaIdData, // 区域ID
+    //           cityId: this.cityIdIndex, // 市区ID
+    //           provinceId: this.provinceData, // 省区ID
+    //           marketId: this.marketIdData // 菜市场ID
+    //         }
+    //       } // 修改参数
+    //       api.getUpdateDeliver(saveDate).then(res => {
+    //         if (res && res === true) {
+    //           this.getDeployManager()
+    //           this.getDeliverInfo()
+    //         }
+    //       })
+    //   }
+    // },
+    cancel() {
+      this.$Message.info('取消修改')
     },
     //  时间过滤
     formatTime(time) {
