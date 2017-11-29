@@ -27,9 +27,11 @@
        <!-- 导出数据Modal -->
       <Modal v-model="exportModal" width="300">
         <div class="vm-textCenter">
-          <DatePicker type="date" v-model="startTime" placeholder="选择日期" style="width: 100%"></DatePicker>
+          <!-- <DatePicker type="date" v-model="startTime" placeholder="选择日期" style="width: 100%"></DatePicker> -->
+          <DatePicker type="datetime" @on-change="changeStartTime" placeholder="Select date and time" style="width: 100%"></DatePicker>
           <div class="mtb10">到</div>
-          <DatePicker type="date" v-model="endTime" placeholder="选择日期" style="width: 100%"></DatePicker>
+          <!-- <DatePicker type="date" v-model="endTime" placeholder="选择日期" style="width: 100%"></DatePicker> -->
+          <DatePicker type="datetime" @on-change="changeEndTime" placeholder="Select date and time" style="width: 100%"></DatePicker>
         </div>
         <div slot="footer">
           <Button type="primary" long @click="getExportData()">确定</Button>
@@ -169,22 +171,33 @@ export default {
       this.endTime = ''
       this.startTime = ''
     },
+    // 获取导出时间源
+    changeStartTime(data) {
+      this.startTime = data
+    },
+    // 获取导出结束时间源
+    changeEndTime(data) {
+      this.endTime = data
+    },
     // 导出数据
     getExportData() {
-      let params = {
-        beginTime: this.startTime,
-        endTime: this.endTime
+      if (!!this.startTime && !!this.endTime) {
+        let params = {
+          beginTime: this.startTime,
+          endTime: this.endTime
+        }
+        api.getDeliverPoi(params).then(data => {
+          // 导出数据
+          window.open(data)
+        })
+        this.exportModal = false
       }
-      api.getDeliverPoi(params).then(data => {
-        // 导出数据
-        window.open(data)
-      })
-      this.exportModal = false
     },
     // 确定冻结用户
     ok() {
       api.getDeliverId(this.psDeliverId).then(obj => {
         if (obj === true) {
+          this.$Message.info('冻结成功')
           this.getDeliverList() // 初始化数据
         }
       })
@@ -194,7 +207,9 @@ export default {
       this.params.pageNumber = page
       this.getDeliverList()
     },
-    cancel() {}
+    cancel() {
+      this.$Message.info('取消冻结')
+    }
   }
 }
 </script>

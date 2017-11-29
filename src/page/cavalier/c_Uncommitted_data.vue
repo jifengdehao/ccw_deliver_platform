@@ -24,7 +24,7 @@
         <DatePicker type="datetime" @on-change="changeStartTime" placeholder="Select date and time" style="width: 100%"></DatePicker>
         <!-- <DatePicker type="date" v-model="startTime" placeholder="选择日期" style="width: 100%"></DatePicker> -->
         <div class="mtb10">到</div>
-        <DatePicker type="datetime" @on-change="changeEndTime" v-model="endTime" placeholder="Select date and time" style="width: 100%"></DatePicker>
+        <DatePicker type="datetime" @on-change="changeEndTime" placeholder="Select date and time" style="width: 100%"></DatePicker>
         <!-- <DatePicker type="date" v-model="endTime" placeholder="选择日期" style="width: 100%"></DatePicker> -->
       </div>
       <div slot="footer">
