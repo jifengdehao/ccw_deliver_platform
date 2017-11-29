@@ -89,6 +89,9 @@ export default {
         if (this.remember) {
           localStorage.setItem('mobileno', this.formLogin.mobileno)
           localStorage.setItem('password', this.formLogin.password)
+        }else {
+          localStorage.removeItem('username')
+          localStorage.removeItem('password')
         }
       })
     },
