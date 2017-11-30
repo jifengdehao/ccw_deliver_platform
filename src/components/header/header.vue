@@ -88,6 +88,7 @@
         }
         api.getAccountMsgList(params).then((res) => {
           if (res) {
+            console.log(res)
             this.prizeList = res.records
           }
         })
