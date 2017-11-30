@@ -86,7 +86,7 @@
           pageSize: 10,
           pageNumber: 1
         }
-        api.getManageMsgList(params).then((res) => {
+        api.getAccountMsgList(params).then((res) => {
           if (res) {
             this.prizeList = res.records
           }
