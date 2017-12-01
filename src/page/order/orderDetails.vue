@@ -11,50 +11,7 @@
       <Table :columns="columns" :data="data"></Table>
       </Col>
     </Row>
-    <div id="panel"></div>
-    <!--<Row>-->
-    <!--<Col span="6">-->
-    <!--<h3>用户信息</h3><br/>-->
-    <!--<p>用户ID：22122323</p>-->
-    <!--<p>收货人：王小伟</p>-->
-    <!--<p>联系电话：171791279</p>-->
-    <!--<p>收货地址：广东省广州市番禺区桥南街南堤东路836号</p>-->
-    <!--<p>下单时间：2017-10-03 15:12</p>-->
-    <!--</Col>-->
-    <!--<Col span="6">-->
-    <!--<h3>订单信息</h3><br/>-->
-    <!--<p>运单编号：ff3222442</p>-->
-    <!--<p>订单类型：用户首单／普通订单</p>-->
-    <!--<p>订单编号：jk23892823</p>-->
-    <!--<p>订单状态：新订单</p>-->
-    <!--<p>货物明细：榴莲 * 5</p>-->
-    <!--<p>订单备注：无</p>-->
-    <!--<p>缺货选择：缺货</p>-->
-    <!--</Col>-->
-    <!--<Col span="6">-->
-    <!--<h3>支付信息</h3><br/>-->
-    <!--<p>订单金额：¥500.00</p>-->
-    <!--<p>包装费：¥10.00</p>-->
-    <!--<p>配送费：0</p>-->
-    <!--<p>优惠金额：¥50</p>-->
-    <!--<p>优惠方式：优惠卷</p>-->
-    <!--<p>实付金额：¥450</p>-->
-    <!--<p>支付方式：支付宝</p>-->
-    <!--<p>支付时间：2017-10-03 16:00</p>-->
-    <!--</Col>-->
-    <!--<Col span="6">-->
-    <!--<h3>配送信息</h3><br/>-->
-    <!--<p>配送时间：2017-10-03 16:00</p>-->
-    <!--<p>送达时间：2017-10-03 16:00</p>-->
-    <!--<p>配送员Id：jl73838</p>-->
-    <!--<p>配送员：🀄️钟小楚</p>-->
-    <!--<p>异常原因：无</p>-->
-    <!--<p>省区：广东省</p>-->
-    <!--<p>市区：广州市</p>-->
-    <!--<p>区域：番禺区</p>-->
-    <!--<p>菜市场：番禺菜市场</p>-->
-    <!--</Col>-->
-    <!--</Row>-->
+    <!--<div id="panel"></div>-->
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -63,7 +20,7 @@
   import mainHeader from '@/components/header/main_header.vue'
 
   export default {
-    name:'orderDetails',
+    name: 'orderDetails',
     data() {
       return {
         title: '',
@@ -97,6 +54,40 @@
             title: '状态',
             key: 'personStatusStr',
             align: 'center'
+          },
+          {
+            title: '操作',
+            key: 'options',
+            align: 'center',
+            render: (h, params) => {
+              let deliverId = params.row.psDeliverId
+              let isRefunded
+              if (params.row.personStatusStr === '在附近') {
+                isRefunded = false
+              } else {
+                isRefunded = true
+              }
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'primary',
+                    size: 'small',
+                    disabled: isRefunded
+                  },
+                  on: {
+                    click: () => {
+                      let that = this
+                      that.$Modal.confirm({
+                        content: '确定要指派配送员',
+                        onOk: () => {
+                          that.goDeliver(deliverId)
+                        }
+                      })
+                    }
+                  }
+                }, '指派')
+              ])
+            }
           }
         ],
         data: [],
@@ -112,27 +103,77 @@
       getOrderData() {
         api.getOrderDetails(this.orderId).then((res) => {
           if (res) {
-            console.log(res)
             this.title = res.title
             this.data = res.deliverList
-            let that = this
             const map = new AMap.Map("container", {
               center: res.market,//地图中心点
               zoom: 10, //地图显示的缩放级别
               mapStyle: 'amap://styles/normal'//样式URL
             })
-            if(res.status === 1){
+            // 取件 - 送达
+            AMap.service('AMap.Driving', function () {//回调函数
+              const driving = new AMap.Driving({
+                map: map
+              })
+              // 根据起终点经纬度规划驾车导航路线
+              driving.search(new AMap.LngLat(res.market[0], res.market[1]), new AMap.LngLat(res.userAddress[0], res.userAddress[1]))
+              const infoWindow = new AMap.InfoWindow({
+                offset: new AMap.Pixel(0, -22) //-113, -140
+              });
+              for (let i = 0, marker; i < res.deliverList.length; i++) {
+                marker = new AMap.Marker({
+                  position: [res.deliverList[i].longitude, res.deliverList[i].latitude],
+                  map: map,
+                  iconLabel: 'A',
+                });
+                let deliver = res.deliverList[i].psDeliverId
+                marker.content = '<a href="javascript:void(0);" onclick="goAssign(this)" data-deliver="' + deliver + '">指派</a>';
+                //给Marker绑定单击事件
+                if (res.deliverList[i].personStatusStr === '在附近') {
+                  marker.on('click', markerClick);
+                }
+                marker.setLabel({
+                  offset: new AMap.Pixel(0, -22),
+                  content: res.deliverList[i].deliverMsg
+                });
+              }
+              map.setFitView();
+
+              function markerClick(e) {
+                infoWindow.setContent(e.target.content);
+                infoWindow.open(map, e.target.getPosition());
+              }
+            })
+            let that = this
+            window.goAssign = function (t) {
+              api.putDeliver(that.orderId, t.getAttribute('data-deliver')).then((res) => {
+                if (res) {
+                  that.$Notice.success({
+                    title: '指派成功！',
+                    onClose: function () {
+                      that.getOrderData()
+                    }
+                  });
+                } else {
+                  that.$Notice.error({
+                    title: '指派失败！'
+                  });
+                }
+              })
+            }
+            /*
+            if (res.status === 1) {
               // 取件 - 送达
               AMap.service('AMap.Driving', function () {//回调函数
                 //实例化Driving
                 //TODO: 使用driving对象调用驾车路径规划相关的功能
                 //构造路线导航类
                 const driving = new AMap.Driving({
-                  map: map,
-                  panel: "panel"
+                  panel: 'panel',
+                  map: map
                 })
                 // 根据起终点经纬度规划驾车导航路线
-                driving.search(new AMap.LngLat(res.deliverList[0].longitude,res.deliverList[0].latitude), new AMap.LngLat(res.userAddress[0], res.userAddress[1]), function (status, result) {
+                driving.search(new AMap.LngLat(res.deliverList[0].longitude, res.deliverList[0].latitude), new AMap.LngLat(res.userAddress[0], res.userAddress[1]), function (status, result) {
                   let path = []
                   result.routes[0].steps.forEach((item) => {
                     if (item.path) {
@@ -193,16 +234,16 @@
                   });
                 })
               })
-            }else{
+            } else {
               AMap.service('AMap.Driving', function () {
                 const driving = new AMap.Driving({
-                  map: map,
-                  panel: "panel"
+                  panel: "panel,
+                  map: map
                 })
                 driving.search(new AMap.LngLat(res.market[0], res.market[1]), new AMap.LngLat(res.userAddress[0], res.userAddress[1]))
                 const infoWindow = new AMap.InfoWindow({
-                    offset: new AMap.Pixel(0, -22) //-113, -140
-                  });
+                  offset: new AMap.Pixel(0, -22) //-113, -140
+                });
                 for (let i = 0, marker; i < res.deliverList.length; i++) {
                   marker = new AMap.Marker({
                     position: [res.deliverList[i].longitude, res.deliverList[i].latitude],
@@ -217,14 +258,16 @@
                   }
                   marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
                     offset: new AMap.Pixel(0, -22),//修改label相对于maker的位置
-                    content:res.deliverList[i].deliverMsg
+                    content: res.deliverList[i].deliverMsg
                   });
                 }
                 map.setFitView();
+
                 function markerClick(e) {
                   infoWindow.setContent(e.target.content);
                   infoWindow.open(map, e.target.getPosition());
                 }
+
                 window.goAssign = function (t) {
                   api.putDeliver(that.orderId, t.getAttribute('data-deliver')).then((res) => {
                     if (res) {
@@ -244,12 +287,33 @@
                 }
               })
             }
+            */
           }
         })
       },
       close() {
         this.$router.back()
+      },
+      // 指派配送员
+      goDeliver(deliverId) {
+        let that = this
+        api.putDeliver(this.orderId, deliverId).then((res) => {
+          if (res) {
+            this.$Notice.success({
+              title: '指派成功！',
+              duration: 2,
+              onClose: function () {
+                that.getOrderData()
+              }
+            });
+          } else {
+            this.$Notice.error({
+              title: '指派失败！'
+            });
+          }
+        })
       }
+
     },
     components: {
       mainHeader
