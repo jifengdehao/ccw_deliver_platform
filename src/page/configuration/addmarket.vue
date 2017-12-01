@@ -181,7 +181,7 @@ export default {
         this.$Message.error('单击地图规划菜市场配送范围')
         return false
       }
-      if(!this.formItem.latitude){
+      if (!this.formItem.latitude) {
         this.$Message.error('双击选择菜市场地址')
         return false
       }
@@ -191,12 +191,10 @@ export default {
         market: this.formItem,
         marketId: this.marketId
       }
-      api
-        .addMarket(params)
-        .then(response => {
-          this.$Message.success('添加菜市场成功')
-          this.$router.push('/configuration')
-        })
+      api.addMarket(params).then(response => {
+        this.$Message.success('添加菜市场成功')
+        window.open('#/configuration')
+      })
     },
     // 取消按钮
     goback() {
