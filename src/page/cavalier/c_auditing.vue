@@ -75,26 +75,24 @@ export default {
       columns4: [
         {
           type: 'selection',
-          width: '60',
           align: 'center'
         },
         {
           title: '序号',
           key: 'ID',
           type: 'index',
-          width: '70',
           align: 'center'
         },
         {
           title: '用户ID',
-          width: '90',
           key: 'psDeliverApplyId',
+          width: '140',
           align: 'center'
         },
         {
           title: '姓名',
           key: 'name',
-          width: '130',
+          width: '100',
           align: 'center'
         },
         {
@@ -112,12 +110,14 @@ export default {
         {
           title: '联系方式',
           key: 'mobileno',
-          align: 'center'
+          align: 'center',
+          width: '100'
         },
         {
           title: '出生年月日',
           key: 'birthday',
           align: 'center',
+          width: '100',
           render: (h, params) => {
             return 'span', this.formatTime(params.row.birthday)
           }
@@ -125,7 +125,8 @@ export default {
         {
           title: '身份证号码',
           key: 'identityCard',
-          align: 'center'
+          align: 'center',
+          width: '100'
         },
         {
           title: '身份证正反面',
@@ -379,7 +380,7 @@ export default {
       let month =
         date.getMonth() + 1 >= 10
           ? date.getMonth() + 1
-          : '0' + date.getMonth() + 1
+          : '0' + (date.getMonth() + 1)
       let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
       let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
       // let minutes =
