@@ -10,8 +10,9 @@
     <div class="header">
       <h2>角色列表</h2>
       <div class="header-search">
-        <Input placeholder="创建人姓名/修改人姓名" style="width: 200px" v-model="params.condition"></Input>
+        <Input placeholder="创建人姓名/修改人姓名" style="width: 200px" v-model="condition" @keyup.native.enter="search" @keyup.native="checkLen"></Input>
         <span @click="search"><Icon type="ios-search icos"></Icon></span>
+        <Icon v-if="closeBool" style="position:absolute;top:15px;right:5px;" type="close-circled" @click.native="clearValue"></Icon>
       </div>
     </div>
     <div class="btn-box">
@@ -104,6 +105,8 @@ export default {
           }
         }
       ],
+      closeBool: false,
+      condition: '',
       roleData: [],
       params: {
         pageSize: 10,
@@ -135,8 +138,19 @@ export default {
     },
     //  搜索
     search() {
+      this.closeBool = this.condition.length > 0 ? true : false
+      this.params.condition = this.condition
       this.params.pageNumber = 1
       this.getRoleList()
+    },
+    //  清空值
+    clearValue() {
+      this.condition = ''
+      this.closeBool = false
+    },
+    //  键盘事件
+    checkLen() {
+      this.closeBool = this.condition.length > 0 ? true : false
     },
     //  添加角色用户
     addRoleUser() {

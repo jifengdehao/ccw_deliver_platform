@@ -12,7 +12,7 @@
       <h2>财务对账</h2>
       <div class="header-search">
         <DatePicker type="date" placeholder="请输入开始时间" style="width: 200px" @on-change="changeStartTime"></DatePicker>
-        <DatePicker type="date" v-model="params.endTime" placeholder="请输入结束时间" style="width: 200px" @on-change="changeTime"></DatePicker>
+        <DatePicker type="date" placeholder="请输入结束时间" style="width: 200px" @on-change="changeTime"></DatePicker>
         <Button @click="onExport">导出</Button>
       </div>
     </div>
@@ -62,7 +62,7 @@
         <DatePicker type="datetime" @on-change="changeStartTimeSTR" placeholder="Select date and time" style="width: 100%"></DatePicker>
         <div class="mtb10">到</div>
         <!-- <DatePicker type="date" v-model="endTimeStr" placeholder="选择日期" style="width: 100%"></DatePicker> -->
-        <DatePicker type="datetime" @on-change="changeEndTime" placeholder="Select date and time" style="width: 100%"></DatePicker>
+        <DatePicker type="datetime" @on-change="changeEndTimeSTR" placeholder="Select date and time" style="width: 100%"></DatePicker>
       </div>
       <div slot="footer">
         <Button type="primary" long @click="getExportData()">确定</Button>
@@ -173,7 +173,16 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push('/finance/' + params.row.psDeliverId)
+                      // this.$router.push('/finance/' + params.row.psDeliverId)
+                      this.$router.push(
+                        {
+                          path: '/finance/' + params.row.psDeliverId,
+                          query: {
+                            'start': this.params.beginTime,
+                            'end': this.params.endTime
+                          }
+                        }
+                      )
                     }
                   }
                 },
@@ -254,7 +263,7 @@ export default {
       this.startTimeStr = data
     },
     // 获取导出结束时间源
-    changeEndTime(data) {
+    changeEndTimeSTR(data) {
       this.endTimeStr = data
     },
     // 导出数据
@@ -281,13 +290,13 @@ export default {
     },
     // 获取结束时间
     changeTime(data) {
+      this.params.endTime = data
       if (
         this.params.marketId &&
         this.params.marketId != '' &&
         this.params.beginTime &&
         this.params.beginTime != ''
       ) {
-        this.params.endTime = data
         this.getFinanceList()
       }
     },

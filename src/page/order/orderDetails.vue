@@ -69,7 +69,7 @@
         title: '',
         columns: [
           {
-            title: '序号',
+            title: '工号',
             align: 'center',
             key: 'psEmpno'
           },
