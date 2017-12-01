@@ -126,7 +126,7 @@ export default {
       api
         .addQu(params)
         .then(response => {
-          window.open('#/configuration')
+          // window.open('#/configuration')
           this.$Message.success('添加成功')
         })
     },
