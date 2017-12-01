@@ -21,10 +21,12 @@
             <div class="map" id="container">
                 当前区地图
             </div>
+            <Button @click="polygonEditorOpen()">开始编辑区域范围</Button>
+            <Button @click="polygonEditorClose()">结束编辑区域范围</Button>
         </section>
         <section class="quInfo_button">
             <Button size="large" style="width: 200px;" @click="goback">取消</Button>
-            <Button size="large" style="width: 200px;">确定</Button>
+            <Button size="large" style="width: 200px;" @click="modifyArea">确定</Button>
         </section>
     </div>
 </template>
@@ -36,7 +38,9 @@ export default {
   name: 'component_name',
   data() {
     return {
-      areaData: {}
+      areaData: {},
+      editor: {},
+      areaPath: []
     }
   },
   computed: {
@@ -48,6 +52,11 @@ export default {
     },
     provinceName() {
       return this.$route.query.provinceName
+    },
+    modifyPath() {
+      return this.areaPath.map(item => {
+        return [item.lng, item.lat]
+      })
     }
   },
   created() {
@@ -66,11 +75,14 @@ export default {
         resizeEnable: true,
         zoom: 12
       })
-      AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
-        map.addControl(new AMap.ToolBar())
-        map.addControl(new AMap.Scale())
-      })
-      var editor = {}
+      AMap.plugin(
+        ['AMap.ToolBar', 'AMap.Scale', 'AMap.PolyEditor'],
+        function() {
+          map.addControl(new AMap.ToolBar())
+          map.addControl(new AMap.Scale())
+        }
+      )
+      var editor = this.editor
       editor._polygon = (() => {
         // var arr = JSON.parse(this.areaData.areaCoordinate)
         var arr = this.areaData.areaCoordinate
@@ -84,10 +96,29 @@ export default {
           fillOpacity: 0.5
         })
       })()
+
       map.setFitView() //地图自适应
+      // 修改地图区域
+      editor._polygonEditor = new AMap.PolyEditor(map, editor._polygon)
+    },
+    // 开始修改区域
+    polygonEditorOpen(map) {
+      this.editor._polygonEditor.open()
+    },
+    // 结束修改
+    polygonEditorClose() {
+      this.editor._polygonEditor.close()
+      this.areaPath = this.editor._polygon.getPath()
     },
     goback() {
-      window.history.go(-1)
+      this.getQuInfo()
+    },
+    modifyArea() {
+      this.areaData.areaCoordinate = this.modifyPath
+      console.log(this.areaData.areaCoordinate)
+      api.addQu(this.areaData).then(res => {
+        this.$Message.success('修改成功')
+      })
     }
   }
 }
@@ -119,6 +150,7 @@ export default {
     }
   }
   .quInfo_button {
+    margin-top: 30px;
     text-align: center;
     width: 100%;
   }

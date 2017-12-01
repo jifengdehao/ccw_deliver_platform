@@ -10,7 +10,8 @@
     <div class="header">
       <h2>权限管理</h2>
       <div class="header-search">
-        <Input placeholder="姓名/联系方式/用户ID" style="width: 200px" v-model="params.condition"></Input>
+        <Input placeholder="姓名/联系方式/用户ID" style="width: 200px" v-model="condition" @keyup.native.enter="search" @keyup.native="checkLen"></Input>
+        <Icon v-if="closeBool" style="position:absolute;top:15px;right:5px;" type="close-circled" @click.native="clearValue"></Icon>
         <span @click="search"><Icon type="ios-search icos"></Icon></span>
       </div>
     </div>
@@ -26,11 +27,13 @@ export default {
   name: 'authList',
   data() {
     return {
+      condition: '',
       params: {
         pageSize: 10,
         pageNumber: 1,
         condition: ''
       },
+      closeBool: false, //  X箭头
       UserListTitles: [
         {
           title: '序号',
@@ -109,8 +112,19 @@ export default {
     },
     //  搜索
     search() {
+      this.closeBool = this.condition.length > 0 ? true : false
+      this.params.condition = this.condition
       this.params.pageNumber = 1
       this.getUsersList()
+    },
+    //  清空值
+    clearValue() {
+      this.condition = ''
+      this.closeBool = false
+    },
+    //  键盘事件
+    checkLen() {
+      this.closeBool = this.condition.length > 0 ? true : false
     },
     //  分页加载数据
     reLoadData(pageNum) {
