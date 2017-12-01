@@ -10,8 +10,9 @@
     <!-- 头部 -->
     <div class="header">
       <h2>骑士审核</h2>
-      <div class="header-search">
+      <div class="header-search" @keydown.enter="onSearch">
         <Input placeholder="姓名/联系方式/身份证号" style="width: 200px" v-model="searchData"></Input>
+        <Icon type="close-circled icos icosS" v-if="searchData" @click.native="onDelete"></Icon>
         <Icon type="ios-search icos" @click.native="onSearch"></Icon>
       </div>
     </div>
@@ -205,6 +206,9 @@ export default {
                   on: {
                     click: () => {
                       this.ModalTitle = '是否确认此用户通过'
+                      this.DeliverAudit.deliverApplyId.push(
+                        params.row.psDeliverApplyId
+                      )
                       this.showModal = true
                     }
                   }
@@ -217,6 +221,9 @@ export default {
                   on: {
                     click: () => {
                       this.ModalTitle = '是否确认此用户不通过'
+                      this.DeliverAudit.deliverApplyId.push(
+                        params.row.psDeliverApplyId
+                      )
                       this.showModal = true
                     }
                   }
@@ -253,6 +260,7 @@ export default {
     },
     // 选择时返回的数据
     changeSelect(data) {
+      console.log(data)
       this.selectData = data
     },
     // 通过/ 未通过
@@ -271,11 +279,14 @@ export default {
       }
     },
     ok() {
-      // 点击Modal确定按钮 发送请求
-      this.selectData.forEach(item => {
-        // 获取数据ID
-        this.DeliverAudit.deliverApplyId.push(item.psDeliverApplyId)
-      })
+      this.DeliverAudit.deliverApplyId = []
+      if (this.selectData != []) {
+        // 点击Modal确定按钮 发送请求
+        this.selectData.forEach(item => {
+          // 获取数据ID
+          this.DeliverAudit.deliverApplyId.push(item.psDeliverApplyId)
+        })
+      }
       switch (this.ModalTitle) {
         case '是否确认此用户通过':
           this.DeliverAudit.status = '3'
@@ -307,6 +318,10 @@ export default {
       this.params.pageNumber = 1
       this.params.condition = this.searchData
       this.getAuditManager()
+      this.searchData = ''
+    },
+    // 删除搜索内容
+    onDelete() {
       this.searchData = ''
     },
     // 点击分页发生变化
@@ -350,6 +365,12 @@ export default {
   position: relative;
   float: right;
   margin-right: 45px;
+}
+.icosS {
+  color: #5c6b77 !important;
+  right: 3px !important;
+  font-size: 16px !important;
+  line-height: 26px;
 }
 
 .icos {

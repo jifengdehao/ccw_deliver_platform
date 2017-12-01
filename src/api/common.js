@@ -188,8 +188,8 @@ export const getDeliverPoi = params => {
 }
 
 // 配送人员冻结用户PUT /deliverManager/deliver/{deliverId}
-export const getDeliverId = id => {
-  return ax.u(`/deliverManager/deliver/${id}`)
+export const getDeliverId = (params) => {
+  return ax.u(`/deliverManager/deliver/`, params)
 }
 
 // 配送人员查看用户/deliverManager/deliver/
