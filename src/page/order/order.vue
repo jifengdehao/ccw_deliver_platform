@@ -8,6 +8,8 @@
                icon="search"
                placeholder="订单号/运单号"
                style="width: 200px;margin-top: 4px;" @on-click="search"></Input>
+        <i class="ivu-icon ivu-icon-ios-close ivu-select-arrow close-input" v-show="expressId"
+           @click="clearSearch"></i>
       </div>
     </div>
     <Row style="margin-bottom: 20px;" :gutter="24">
@@ -45,6 +47,7 @@
           <Col span="2">
           <ul class="textCenter O_cava_name">
             <li>姓名</li>
+            <li @click="getDeliver()" :class="{active:allClass}">全部</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
                 :class="{active:item.psDeliverId === deliverId}" v-if="item">
               {{item.name}}
@@ -70,6 +73,7 @@
           <Col span="2">
           <ul class="textCenter O_cava_name">
             <li>姓名</li>
+            <li @click="getDeliver()" :class="{active:allClass}">全部</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
                 :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
@@ -97,6 +101,7 @@
           <Col span="2">
           <ul class="textCenter O_cava_name">
             <li>姓名</li>
+            <li @click="getDeliver()" :class="{active:allClass}">全部</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
                 :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
@@ -122,6 +127,7 @@
           <Col span="2">
           <ul class="textCenter O_cava_name">
             <li>姓名</li>
+            <li @click="getDeliver()" :class="{active:allClass}">全部</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
                 :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
@@ -147,6 +153,7 @@
           <Col span="2">
           <ul class="textCenter O_cava_name">
             <li>姓名</li>
+            <li @click="getDeliver()" :class="{active:allClass}">全部</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
                 :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
@@ -260,6 +267,11 @@
     created() {
       this.getProvinceData()
     },
+    computed: {
+      allClass() {
+        return this.deliverId === '' ? true : false
+      }
+    },
     methods: {
       // 获取省市数据
       getProvinceData() {
@@ -327,11 +339,9 @@
           expressId: this.expressId,
           state: this.state
         }
-        console.log(params)
         if (params.marketId && params.marketId !== '') {
           api.getOrderData(params).then((res) => {
             if (res) {
-              console.log(res)
               this.showResult = true
               this.data = res.expressPage.records
               this.tableTotal = res.expressPage.total
@@ -352,14 +362,18 @@
         this.changeMarket()
       },
       // 选择配送员
-      getDeliver(key) {
-        console.log(key)
+      getDeliver(key = '') {
+        this.pageNumber = 1
         this.deliverId = key
         this.changeMarket()
       },
       // 搜索
       search() {
+        this.pageNumber = 1
         this.changeMarket()
+      },
+      clearSearch() {
+        this.expressId = ''
       }
     }
   }
@@ -376,6 +390,15 @@
         display: inline-block;
         height: 40px;
         line-height: 40px;
+      }
+      .search-bar {
+        position: relative;
+        .close-input {
+          position: absolute;
+          right: 27px;
+          top: 20px;
+          cursor: pointer;
+        }
       }
     }
     .O_cava {
