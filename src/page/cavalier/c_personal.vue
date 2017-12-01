@@ -10,8 +10,9 @@
     <!-- 头部 -->
     <div class="header">
       <h2>配送人员</h2>
-      <div class="header-search">
+      <div class="header-search" @keydown.enter="onSearch">
         <Input placeholder="姓名/联系方式/身份证号" style="width: 200px" v-model="searchData"></Input>
+        <Icon type="close-circled icos icosS" v-if="searchData" @click.native="onDelete"></Icon>
         <Icon type="ios-search icos" @click.native="onSearch"></Icon>
       </div>
     </div>
@@ -44,7 +45,7 @@
           title="提醒"
           @on-ok="ok"
           @on-cancel="cancel">
-          <p style="text-align: center">是否确认冻结此用户？</p>
+          <p style="text-align: center">{{ deliverTitle }}</p>
       </Modal>
 
     </div>
@@ -61,13 +62,18 @@ export default {
         pageNumber: 1,
         condition: ''
       }, // 列表请求数据
+      deliverTitle: '', // 冻结/解冻title
+      deliver: {
+        psDeliverId: '', // 保存冻结ID/ 查看ID
+        status: '' // 冻结1 解冻2
+      },
       searchData: '', // 搜索数据
       total: '', // 总条数
       exportModal: false, // 隐藏导出弹框
-      psDeliverId: '', // 保存冻结ID/ 查看ID
       startTime: '', // 导出开始时间
       endTime: '', // 导出结束时间
       showModal: false, // 隐藏冻结弹框
+      statusData: '', // 冻结/解冻状态
       columns7: [
         {
           title: '序号',
@@ -134,11 +140,17 @@ export default {
                   on: {
                     click: () => {
                       this.showModal = true
-                      this.psDeliverId = params.row.psDeliverId
+                      this.statusData = params.row.status
+                      if (params.row.status === 1) {
+                        this.deliverTitle = '是否确认冻结此用户？'
+                      } else if (params.row.status === 2) {
+                        this.deliverTitle = '是否确认解冻此用户？'
+                      }
+                      this.deliver.psDeliverId = params.row.psDeliverId
                     }
                   }
                 },
-                '冻结'
+                this.filterStatus(params.row.status)
               )
             ])
           }
@@ -158,11 +170,27 @@ export default {
         this.total = res.total
       })
     },
+    filterStatus(status) {
+      let str = ''
+      switch (status) {
+        case 1:
+          str = '冻结'
+          break
+        case 2:
+          str = '解冻'
+          break
+      }
+      return str
+    },
     // 搜索请求
     onSearch() {
       this.params.pageNumber = 1
       this.params.condition = this.searchData
       this.getDeliverList()
+      this.searchData = ''
+    },
+    // 删除搜索内容
+    onDelete() {
       this.searchData = ''
     },
     // 显示导出框
@@ -195,12 +223,27 @@ export default {
     },
     // 确定冻结用户
     ok() {
-      api.getDeliverId(this.psDeliverId).then(obj => {
-        if (obj === true) {
-          this.$Message.info('冻结成功')
-          this.getDeliverList() // 初始化数据
-        }
-      })
+      if (this.statusData === 1) {
+        this.deliver.status = 1
+        api.getDeliverId(this.deliver).then(obj => {
+          if (obj === true) {
+            this.$Message.info('冻结成功')
+            this.getDeliverList() // 初始化数据
+          } else {
+            this.$Message.info('冻结失败')
+          }
+        })
+      } else if (this.statusData === 2) {
+        this.deliver.status = 2
+        api.getDeliverId(this.deliver).then(obj => {
+          if (obj === true) {
+            this.$Message.info('解冻成功')
+            this.getDeliverList() // 初始化数据
+          } else {
+            this.$Message.info('解冻失败')
+          }
+        })
+      }
     },
     // 点击分页发生变化
     changePage(page) {
@@ -208,7 +251,7 @@ export default {
       this.getDeliverList()
     },
     cancel() {
-      this.$Message.info('取消冻结')
+      this.$Message.info('取消')
     }
   }
 }
@@ -240,6 +283,13 @@ export default {
   color: #fff;
   font-size: 24px;
   cursor: pointer;
+}
+
+.icosS {
+  color: #5c6b77 !important;
+  right: 3px !important;
+  font-size: 16px !important;
+  line-height: 26px;
 }
 
 .mtb10 {

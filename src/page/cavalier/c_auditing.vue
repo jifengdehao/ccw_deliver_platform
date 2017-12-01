@@ -10,8 +10,9 @@
     <!-- 头部 -->
     <div class="header">
       <h2>骑士审核</h2>
-      <div class="header-search">
+      <div class="header-search" @keydown.enter="onSearch">
         <Input placeholder="姓名/联系方式/身份证号" style="width: 200px" v-model="searchData"></Input>
+        <Icon type="close-circled icos icosS" v-if="searchData" @click.native="onDelete"></Icon>
         <Icon type="ios-search icos" @click.native="onSearch"></Icon>
       </div>
     </div>
@@ -74,26 +75,24 @@ export default {
       columns4: [
         {
           type: 'selection',
-          width: '60',
           align: 'center'
         },
         {
           title: '序号',
           key: 'ID',
           type: 'index',
-          width: '70',
           align: 'center'
         },
         {
           title: '用户ID',
-          width: '90',
           key: 'psDeliverApplyId',
+          width: '140',
           align: 'center'
         },
         {
           title: '姓名',
           key: 'name',
-          width: '130',
+          width: '100',
           align: 'center'
         },
         {
@@ -111,12 +110,14 @@ export default {
         {
           title: '联系方式',
           key: 'mobileno',
-          align: 'center'
+          align: 'center',
+          width: '100'
         },
         {
           title: '出生年月日',
           key: 'birthday',
           align: 'center',
+          width: '100',
           render: (h, params) => {
             return 'span', this.formatTime(params.row.birthday)
           }
@@ -124,7 +125,8 @@ export default {
         {
           title: '身份证号码',
           key: 'identityCard',
-          align: 'center'
+          align: 'center',
+          width: '100'
         },
         {
           title: '身份证正反面',
@@ -204,8 +206,37 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.ModalTitle = '是否确认此用户通过'
-                      this.showModal = true
+                      // this.ModalTitle = '是否确认此用户通过'
+                      // this.showModal = true
+                      // api.getDeliverAudit({
+                      //   deliverApplyId: [params.row.psDeliverApplyId],
+                      //   status: '3'
+                      // })
+
+                      this.$Modal.confirm({
+                        title: '提示',
+                        content: '是否确认此用户通过',
+                        okText: '确定',
+                        cancelText: '取消',
+                        onOk: () => {
+                          api
+                            .getDeliverAudit({
+                              deliverApplyId: [params.row.psDeliverApplyId],
+                              status: '3'
+                            })
+                            .then(data => {
+                              this.getAuditManager()
+                            })
+                        }
+                      })
+
+                      // this.$Modal.success({
+                      //   title: '提示',
+                      //   content: '是否确认此用户通过',
+                      //   onOk: () => {
+                      //     this.$Message.info('Clicked ok')
+                      //   }
+                      // })
                     }
                   }
                 },
@@ -216,12 +247,33 @@ export default {
                 {
                   on: {
                     click: () => {
-                      this.ModalTitle = '是否确认此用户不通过'
-                      this.showModal = true
+                      // this.ModalTitle = '是否确认此用户不通过'
+                      // this.showModal = true
+                      // console.log(params.row.psDeliverApplyId)
+                      // api.getDeliverAudit({
+                      //   deliverApplyId: [params.row.psDeliverApplyId],
+                      //   status: '4'
+                      // })
+                      this.$Modal.confirm({
+                        title: '提示',
+                        content: '是否确认此用户不通过',
+                        okText: '确定',
+                        cancelText: '取消',
+                        onOk: () => {
+                          api
+                            .getDeliverAudit({
+                              deliverApplyId: [params.row.psDeliverApplyId],
+                              status: '4'
+                            })
+                            .then(data => {
+                              this.getAuditManager()
+                            })
+                        }
+                      })
                     }
                   }
                 },
-                '不通过'
+                '未通过'
               )
             ])
           }
@@ -253,6 +305,7 @@ export default {
     },
     // 选择时返回的数据
     changeSelect(data) {
+      console.log(data)
       this.selectData = data
     },
     // 通过/ 未通过
@@ -271,11 +324,14 @@ export default {
       }
     },
     ok() {
-      // 点击Modal确定按钮 发送请求
-      this.selectData.forEach(item => {
-        // 获取数据ID
-        this.DeliverAudit.deliverApplyId.push(item.psDeliverApplyId)
-      })
+      this.DeliverAudit.deliverApplyId = []
+      if (this.selectData != []) {
+        // 点击Modal确定按钮 发送请求
+        this.selectData.forEach(item => {
+          // 获取数据ID
+          this.DeliverAudit.deliverApplyId.push(item.psDeliverApplyId)
+        })
+      }
       switch (this.ModalTitle) {
         case '是否确认此用户通过':
           this.DeliverAudit.status = '3'
@@ -309,6 +365,10 @@ export default {
       this.getAuditManager()
       this.searchData = ''
     },
+    // 删除搜索内容
+    onDelete() {
+      this.searchData = ''
+    },
     // 点击分页发生变化
     changePage(page) {
       this.params.pageNumber = page
@@ -320,7 +380,7 @@ export default {
       let month =
         date.getMonth() + 1 >= 10
           ? date.getMonth() + 1
-          : '0' + date.getMonth() + 1
+          : '0' + (date.getMonth() + 1)
       let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
       let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
       // let minutes =
@@ -350,6 +410,12 @@ export default {
   position: relative;
   float: right;
   margin-right: 45px;
+}
+.icosS {
+  color: #5c6b77 !important;
+  right: 3px !important;
+  font-size: 16px !important;
+  line-height: 26px;
 }
 
 .icos {

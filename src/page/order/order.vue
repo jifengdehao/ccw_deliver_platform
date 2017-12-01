@@ -7,7 +7,7 @@
         <Input v-model="expressId"
                icon="search"
                placeholder="订单号/运单号"
-               style="width: 200px;margin-top: 4px;" @on-click="search"></Input>
+               style="width: 200px;margin-top: 4px;" @on-click="search" @keyup.native.enter="search"></Input>
         <i class="ivu-icon ivu-icon-ios-close ivu-select-arrow close-input" v-show="expressId"
            @click="clearSearch"></i>
       </div>
@@ -359,6 +359,7 @@
       selectTab(name) {
         this.state = name
         this.pageNumber = 1
+        this.showResult = false
         this.changeMarket()
       },
       // 选择配送员

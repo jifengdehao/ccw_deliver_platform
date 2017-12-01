@@ -1,6 +1,6 @@
 <template>
   <div id="d_list" class="main" :class="{'isShow':show}">
-    <main-header>
+    <!-- <main-header>
       <span slot="h3"> 分销列表</span>
       <Button slot="button" size="large" @click="exportData(1)">
         <Icon></Icon> 导出</Button>
@@ -10,8 +10,8 @@
     </section>
     <section>
       <Table border :columns="columns7" :data="data6" size="small" ref="table"></Table>
-    </section>
-
+    </section> -->
+    <h1>二期项目</h1>
   </div>
 </template>
 <script>
@@ -19,7 +19,8 @@ import citySelect from '../../components/changecity/cityselect.vue'
 import mainHeader from '../../components/header/main_header.vue'
 export default {
   components: {
-    mainHeader, citySelect
+    mainHeader,
+    citySelect
   },
   data() {
     return {
@@ -35,7 +36,7 @@ export default {
                 }
               }),
               h('strong', params.row.name)
-            ]);
+            ])
           }
         },
         {
@@ -53,22 +54,25 @@ export default {
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.to(params.index)
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.to(params.index)
+                    }
                   }
-                }
-              }, '查看'),
-
-            ]);
+                },
+                '查看'
+              )
+            ])
           }
         }
       ],
@@ -109,7 +113,7 @@ export default {
       if (type === 1) {
         this.$refs.table.exportCsv({
           filename: '原始数据'
-        });
+        })
       }
     }
   }
