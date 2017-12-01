@@ -1,7 +1,7 @@
 <template>
   <div id="s_operation" class="main" :class="{'isShow':show}">
-    <!-- 头部 -->
-    <div class="header">
+    <h1>二期项目</h1>
+    <!-- <div class="header">
       <h2>操作日志</h2>
       <div class="header-search">
         <Input placeholder="姓名/联系方式/用户ID" style="width: 200px"></Input>
@@ -19,7 +19,7 @@
           &nbsp;&nbsp;—&nbsp;&nbsp;
           <DatePicker format="yyyy年MM月dd日" v-model="downParams.endTime" type="date" placeholder="请选择结束时间" style="width: 200px"></DatePicker>
         </div>
-    </Modal>
+    </Modal> -->
   </div>
 </template>
 <script>
@@ -52,7 +52,7 @@ export default {
           key: 'creator'
         },
         {
-          title: '姓名',
+          // title: '姓名'
           key: 'userName'
         },
         {
@@ -69,7 +69,7 @@ export default {
     }
   },
   created() {
-    this.getOperationLog()
+    // this.getOperationLog()
   },
   methods: {
     //  获取操作日志列表
