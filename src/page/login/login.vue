@@ -138,7 +138,6 @@
       },
       // 登录
       login(params) {
-        console.log(params)
         api.login(params).then(res => {
           if (res) {
             sessionStorage.setItem('userInfo', JSON.stringify(res))

@@ -359,6 +359,7 @@
       selectTab(name) {
         this.state = name
         this.pageNumber = 1
+        this.showResult = false
         this.changeMarket()
       },
       // 选择配送员
