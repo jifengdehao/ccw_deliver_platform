@@ -42,11 +42,11 @@
             <Input v-model="marketData.selfPickAddress"  style="width:200px"></Input>
             <span>菜市场地址：</span>
             <Input v-model="marketData.address" style="width:200px" ></Input>
+            <div class="button">
+              <Button @click="polygonEditorOpen()">开始编辑区域范围</Button>
+              <Button @click="polygonEditorClose()">结束编辑区域范围</Button>
+            </div>
         </FormItem>
-        <div class="button">
-       <Button @click="polygonEditorOpen()">开始编辑区域范围</Button>
-       <Button @click="polygonEditorClose()">结束编辑区域范围</Button>
-    </div>
     </Form>
     
     </section>
@@ -247,6 +247,10 @@ export default {
       margin-left: 10px;
       font-size: 16px;
     }
+  }
+  .button{
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
   .addmarket_button {
     width: 100%;
