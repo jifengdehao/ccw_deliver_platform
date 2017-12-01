@@ -12,7 +12,7 @@
     <div v-if="data">
       <ul class="fl first">
       <li><span>用户ID:</span>{{data.user.psUserId}}</li>
-      <li><span>性别:</span>{{data.user.sex}}</li>
+      <li><span>性别:</span>{{data.user.sex == 1 ? '男' : '女'}}</li>
       <li><span>邮箱地址:</span>{{data.user.email}}</li>
       <li><span>所属菜市场:</span>{{data.marketName}}</li>
       <li><span>姓名:</span>{{data.user.userName}}</li>

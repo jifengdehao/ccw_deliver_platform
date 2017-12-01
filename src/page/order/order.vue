@@ -10,30 +10,30 @@
                style="width: 200px;margin-top: 4px;" @on-click="search"></Input>
       </div>
     </div>
-    <Row style="margin-bottom: 20px;">
-      <Col span="6">
+    <Row style="margin-bottom: 20px;" :gutter="24">
+      <Col :xs="24" :sm="6" :md="6" :lg="6">
       <h3>省区</h3>
-      <Select v-model="province" clearable style="width:200px" @on-change="changeProvince">
+      <Select v-model="province" clearable style="max-width:200px;" @on-change="changeProvince">
         <Option v-for="(item,index) in provinceData" :value="item.provinceId" :key="item.provinceId">{{
           item.provinceName}}
         </Option>
       </Select>
       </Col>
-      <Col span="6">
+      <Col :xs="24" :sm="6" :md="6" :lg="6">
       <h3>市区</h3>
-      <Select v-model="city" style="width:200px" clearable :disabled="showCity" @on-change="changeCity">
+      <Select v-model="city" style="max-width:200px;" clearable :disabled="showCity" @on-change="changeCity">
         <Option v-for="item in cityData" :value="item.cityId" :key="item.cityId">{{ item.cityName }}</Option>
       </Select>
       </Col>
-      <Col span="6">
+      <Col :xs="24" :sm="6" :md="6" :lg="6">
       <h3>区域</h3>
-      <Select v-model="area" style="width:200px" clearable :disabled="showArea" @on-change="changeArea">
+      <Select v-model="area" style="max-width:200px;" clearable :disabled="showArea" @on-change="changeArea">
         <Option v-for="item in areaData" :value="item.areaId" :key="item.areaId">{{ item.areaName }}</Option>
       </Select>
       </Col>
-      <Col span="6">
+      <Col :xs="24" :sm="6" :md="6" :lg="6">
       <h3>菜市场</h3>
-      <Select v-model="market" style="width:200px" clearable :disabled="showMarket" @on-change="changeMarket">
+      <Select v-model="market" style="max-width:200px;" clearable :disabled="showMarket" @on-change="changeMarket">
         <Option v-for="item in marketData" :value="item.marketId" :key="item.marketId">{{ item.marketName }}
         </Option>
       </Select>

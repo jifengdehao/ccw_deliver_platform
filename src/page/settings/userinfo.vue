@@ -147,11 +147,18 @@ export default {
         return
       }
       http.lookUser(this.params).then(data => {
-        this.chooseProvince(String(data.user.provinceId), () => {
-          this.chooseCity(String(data.user.cityId), () => {
-            this.chooseArea(String(data.user.areaId))
+        if (data.user.provinceId) {
+          this.chooseProvince(String(data.user.provinceId), () => {
+            if (data.user.cityId) {
+              this.chooseCity(String(data.user.cityId), () => {
+                if (data.user.areaId) {
+                  this.chooseArea(String(data.user.areaId))
+                }
+              })
+            }
           })
-        })
+        }
+
         this.data = data
         //  获取市
         // this.chooseCity(this.data.user.cityId) //  获取区

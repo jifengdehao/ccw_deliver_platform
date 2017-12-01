@@ -99,7 +99,7 @@
             </router-link>
             <router-link tag="li" to="/order">
               异常订单
-              <span class="H-card-border">{{monitoring.needExpressOrder}}</span>
+              <span class="H-card-border">{{monitoring.exceptionOrder}}</span>
               <Icon type="chevron-right"></Icon>
             </router-link>
             <router-link tag="li" to="/cPersonal">

@@ -281,7 +281,7 @@ export default [
         path: '/home',
         name: 'home',
         component: Home,
-        meta: {keepAlive: true}
+        meta: {keepAlive: false}
       },
       {
         path: '/order',
