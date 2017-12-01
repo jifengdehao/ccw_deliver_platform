@@ -203,7 +203,6 @@
         if (value && value != '') {
           api.getProvinceIndex(value).then((res) => {
             if (res) {
-              console.log(res)
               this.showCity = false
               this.cityData = res
             }
@@ -248,7 +247,6 @@
           // 获取首页数据
           api.getIndeData(this.market).then((res) => {
             if (res) {
-              console.log(res)
               this.indexData = true
               this.sysMsg = (res.custSysMsgList).map((item, index) => {
                 item.createdAt = time.formatDateTime(item.createdAt)
