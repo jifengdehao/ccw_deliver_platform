@@ -10,7 +10,7 @@
     <div class="header">
       <h2>权限管理</h2>
       <div class="header-search">
-        <Input placeholder="姓名/联系方式/用户ID" style="width: 200px" v-model="condition" @keyup.native="checkLen"></Input>
+        <Input placeholder="姓名/联系方式/用户ID" style="width: 200px" v-model="condition" @keyup.native.enter="search" @keyup.native="checkLen"></Input>
         <Icon v-if="closeBool" style="position:absolute;top:15px;right:5px;" type="close-circled" @click.native="clearValue"></Icon>
         <span @click="search"><Icon type="ios-search icos"></Icon></span>
       </div>

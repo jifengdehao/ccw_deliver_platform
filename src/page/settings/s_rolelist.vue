@@ -10,7 +10,7 @@
     <div class="header">
       <h2>角色列表</h2>
       <div class="header-search">
-        <Input placeholder="创建人姓名/修改人姓名" style="width: 200px" v-model="condition" @keyup.native="checkLen"></Input>
+        <Input placeholder="创建人姓名/修改人姓名" style="width: 200px" v-model="condition" @keyup.native.enter="search" @keyup.native="checkLen"></Input>
         <span @click="search"><Icon type="ios-search icos"></Icon></span>
         <Icon v-if="closeBool" style="position:absolute;top:15px;right:5px;" type="close-circled" @click.native="clearValue"></Icon>
       </div>
