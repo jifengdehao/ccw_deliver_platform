@@ -10,8 +10,8 @@
     <div class="header">
       <h2>财务对账</h2>
       <div class="header-search">
-        <DatePicker format="yyyy-MM-dd" type="date" placeholder="请输入开始时间" style="width: 200px" @on-change="changeStartTime"></DatePicker>
-        <DatePicker format="yyyy-MM-dd" type="date" placeholder="请输入结束时间" style="width: 200px" @on-change="changeEndTime"></DatePicker>
+        <DatePicker format="yyyy-MM-dd" type="date" :value="params.beginTime"  placeholder="请输入开始时间" style="width: 200px" @on-change="changeStartTime"></DatePicker>
+        <DatePicker format="yyyy-MM-dd" type="date" :value="params.endTime" placeholder="请输入结束时间" style="width: 200px" @on-change="changeEndTime"></DatePicker>
         <Button @click="onExport">导出</Button>
       </div>
     </div>
@@ -133,7 +133,9 @@ export default {
   methods: {
     // 初始化列表数据
     getFinanceOrderList() {
-      this.params.psDeliverId = this.id
+      this.params.psDeliverId = this.$route.params.id
+      this.params.beginTime = this.$route.query.start
+      this.params.endTime = this.$route.query.end
       api.getFinanceOrderList(this.params).then(data => {
         this.seeFinanceData = data.records
         this.total = data.total
