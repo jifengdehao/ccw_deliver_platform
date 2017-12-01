@@ -45,7 +45,7 @@
         </div>
         <ul class="configuration_quyu_content" v-for="(item,index) in qus" :key="index">
           <li>
-            <span @click="showMarket(item.areaId,item.areaName,index)" :class="{current:areaSelected==index}"> {{item.areaName}}</span>
+            <span @click="showMarket(item.areaId,item.areaName,index)" :class="{current:areaSelected==index}" class="smallSpan"> {{item.areaName}}</span>
             <Button type="ghost" size="small" class="fr" style="color: red;border: none;" @click="delQu(index)">删除</Button>
             <Button type="info" size="small" class="fr" style="border: none;" @click="seeThisQu(item.areaId,item.areaName)">查看</Button>
           </li>
@@ -59,7 +59,7 @@
         </div>
         <ul class="configuration_quyu_content" v-for="(item,index) in markets" :key="index">
           <li>
-            <span> {{item.marketName}}</span>
+            <span class="smallSpan"> {{item.marketName}}</span>
             <Button type="ghost" size="small" class="fr" style="color: red;border: none" @click="delMarket(index)">删除</Button>
             <Button type="info" size="small" class="fr" style="border: none" @click="seeThisMarket(item.marketId)">查看</Button>
           </li>
@@ -245,12 +245,15 @@ export default {
       float: left;
       span {
         display: inline-block;
-        width: 110px;
+        width: 145px;
         height: 25px;
         border: 1px solid #ccc;
         border-radius: 5px;
         text-align: center;
-        overflow: auto;
+        // overflow: auto;
+      }
+      .smallSpan{
+        width: 110px;
       }
       .current {
         background-color: #eee;

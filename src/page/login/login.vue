@@ -141,7 +141,6 @@
         console.log(params)
         api.login(params).then(res => {
           if (res) {
-            console.log(res)
             sessionStorage.setItem('userInfo', JSON.stringify(res))
             this.$router.push('/')
           } else {

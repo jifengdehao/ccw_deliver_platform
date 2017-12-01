@@ -42,8 +42,13 @@
             <Input v-model="marketData.selfPickAddress"  style="width:200px"></Input>
             <span>菜市场地址：</span>
             <Input v-model="marketData.address" style="width:200px" ></Input>
+            <div class="button">
+              <Button @click="polygonEditorOpen()">开始编辑区域范围</Button>
+              <Button @click="polygonEditorClose()">结束编辑区域范围</Button>
+            </div>
         </FormItem>
     </Form>
+    
     </section>
     <section class="addmarket_button">
       <Button type="ghost" size="large" style="width: 150px" @click="goback">取消</Button>
@@ -63,7 +68,9 @@ export default {
       // endTime: '',
       marketName: '',
       current: 0,
-      marketPath: []
+      marketPath: [],
+      editor: {},
+      playStatus: false
     }
   },
   computed: {
@@ -78,6 +85,11 @@ export default {
     },
     provinceName() {
       return this.$route.query.provinceName
+    },
+    modifyPath() {
+      return this.marketPath.map(item => {
+        return [item.lng, item.lat]
+      })
     }
   },
   created() {
@@ -90,18 +102,22 @@ export default {
         // this.beginTime = response.beginTime
         // this.endTime = response.endTime
         this.marketName = response.marketName
+        this.marketPath = response.areaCoordinate
         this.init()
       })
     },
-    init(e) {
+    init: function() {
       var map = new AMap.Map('container', {
         resizeEnable: true,
         zoom: 12
       })
-      AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
-        map.addControl(new AMap.ToolBar())
-        map.addControl(new AMap.Scale())
-      })
+      AMap.plugin(
+        ['AMap.ToolBar', 'AMap.Scale', 'AMap.PolyEditor'],
+        function() {
+          map.addControl(new AMap.ToolBar())
+          map.addControl(new AMap.Scale())
+        }
+      )
       // 菜市场位置
       // AMap.Marker()
       var marker = new AMap.Marker({
@@ -110,7 +126,7 @@ export default {
       })
       marker.setMap(map)
       // 绘制多边形
-      var editor = {}
+      var editor = this.editor
       editor._polygon = (() => {
         var arr = this.marketData.areaCoordinate
         return new AMap.Polygon({
@@ -124,9 +140,21 @@ export default {
         })
       })()
       map.setFitView() //地图自适应
+      editor._polygonEditor = new AMap.PolyEditor(map, editor._polygon)
+    },
+    // 开始修改区域
+    polygonEditorOpen() {
+      this.playStatus = true
+      this.editor._polygonEditor.open()
+    },
+    // 结束修改
+    polygonEditorClose() {
+      this.playStatus = false
+      this.editor._polygonEditor.close()
+      this.marketPath = this.editor._polygon.getPath()
     },
     // 获取选择框的时间
-   // 获取时间
+    // 获取时间
     getbeginTime(time) {
       this.marketData.beginTime = time
     },
@@ -155,7 +183,11 @@ export default {
         this.$Message.error('菜市场地址必填')
         return false
       }
-      this.marketData.areaCoordinate = ''
+      if (this.playStatus) {
+        this.$Message.error('请结束编辑状态')
+        return false
+      }
+      this.marketData.areaCoordinate = this.modifyPath
       let params = {
         marketId: this.marketId,
         market: this.marketData
@@ -167,7 +199,7 @@ export default {
       })
     },
     goback() {
-      window.history.go(-1)
+      this.getQuInfo()
     }
   }
 }
@@ -199,6 +231,7 @@ export default {
     background-color: #caeee9;
   }
   .addmarket_marketinfo {
+    min-width: 1000px;
     margin: 0 auto;
     form {
       text-align: center;
@@ -211,9 +244,13 @@ export default {
       display: inline-block;
       width: 100px;
       line-height: 40px;
-      margin-left: 30px;
+      margin-left: 10px;
       font-size: 16px;
     }
+  }
+  .button{
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
   .addmarket_button {
     width: 100%;
