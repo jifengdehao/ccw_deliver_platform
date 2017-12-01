@@ -96,8 +96,14 @@ export default {
     api.getShengs().then(response => {
       this.shengs = response
     })
-    this.shengSelected = sessionStorage.getItem('index')
-    this.showCity(sessionStorage.getItem('provinceId'))
+    // if (sessionStorage.getItem('provinceId')) {
+    //   this.shengSelected = sessionStorage.getItem('index')
+    //   this.showCity(sessionStorage.getItem('provinceId'))
+    // }
+    // if (sessionStorage.getItem('cityId')) {
+    //   this.citySelected = sessionStorage.getItem('cityIndex')
+    //   this.showQu(sessionStorage.getItem('cityId'))
+    // }
   },
   methods: {
     // 新增 区  菜市场
@@ -177,11 +183,15 @@ export default {
     },
     // 获取下级列表
     showCity(provinceId, provinceName, index) {
+      if (index) {
+        this.shengSelected = index
+      }
+
       this.citySelected = null
       this.areaSelected = null
       this.provinceName = provinceName
-      sessionStorage.setItem('provinceId', provinceId)
-      sessionStorage.setItem('index', index)
+      // sessionStorage.setItem('provinceId', provinceId)
+      // sessionStorage.setItem('index', index)
       api.getCitys(provinceId).then(response => {
         this.citys = response
         this.qus = []
@@ -193,6 +203,8 @@ export default {
       this.areaSelected = null
       this.cityName = cityName
       this.cityId = cityId
+      // sessionStorage.setItem('cityId', cityId)
+      // sessionStorage.setItem('cityIndex', index)
       api.getQus(cityId).then(response => {
         this.qus = response
         this.markets = []
