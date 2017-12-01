@@ -204,8 +204,37 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.ModalTitle = '是否确认此用户通过'
-                      this.showModal = true
+                      // this.ModalTitle = '是否确认此用户通过'
+                      // this.showModal = true
+                      // api.getDeliverAudit({
+                      //   deliverApplyId: [params.row.psDeliverApplyId],
+                      //   status: '3'
+                      // })
+
+                      this.$Modal.confirm({
+                        title: '提示',
+                        content: '是否确认此用户通过',
+                        okText: '确定',
+                        cancelText: '取消',
+                        onOk: () => {
+                          api
+                            .getDeliverAudit({
+                              deliverApplyId: [params.row.psDeliverApplyId],
+                              status: '3'
+                            })
+                            .then(data => {
+                              this.getAuditManager()
+                            })
+                        }
+                      })
+
+                      // this.$Modal.success({
+                      //   title: '提示',
+                      //   content: '是否确认此用户通过',
+                      //   onOk: () => {
+                      //     this.$Message.info('Clicked ok')
+                      //   }
+                      // })
                     }
                   }
                 },
@@ -216,12 +245,33 @@ export default {
                 {
                   on: {
                     click: () => {
-                      this.ModalTitle = '是否确认此用户不通过'
-                      this.showModal = true
+                      // this.ModalTitle = '是否确认此用户不通过'
+                      // this.showModal = true
+                      // console.log(params.row.psDeliverApplyId)
+                      // api.getDeliverAudit({
+                      //   deliverApplyId: [params.row.psDeliverApplyId],
+                      //   status: '4'
+                      // })
+                      this.$Modal.confirm({
+                        title: '提示',
+                        content: '是否确认此用户不通过',
+                        okText: '确定',
+                        cancelText: '取消',
+                        onOk: () => {
+                          api
+                            .getDeliverAudit({
+                              deliverApplyId: [params.row.psDeliverApplyId],
+                              status: '4'
+                            })
+                            .then(data => {
+                              this.getAuditManager()
+                            })
+                        }
+                      })
                     }
                   }
                 },
-                '不通过'
+                '未通过'
               )
             ])
           }
