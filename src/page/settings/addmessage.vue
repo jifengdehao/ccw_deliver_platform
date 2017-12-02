@@ -202,18 +202,16 @@ export default {
         }
         //  添加消息
         console.log(this.params)
-        http
-          .addSingleInfo(this.params)
-          .then(data => {
-            this.resetSingleInfo()
-            this.$Modal.success({
-              title: '提示',
-              content: '添加成功'
-            })
+        http.addSingleInfo(this.params).then(data => {
+          this.resetSingleInfo()
+          this.$Modal.success({
+            title: '提示',
+            content: '添加成功'
           })
-          .catch(err => {
-            this.$router.go(-1)
-          })
+        })
+        // .catch(err => {
+        //   this.$router.go(-1)
+        // })
       } else if (this.$route.path.indexOf('toEidt')) {
         this.params.smMssageId = this.$route.params.smMssageId
 

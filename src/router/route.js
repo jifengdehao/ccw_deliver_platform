@@ -260,7 +260,6 @@ const settingMessageDetail = resolve => {
   })
 }
 
-
 export default [
   {
     path: '/login',
@@ -281,19 +280,19 @@ export default [
         path: '/home',
         name: 'home',
         component: Home,
-        meta: {keepAlive: false}
+        meta: { keepAlive: true }
       },
       {
         path: '/order',
         name: 'order',
         component: Order,
-        meta: {keepAlive: true}
+        meta: { keepAlive: true }
       },
       {
         path: '/order/:id',
         name: 'orderDetails',
         component: OrderDetails,
-        meta: {keepAlive: false}
+        meta: { keepAlive: false }
       },
       {
         path: '/finance',
@@ -354,7 +353,7 @@ export default [
       {
         path: '/configuration',
         component: configuration,
-        meta: {keepAlive: true}
+        meta: { keepAlive: true }
       },
       {
         path: '/addregion',

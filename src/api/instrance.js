@@ -10,7 +10,11 @@ import qs from 'qs'
 import iview from 'iview'
 import hash from 'js-md5'
 
-var URI = config.apiDomain
+// var URI = config.apiDomain
+var URI =
+  window.location.host.indexOf('localhost:') > -1
+    ? config.apiDomain
+    : 'http://192.168.0.151:8094/deliverpt'
 
 var ax = axios.create({
   baseURL: URI,
@@ -98,11 +102,16 @@ export function base(type, url, params) {
             }
           })
         } else {
-          iview.Notice.error({
-            title: '操作失败',
-            desc: `<p><span style="color:#ff3300">${
-              response.data.code
-            }</span>&nbsp;&nbsp;${response.data.msg}</p>`
+          // iview.Notice.error({
+          //   title: '操作失败',
+          //   desc: `<p><span style="color:#ff3300">${
+          //     response.data.code
+          //   }</span>&nbsp;&nbsp;${response.data.msg}</p>`
+          // })
+
+          iview.Modal.error({
+            title: '提示',
+            content: response.data.msg
           })
           reject(response.data.msg)
         }
