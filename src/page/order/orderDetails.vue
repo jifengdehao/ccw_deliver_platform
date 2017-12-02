@@ -111,11 +111,11 @@
               mapStyle: 'amap://styles/normal'//样式URL
             })
             // 取件 - 送达
-            AMap.service('AMap.Driving', function () {//回调函数
-              const driving = new AMap.Driving({
+            AMap.service('AMap.Riding', function () {//回调函数
+              const driving = new AMap.Riding({
                 map: map
               })
-              // 根据起终点经纬度规划驾车导航路线
+              // 根据起终点经纬度规划驾车导航路线  改成骑行模式
               driving.search(new AMap.LngLat(res.market[0], res.market[1]), new AMap.LngLat(res.userAddress[0], res.userAddress[1]))
               const infoWindow = new AMap.InfoWindow({
                 offset: new AMap.Pixel(0, -22) //-113, -140
