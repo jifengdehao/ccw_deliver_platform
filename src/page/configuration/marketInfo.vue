@@ -195,6 +195,7 @@ export default {
       // console.log(params,3)
       api.addMarket(params).then(response => {
         this.$Message.info('修改菜市场成功')
+        this.$router.go(-1)
       })
     },
     goback() {

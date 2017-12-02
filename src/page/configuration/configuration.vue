@@ -74,9 +74,9 @@ export default {
   components: {},
   data() {
     return {
-      shengSelected: Number, // 点击省区选择
-      citySelected: Number, // 点击城市
-      areaSelected: Number, // 点击区域
+      shengSelected: NaN, // 点击省区选择
+      citySelected: NaN, // 点击城市
+      areaSelected: NaN, // 点击区域
       showCitys: true,
       addQu: false,
       addMarket: false,
@@ -96,14 +96,18 @@ export default {
     api.getShengs().then(response => {
       this.shengs = response
     })
-    // if (sessionStorage.getItem('provinceId')) {
-    //   this.shengSelected = sessionStorage.getItem('index')
-    //   this.showCity(sessionStorage.getItem('provinceId'))
-    // }
-    // if (sessionStorage.getItem('cityId')) {
-    //   this.citySelected = sessionStorage.getItem('cityIndex')
-    //   this.showQu(sessionStorage.getItem('cityId'))
-    // }
+    if (/^\d+$/.test(sessionStorage.getItem('index'))) {
+      this.shengSelected = sessionStorage.getItem('index')
+      this.showCity(sessionStorage.getItem('provinceId'))
+    }
+    if (/^\d+$/.test(sessionStorage.getItem('cityIndex'))) {
+      this.citySelected = JSON.parse(sessionStorage.getItem('cityIndex'))
+      this.showQu(sessionStorage.getItem('cityId'))
+    }
+    if (/^\d+$/.test(sessionStorage.getItem('areaIndex'))) {
+      this.areaSelected = JSON.parse(sessionStorage.getItem('areaIndex'))
+      this.showMarket(sessionStorage.getItem('areaId'))
+    }
   },
   methods: {
     // 新增 区  菜市场
@@ -183,36 +187,43 @@ export default {
     },
     // 获取下级列表
     showCity(provinceId, provinceName, index) {
-      if (index) {
+      // index为非负整数的时候
+      if (/^\d+$/.test(index)) {
         this.shengSelected = index
+        sessionStorage.setItem('index', index)
+        console.log(index)
       }
-
       this.citySelected = null
       this.areaSelected = null
       this.provinceName = provinceName
-      // sessionStorage.setItem('provinceId', provinceId)
-      // sessionStorage.setItem('index', index)
+      sessionStorage.setItem('provinceId', provinceId)
       api.getCitys(provinceId).then(response => {
         this.citys = response
         this.qus = []
         this.markets = []
       })
     },
-    showQu(cityId, cityName, index) {
-      this.citySelected = index
+    showQu(cityId, cityName, cityIndex) {
+      if (/^\d+$/.test(cityIndex)) {
+        this.citySelected = cityIndex
+        sessionStorage.setItem('cityIndex', cityIndex)
+      }
       this.areaSelected = null
       this.cityName = cityName
       this.cityId = cityId
-      // sessionStorage.setItem('cityId', cityId)
-      // sessionStorage.setItem('cityIndex', index)
+      sessionStorage.setItem('cityId', cityId)
       api.getQus(cityId).then(response => {
         this.qus = response
         this.markets = []
       })
       this.addQu = true
     },
-    showMarket(areaId, areaName, index) {
-      this.areaSelected = index
+    showMarket(areaId, areaName, areaIndex) {
+      if (/^\d+$/.test(areaIndex)) {
+        this.areaSelected = areaIndex
+        sessionStorage.setItem('areaIndex', areaIndex)
+      }
+      sessionStorage.setItem('areaId',areaId)
       this.areaId = areaId
       this.areaName = areaName
       api.getMarkets(areaId).then(response => {

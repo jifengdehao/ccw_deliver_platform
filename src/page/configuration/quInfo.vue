@@ -135,6 +135,7 @@ export default {
       this.areaData.areaCoordinate = this.modifyPath
       api.addQu(this.areaData).then(res => {
         this.$Message.success('修改成功')
+        this.$router.go(-1)
       })
     }
   }
