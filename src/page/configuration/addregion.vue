@@ -126,8 +126,8 @@ export default {
       api
         .addQu(params)
         .then(response => {
-          window.open('#/configuration')
           this.$Message.success('添加成功')
+          this.$router.go(-1)
         })
     },
     // 点击取消按钮  返回设置主页

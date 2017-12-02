@@ -194,8 +194,8 @@ export default {
       }
       // console.log(params,3)
       api.addMarket(params).then(response => {
-        window.history.go(-1)
         this.$Message.info('修改菜市场成功')
+        this.$router.go(-1)
       })
     },
     goback() {
@@ -248,7 +248,7 @@ export default {
       font-size: 16px;
     }
   }
-  .button{
+  .button {
     margin-top: 10px;
     margin-bottom: 10px;
   }

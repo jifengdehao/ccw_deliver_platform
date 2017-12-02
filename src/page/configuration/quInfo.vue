@@ -21,6 +21,11 @@
             <div class="map" id="container">
                 当前区地图
             </div>
+            <div style="marginBottom: 10px">
+              <span>区域名称：</span>
+              <Input type="text" v-model="areaData.areaName" style="width: 200px"></Input>
+            </div>
+            
             <Button @click="polygonEditorOpen()">开始编辑区域范围</Button>
             <Button @click="polygonEditorClose()">结束编辑区域范围</Button>
         </section>
@@ -40,7 +45,9 @@ export default {
     return {
       areaData: {},
       editor: {},
-      areaPath: []
+      areaPath: [],
+      areaName: '',
+      playStatus: false
     }
   },
   computed: {
@@ -67,6 +74,7 @@ export default {
     getQuInfo() {
       api.getQuInfo(this.areaId).then(response => {
         this.areaData = response
+        this.areaPath = response.areaCoordinate
         this.init()
       })
     },
@@ -104,20 +112,30 @@ export default {
     // 开始修改区域
     polygonEditorOpen(map) {
       this.editor._polygonEditor.open()
+      this.playStatus = true
     },
     // 结束修改
     polygonEditorClose() {
       this.editor._polygonEditor.close()
       this.areaPath = this.editor._polygon.getPath()
+      this.playStatus = false
     },
     goback() {
       this.getQuInfo()
     },
     modifyArea() {
+      if(!this.areaData.areaName){
+        this.$Message.error('区域名称不能为空')
+        return false
+      }
+      if(this.playStatus === true){
+        this.$Message.error('请结束编辑状态')
+        return false
+      }
       this.areaData.areaCoordinate = this.modifyPath
-      console.log(this.areaData.areaCoordinate)
       api.addQu(this.areaData).then(res => {
         this.$Message.success('修改成功')
+        this.$router.go(-1)
       })
     }
   }

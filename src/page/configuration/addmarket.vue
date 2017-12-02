@@ -193,7 +193,8 @@ export default {
       }
       api.addMarket(params).then(response => {
         this.$Message.success('添加菜市场成功')
-        window.open('#/configuration')
+        this.$router.go(-1)
+        // window.open('#/configuration')
       })
     },
     // 取消按钮
