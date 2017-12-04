@@ -386,15 +386,15 @@
         if (user.provinceId) {
           this.province = user.provinceId
           this.getProvinceData()
+          this.getCityData(user.provinceId)
           if (user.cityId) {
             this.city = user.cityId
-            this.getCityData(user.provinceId)
+            this.getAreaData(user.cityId)
             if (user.areaId) {
               this.area = user.areaId
-              this.getAreaData(user.cityId)
+              this.getMarketData(user.areaId)
               if (user.marketId) {
                 this.market = user.marketId
-                this.getMarketData(user.areaId)
                 this.changeMarket(user.marketId)
               }
             }
