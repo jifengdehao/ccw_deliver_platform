@@ -63,15 +63,17 @@ export default {
           } else if (item.childMenuList.length > 0) {
             //  有多个子菜单
             item.childMenuList.forEach(child => {
-              child.permissonList.forEach(son => {
-                let single = {
-                  menuId: child.menuId
-                }
-                if (son.isHave) {
-                  single.permissionId = son.permissionId
-                  this.putParams.permissionList.push(single)
-                }
-              })
+              if (child.permissonList && child.permissonList.length > 0) {
+                child.permissonList.forEach(son => {
+                  let single = {
+                    menuId: child.menuId
+                  }
+                  if (son.isHave) {
+                    single.permissionId = son.permissionId
+                    this.putParams.permissionList.push(single)
+                  }
+                })
+              }
               this.filterValue(child.childMenuList)
             })
           }
