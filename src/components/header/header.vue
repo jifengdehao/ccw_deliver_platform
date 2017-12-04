@@ -72,7 +72,7 @@
         api.logout().then((res) => {
           if (res) {
             sessionStorage.removeItem('userInfo')
-            this.$router.push('/login')
+            window.location.reload()
           }
         })
       },

@@ -58,8 +58,8 @@ export default {
   position: relative;
   height: 100%;
   width: 100%;
-  overflow: hidden;
-
+  overflow-y: scroll;
+  min-width: 1400px;
   .layout-content {
     position: absolute;
     top: 60px;

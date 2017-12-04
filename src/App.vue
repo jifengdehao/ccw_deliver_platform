@@ -43,14 +43,24 @@
   .textLeft {
     text-align: left;
   }
-
+  .ml10{
+    margin-left: 10px;
+  }
+  .mb10{
+    margin-bottom: 10px;
+  }
+  .mb20{
+    margin-bottom: 20px;
+  }
+  .mr10{
+    margin-right: 10px;
+  }
   #app {
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
-    overflow: hidden;
   }
 
 </style>

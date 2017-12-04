@@ -4,7 +4,7 @@
       <Icon type="ios-home"></Icon>&nbsp;&nbsp;欢迎回到配送中心
     </div>
     <!--统计信息-->
-    <div class="H-tip clearfix">
+    <div class="H-tip clearfix mb20">
       <h2>首页统计信息</h2>
       <ul class="fr">
         <li>在线骑手：{{statistics.onlineDeliver}}</li>
@@ -12,7 +12,7 @@
         <li>超时订单：{{statistics.outTimeorderRate}}</li>
       </ul>
     </div>
-    <Row style="margin-top: 20px;">
+    <Row>
       <Col span="6">
       <h3>省区</h3>
       <Select v-model="province" clearable @on-change="changeProvince" style="width:200px">
@@ -177,7 +177,7 @@
       }
     },
     created() {
-      this.getProvinceData()
+      this.getInitData()
     },
     filters: {
       filterTime(value) {
@@ -200,7 +200,7 @@
       },
       // 获取市的数据
       getCityData(value) {
-        if (value && value != '') {
+        if (value !== '') {
           api.getProvinceIndex(value).then((res) => {
             if (res) {
               this.showCity = false
@@ -216,7 +216,7 @@
       },
       // 获取区域的数据
       getAreaData(value) {
-        if (value && value != '') {
+        if (value !== '') {
           api.getCityManager(value).then((res) => {
             if (res) {
               this.showArea = false
@@ -232,7 +232,7 @@
       },
       // 获取菜市场数据
       getMarketData(value) {
-        if (value && value != '') {
+        if (value !== '') {
           api.getAreaMarket(value).then((res) => {
             if (res) {
               this.showMarket = false
@@ -243,9 +243,9 @@
       },
       // 选择菜市场
       changeMarket(value) {
-        if (value && value != '') {
+        if (value !== '') {
           // 获取首页数据
-          api.getIndeData(this.market).then((res) => {
+          api.getIndeData(value).then((res) => {
             if (res) {
               this.indexData = true
               this.sysMsg = (res.custSysMsgList).map((item, index) => {
@@ -262,6 +262,29 @@
       },
       linkMsg(id) {
         this.$router.push('/setting_message/' + id)
+      },
+      // 获取默认的数据
+      getInitData() {
+        let user = JSON.parse(sessionStorage.getItem('userInfo'))
+        if (user.provinceId) {
+          this.province = user.provinceId
+          this.getProvinceData()
+          if (user.cityId) {
+            this.city = user.cityId
+            this.getCityData(user.provinceId)
+            if (user.areaId) {
+              this.area = user.areaId
+              this.getAreaData(user.cityId)
+              if (user.marketId) {
+                this.market = user.marketId
+                this.getMarketData(user.areaId)
+                this.changeMarket(user.marketId)
+              }
+            }
+          }
+        } else {
+          this.getProvinceData()
+        }
       }
     }
   }

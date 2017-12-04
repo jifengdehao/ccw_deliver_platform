@@ -12,8 +12,8 @@
            @click="clearSearch"></i>
       </div>
     </div>
-    <Row style="margin-bottom: 20px;" :gutter="24">
-      <Col :xs="24" :sm="6" :md="6" :lg="6">
+    <Row :gutter="24" class="mb20">
+      <Col span="6">
       <h3>省区</h3>
       <Select v-model="province" clearable style="max-width:200px;" @on-change="changeProvince">
         <Option v-for="(item,index) in provinceData" :value="item.provinceId" :key="item.provinceId">{{
@@ -21,19 +21,19 @@
         </Option>
       </Select>
       </Col>
-      <Col :xs="24" :sm="6" :md="6" :lg="6">
+      <Col span="6">
       <h3>市区</h3>
       <Select v-model="city" style="max-width:200px;" clearable :disabled="showCity" @on-change="changeCity">
         <Option v-for="item in cityData" :value="item.cityId" :key="item.cityId">{{ item.cityName }}</Option>
       </Select>
       </Col>
-      <Col :xs="24" :sm="6" :md="6" :lg="6">
+      <Col span="6">
       <h3>区域</h3>
       <Select v-model="area" style="max-width:200px;" clearable :disabled="showArea" @on-change="changeArea">
         <Option v-for="item in areaData" :value="item.areaId" :key="item.areaId">{{ item.areaName }}</Option>
       </Select>
       </Col>
-      <Col :xs="24" :sm="6" :md="6" :lg="6">
+      <Col span="6">
       <h3>菜市场</h3>
       <Select v-model="market" style="max-width:200px;" clearable :disabled="showMarket" @on-change="changeMarket">
         <Option v-for="item in marketData" :value="item.marketId" :key="item.marketId">{{ item.marketName }}
@@ -43,7 +43,7 @@
     </Row>
     <Tabs :value="this.state" :animated="false" @on-click="selectTab" style="min-height: 600px;">
       <TabPane label="全部" name="5">
-        <Row class="O_cava" v-show="showResult">
+        <Row class="O_cava">
           <Col span="2">
           <ul class="textCenter O_cava_name">
             <li>姓名</li>
@@ -55,7 +55,7 @@
           </ul>
           </Col>
           <Col span="21" offset="1">
-          <Table border :columns="columns" :data="data"></Table>
+          <Table border :columns="columns" :data="data" :loading="loading"></Table>
           <Page
             :total="tableTotal"
             :current="pageNumber"
@@ -69,7 +69,7 @@
         </Row>
       </TabPane>
       <TabPane label="新订单" name="0">
-        <Row class="O_cava" v-show="showResult">
+        <Row class="O_cava">
           <Col span="2">
           <ul class="textCenter O_cava_name">
             <li>姓名</li>
@@ -81,7 +81,7 @@
           </ul>
           </Col>
           <Col span="21" offset="1">
-          <Table border :columns="columns" :data="data"></Table>
+          <Table border :columns="columns" :data="data" :loading="loading"></Table>
           <Page
             :total="tableTotal"
             :current="pageNumber"
@@ -97,7 +97,7 @@
       <!--<TabPane label="重抛池" name="1">-->
       <!--</TabPane>-->
       <TabPane label="配送中" name="1">
-        <Row class="O_cava" v-show="showResult">
+        <Row class="O_cava">
           <Col span="2">
           <ul class="textCenter O_cava_name">
             <li>姓名</li>
@@ -109,7 +109,7 @@
           </ul>
           </Col>
           <Col span="21" offset="1">
-          <Table border :columns="columns" :data="data"></Table>
+          <Table border :columns="columns" :data="data" :loading="loading"></Table>
           <Page
             :total="tableTotal"
             :current="pageNumber"
@@ -123,7 +123,7 @@
         </Row>
       </TabPane>
       <TabPane label="配送完成" name="2">
-        <Row class="O_cava" v-show="showResult">
+        <Row class="O_cava">
           <Col span="2">
           <ul class="textCenter O_cava_name">
             <li>姓名</li>
@@ -135,7 +135,7 @@
           </ul>
           </Col>
           <Col span="21" offset="1">
-          <Table border :columns="columns" :data="data"></Table>
+          <Table border :columns="columns" :data="data" :loading="loading"></Table>
           <Page
             :total="tableTotal"
             :current="pageNumber"
@@ -149,7 +149,7 @@
         </Row>
       </TabPane>
       <TabPane label="配送异常" name="3">
-        <Row class="O_cava" v-show="showResult">
+        <Row class="O_cava">
           <Col span="2">
           <ul class="textCenter O_cava_name">
             <li>姓名</li>
@@ -161,7 +161,7 @@
           </ul>
           </Col>
           <Col span="21" offset="1">
-          <Table border :columns="columns" :data="data"></Table>
+          <Table border :columns="columns" :data="data" :loading="loading"></Table>
           <Page
             :total="tableTotal"
             :current="pageNumber"
@@ -261,11 +261,11 @@
         tableTotal: 0,  // 表格数据总数
         state: '5', // 状态
         deliverData: [], //配送员数据
-        showResult: false // 数据展示
+        loading: false
       }
     },
     created() {
-      this.getProvinceData()
+      this.getInitOrderData()
     },
     computed: {
       allClass() {
@@ -288,7 +288,7 @@
       },
       // 获取市的数据
       getCityData(value) {
-        if (value && value !== '') {
+        if (value !== '') {
           api.getProvinceIndex(value).then((res) => {
             if (res) {
               this.showCity = false
@@ -304,7 +304,7 @@
       },
       // 获取区域的数据
       getAreaData(value) {
-        if (value && value !== '') {
+        if (value !== '') {
           api.getCityManager(value).then((res) => {
             if (res) {
               this.showArea = false
@@ -320,7 +320,7 @@
       },
       // 获取菜市场数据
       getMarketData(value) {
-        if (value && value !== '') {
+        if (value !== '') {
           api.getAreaMarket(value).then((res) => {
             if (res) {
               this.showMarket = false
@@ -330,19 +330,20 @@
         }
       },
       // 选择菜市场
-      changeMarket() {
-        let params = {
-          marketId: this.market,
-          pageSize: this.pageSize,
-          pageNumber: this.pageNumber,
-          psDeliverId: this.deliverId,
-          expressId: this.expressId,
-          state: this.state
-        }
-        if (params.marketId && params.marketId !== '') {
+      changeMarket(value) {
+        if (value !== '') {
+          let params = {
+            marketId: value,
+            pageSize: this.pageSize,
+            pageNumber: this.pageNumber,
+            psDeliverId: this.deliverId,
+            expressId: this.expressId,
+            state: this.state
+          }
+          this.loading = true
           api.getOrderData(params).then((res) => {
             if (res) {
-              this.showResult = true
+              this.loading = false
               this.data = res.expressPage.records
               this.tableTotal = res.expressPage.total
               this.deliverData = res.deliverList
@@ -353,28 +354,54 @@
       // 分页
       changePage(index) {
         this.pageNumber = index
-        this.changeMarket()
+        this.changeMarket(this.market)
       },
       // 切换
       selectTab(name) {
         this.state = name
         this.pageNumber = 1
-        this.showResult = false
-        this.changeMarket()
+        this.changeMarket(this.market)
       },
       // 选择配送员
       getDeliver(key = '') {
         this.pageNumber = 1
         this.deliverId = key
-        this.changeMarket()
+        this.changeMarket(this.market)
       },
       // 搜索
       search() {
         this.pageNumber = 1
-        this.changeMarket()
+        if (this.market !== '') {
+          this.changeMarket(this.market)
+        } else {
+          this.changeMarket(0)
+        }
       },
       clearSearch() {
         this.expressId = ''
+      },
+      // 获取默认数据
+      getInitOrderData() {
+        let user = JSON.parse(sessionStorage.getItem('userInfo'))
+        if (user.provinceId) {
+          this.province = user.provinceId
+          this.getProvinceData()
+          if (user.cityId) {
+            this.city = user.cityId
+            this.getCityData(user.provinceId)
+            if (user.areaId) {
+              this.area = user.areaId
+              this.getAreaData(user.cityId)
+              if (user.marketId) {
+                this.market = user.marketId
+                this.getMarketData(user.areaId)
+                this.changeMarket(user.marketId)
+              }
+            }
+          }
+        } else {
+          this.getProvinceData()
+        }
       }
     }
   }
