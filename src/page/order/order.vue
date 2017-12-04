@@ -44,8 +44,8 @@
     <Tabs :value="this.state" :animated="false" @on-click="selectTab" style="min-height: 600px;">
       <TabPane label="全部" name="5">
         <Row class="O_cava">
-          <Col span="2">
-          <ul class="textCenter O_cava_name">
+          <Col span="2" class="O_cava_name">
+          <ul>
             <li>姓名</li>
             <li @click="getDeliver()" :class="{active:allClass}">全部</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
@@ -70,8 +70,8 @@
       </TabPane>
       <TabPane label="新订单" name="0">
         <Row class="O_cava">
-          <Col span="2">
-          <ul class="textCenter O_cava_name">
+          <Col span="2" class="O_cava_name">
+          <ul>
             <li>姓名</li>
             <li @click="getDeliver()" :class="{active:allClass}">全部</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
@@ -98,8 +98,8 @@
       <!--</TabPane>-->
       <TabPane label="配送中" name="1">
         <Row class="O_cava">
-          <Col span="2">
-          <ul class="textCenter O_cava_name">
+          <Col span="2" class="O_cava_name">
+          <ul>
             <li>姓名</li>
             <li @click="getDeliver()" :class="{active:allClass}">全部</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
@@ -124,8 +124,8 @@
       </TabPane>
       <TabPane label="配送完成" name="2">
         <Row class="O_cava">
-          <Col span="2">
-          <ul class="textCenter O_cava_name">
+          <Col span="2" class="O_cava_name">
+          <ul>
             <li>姓名</li>
             <li @click="getDeliver()" :class="{active:allClass}">全部</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
@@ -150,8 +150,8 @@
       </TabPane>
       <TabPane label="配送异常" name="3">
         <Row class="O_cava">
-          <Col span="2">
-          <ul class="textCenter O_cava_name">
+          <Col span="2" class="O_cava_name">
+          <ul>
             <li>姓名</li>
             <li @click="getDeliver()" :class="{active:allClass}">全部</li>
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
@@ -266,6 +266,7 @@
     },
     created() {
       this.getInitOrderData()
+     // this.isQuery()
     },
     computed: {
       allClass() {
@@ -377,6 +378,7 @@
           this.changeMarket(0)
         }
       },
+      // 清除搜索
       clearSearch() {
         this.expressId = ''
       },
@@ -403,6 +405,16 @@
           this.getProvinceData()
         }
       }
+//      isQuery() {
+//        if (this.$route.query.market) {
+//          this.market = this.$route.query.market
+//          this.state = this.$route.query.state
+//          this.$route.meta.keepAlive = false
+//          this.changeMarket(this.market)
+//        } else {
+//          this.$route.meta.keepAlive = true
+//        }
+//      }
     }
   }
 </script>
@@ -432,7 +444,10 @@
     .O_cava {
       margin-top: 40px;
       .O_cava_name {
+        text-align: center;
         border: 1px solid #ccc;
+        max-height: 1287px;
+        overflow-y: scroll;
         li {
           width: 100%;
           height: 35px;
