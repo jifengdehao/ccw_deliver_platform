@@ -174,6 +174,32 @@
           </Col>
         </Row>
       </TabPane>
+      <TabPane label="已取消" name="7">
+        <Row class="O_cava">
+          <Col span="2" class="O_cava_name">
+          <ul>
+            <li>姓名</li>
+            <li @click="getDeliver()" :class="{active:allClass}">全部</li>
+            <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
+                :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
+              {{item.name}}
+            </li>
+          </ul>
+          </Col>
+          <Col span="21" offset="1">
+          <Table border :columns="columns" :data="data" :loading="loading"></Table>
+          <Page
+            :total="tableTotal"
+            :current="pageNumber"
+            :page-size="pageSize"
+            @on-change="changePage"
+            show-total
+            class="fr"
+            style="margin-top: 20px;"
+          ></Page>
+          </Col>
+        </Row>
+      </TabPane>
       <Button type="primary" class="vm-fr" @click="exportModal=true" slot="extra">导出</Button>
     </Tabs>
     <Modal v-model="exportModal" width="300">
