@@ -490,7 +490,7 @@
       .O_cava_name {
         text-align: center;
         border: 1px solid #ccc;
-        max-height: 1287px;
+        max-height: 1000px;
         overflow-y: scroll;
         li {
           width: 100%;
