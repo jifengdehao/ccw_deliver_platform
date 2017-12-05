@@ -1,20 +1,20 @@
 <template>
-  <div id="d_peisong" class="main" :class="{'isShow':show}">
-    <main-header>
+  <div id="d_peisong" class="main">
+    <h1>二期项目</h1>
+    <!-- <main-header>
       <span slot="h3">配送员数据</span>
       <Button size="large" @click="exportData(2)">导出排序和过滤后的数据</Button>
     </main-header>
     <city-select></city-select>
     <section>
       <Table border :columns="columns6" :data="data5"></Table>
-    </section>
+    </section> -->
   </div>
 </template>
 <script>
-import mainHeader from '../../components/header/main_header.vue'
 import citySelect from '../../components/changecity/cityselect.vue'
 export default {
-  components: { mainHeader, citySelect },
+  components: { citySelect },
   data() {
     return {
       columns6: [
@@ -62,9 +62,9 @@ export default {
           filterMultiple: false,
           filterMethod(value, row) {
             if (value === 1) {
-              return row.age > 25;
+              return row.age > 25
             } else if (value === 2) {
-              return row.age < 25;
+              return row.age < 25
             }
           }
         },
@@ -86,7 +86,7 @@ export default {
             }
           ],
           filterMethod(value, row) {
-            return row.address.indexOf(value) > -1;
+            return row.address.indexOf(value) > -1
           }
         }
       ],
@@ -118,11 +118,7 @@ export default {
       ]
     }
   },
-  computed: {
-    show() {
-      return this.$store.state.show
-    }
-  },
+  computed: {},
   methods: {
     getCurrentDate() {
       return new Date().toLocaleDateString()
@@ -130,7 +126,8 @@ export default {
     exportData() {
       this.$Modal.info({
         title: '用户信息',
-        content: `姓名：${this.data6[index].name}<br>年龄：${this.data6[index].age}<br>地址：${this.data6[index].address}`
+        content: `姓名：${this.data6[index].name}<br>年龄：${this.data6[index]
+          .age}<br>地址：${this.data6[index].address}`
       })
     }
   }
