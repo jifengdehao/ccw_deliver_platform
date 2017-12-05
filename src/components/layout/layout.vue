@@ -9,7 +9,7 @@
         </div>
         <m-menu :spanLeft="spanLeft"></m-menu>
         </Col>
-        <Col style="overflow-y: scroll;padding: 40px;height:100%;" :xs="spanRight" :sm="spanRight" :md="spanRight" :lg="spanRight">
+        <Col style="overflow: scroll;padding: 40px;height:100%;" :xs="spanRight" :sm="spanRight" :md="spanRight" :lg="spanRight">
         <keep-alive>
           <router-view v-if="$route.meta.keepAlive"></router-view>
         </keep-alive>
@@ -58,7 +58,6 @@ export default {
   position: relative;
   height: 100%;
   width: 100%;
-  overflow-y: scroll;
   min-width: 1400px;
   .layout-content {
     position: absolute;
