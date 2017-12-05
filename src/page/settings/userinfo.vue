@@ -1,5 +1,5 @@
 <template>
-  <div id="userinfo" class="main" :class="{'isShow':show}">
+  <div id="userinfo" class="main">
     <div class="header">
       <h2>用户管理</h2>
     </div>
@@ -78,11 +78,6 @@ export default {
       areaList: null, //  区域集合
       marketList: null, //  菜市场集合
       roleArray: null //  角色集合
-    }
-  },
-  computed: {
-    show() {
-      return this.$store.state.show
     }
   },
   created() {

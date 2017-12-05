@@ -10,8 +10,8 @@
     <div class="header">
       <h2>财务对账</h2>
       <div class="header-search">
-        <DatePicker format="yyyy-MM-dd" type="date" :value="params.beginTime"  placeholder="请输入开始时间" style="width: 200px" @on-change="changeStartTime"></DatePicker>
-        <DatePicker format="yyyy-MM-dd" type="date" :value="params.endTime" placeholder="请输入结束时间" style="width: 200px" @on-change="changeEndTime"></DatePicker>
+        <DatePicker type="datetime" :value="params.beginTime"  placeholder="请输入开始时间" style="width: 200px" @on-change="changeStartTime"></DatePicker>
+        <DatePicker type="datetime" :value="params.endTime" placeholder="请输入结束时间" style="width: 200px" @on-change="changeEndTime"></DatePicker>
         <Button @click="onExport">导出</Button>
       </div>
     </div>
@@ -23,11 +23,11 @@
     <!-- 导出数据Modal -->
     <Modal v-model="exportModal" width="300">
       <div class="vm-textCenter">
-        <!-- <DatePicker type="date" v-model="startTimeStr" placeholder="选择日期" style="width: 100%"></DatePicker> -->
-        <DatePicker type="datetime" @on-change="changeStartTimeSTR" placeholder="Select date and time" style="width: 100%"></DatePicker>
+        <DatePicker type="date" v-model="startTimeStr" placeholder="选择日期" style="width: 100%"></DatePicker>
+        <!-- <DatePicker type="datetime" @on-change="changeStartTimeSTR" placeholder="Select date and time" style="width: 100%"></DatePicker> -->
         <div class="mtb10">到</div>
-        <!-- <DatePicker type="date" v-model="endTimeStr" placeholder="选择日期" style="width: 100%"></DatePicker> -->
-        <DatePicker type="datetime" @on-change="changeEndTimeSTR" placeholder="Select date and time" style="width: 100%"></DatePicker>
+        <DatePicker type="date" v-model="endTimeStr" placeholder="选择日期" style="width: 100%"></DatePicker>
+        <!-- <DatePicker type="datetime" @on-change="changeEndTimeSTR" placeholder="Select date and time" style="width: 100%"></DatePicker> -->
       </div>
       <div slot="footer">
         <Button type="primary" long @click="getExportData()">确定</Button>
@@ -147,16 +147,16 @@ export default {
       this.startTimeStr = ''
       this.endTimeStr = ''
     },
-    // 获取导出时间源
-    changeStartTimeSTR(data) {
-      console.log(data)
-      this.startTimeStr = data
-    },
-    // 获取导出结束时间源
-    changeEndTimeSTR(data) {
-      console.log(data)
-      this.endTimeStr = data
-    },
+    // // 获取导出时间源
+    // changeStartTimeSTR(data) {
+    //   console.log(data)
+    //   this.startTimeStr = data
+    // },
+    // // 获取导出结束时间源
+    // changeEndTimeSTR(data) {
+    //   console.log(data)
+    //   this.endTimeStr = data
+    // },
     // 导出数据
     getExportData() {
       if (!!this.id) {
@@ -171,6 +171,7 @@ export default {
               window.open(data)
             }
           })
+          this.exportModal = false
         }
       }
     },

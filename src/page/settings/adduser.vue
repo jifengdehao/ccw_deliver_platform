@@ -5,7 +5,7 @@
  * FunctionPoint: 添加用户
  */
 <template>
-  <div id="adduser" class="main" :class="{'isShow':show}">
+  <div id="adduser" class="main">
     <div class="header">
       <h2>用户管理</h2>
     </div>
@@ -73,11 +73,6 @@ export default {
       areaList: null, //  区域集合
       marketList: null, //  菜市场集合
       roleArray: null //  角色列表
-    }
-  },
-  computed: {
-    show() {
-      return this.$store.state.show
     }
   },
   created() {

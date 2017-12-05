@@ -5,7 +5,7 @@
  * FunctionPoint: 平台用户
  */
 <template>
-  <div id="s_platform" class="main" :class="{'isShow':show}">
+  <div id="s_platform" class="main">
     <!-- 头部 -->
     <div class="header">
       <h2>平台用户</h2>
@@ -125,11 +125,7 @@ export default {
   created() {
     this.getUsersList()
   },
-  computed: {
-    show() {
-      return this.$store.state.show
-    }
-  },
+  computed: {},
   methods: {
     //  获取用户列表数据
     getUsersList() {

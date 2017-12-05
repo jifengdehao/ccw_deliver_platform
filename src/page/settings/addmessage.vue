@@ -1,5 +1,5 @@
 <template>
-  <div id="addmessage" class="main" :class="{'isShow':show}">
+  <div id="addmessage" class="main">
     <div class="header">
       <h2>消息</h2>
     </div>
@@ -78,11 +78,6 @@ export default {
           text: '应用消息-文本消息' //  types:3
         }
       ]
-    }
-  },
-  computed: {
-    show() {
-      return this.$store.state.show
     }
   },
   created() {
