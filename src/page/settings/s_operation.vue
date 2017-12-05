@@ -1,5 +1,5 @@
 <template>
-  <div id="s_operation" class="main" :class="{'isShow':show}">
+  <div id="s_operation" class="main">
     <h1>二期项目</h1>
     <!-- <div class="header">
       <h2>操作日志</h2>

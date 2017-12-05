@@ -1,5 +1,5 @@
 <template>
-  <div id="settings" class="main" :class="{'isShow':show}">
+  <div id="settings" class="main">
     <main-header>
       <span slot="h3">设置中心</span>
     </main-header>
@@ -25,16 +25,9 @@
   </div>
 </template>
 <script>
-import mainHeader from '../../components/header/main_header.vue'
 export default {
-  components: { mainHeader },
   data() {
     return {}
-  },
-  computed: {
-    show() {
-      return this.$store.state.show
-    }
   },
   methods: {
     getCurrentDate() {

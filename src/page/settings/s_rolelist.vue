@@ -5,7 +5,7 @@
  * FunctionPoint: 角色列表
  */
 <template>
-  <div id="s_rolelist" class="main" :class="{'isShow':show}">
+  <div id="s_rolelist" class="main">
     <!-- 头部 -->
     <div class="header">
       <h2>角色列表</h2>
@@ -113,11 +113,6 @@ export default {
         pageNumber: 1,
         condition: ''
       }
-    }
-  },
-  computed: {
-    show() {
-      return this.$store.state.show
     }
   },
   created() {

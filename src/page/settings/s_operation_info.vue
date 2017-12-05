@@ -43,7 +43,6 @@
   </div>
 </template>
 <script>
-import mainHeader from '../../components/header/main_header.vue'
 export default {
   components: { mainHeader },
   data() {
