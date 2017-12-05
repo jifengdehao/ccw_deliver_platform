@@ -11,8 +11,8 @@
     <div class="header">
       <h2>财务对账</h2>
       <div class="header-search">
-        <DatePicker type="date" placeholder="请输入开始时间" style="width: 200px" @on-change="changeStartTime"></DatePicker>
-        <DatePicker type="date" placeholder="请输入结束时间" style="width: 200px" @on-change="changeTime"></DatePicker>
+        <DatePicker type="datetime" v-model="firstDate" placeholder="请输入开始时间" style="width: 200px" @on-change="changeStartTime"></DatePicker>
+        <DatePicker type="datetime" v-model="currentDate" placeholder="请输入结束时间" style="width: 200px" @on-change="changeTime"></DatePicker>
         <Button @click="onExport">导出</Button>
       </div>
     </div>
@@ -58,11 +58,11 @@
      <!-- 导出数据Modal -->
     <Modal v-model="exportModal" width="300">
       <div class="vm-textCenter">
-        <!-- <DatePicker type="date" v-model="startTimeStr" placeholder="选择日期" style="width: 100%"></DatePicker> -->
-        <DatePicker type="datetime" @on-change="changeStartTimeSTR" placeholder="Select date and time" style="width: 100%"></DatePicker>
+        <DatePicker type="date" v-model="startTimeStr" placeholder="选择日期" style="width: 100%"></DatePicker>
+        <!-- <DatePicker type="datetime" @on-change="changeStartTimeSTR" placeholder="Select date and time" style="width: 100%"></DatePicker> -->
         <div class="mtb10">到</div>
-        <!-- <DatePicker type="date" v-model="endTimeStr" placeholder="选择日期" style="width: 100%"></DatePicker> -->
-        <DatePicker type="datetime" @on-change="changeEndTimeSTR" placeholder="Select date and time" style="width: 100%"></DatePicker>
+        <DatePicker type="date" v-model="endTimeStr" placeholder="选择日期" style="width: 100%"></DatePicker>
+        <!-- <DatePicker type="datetime" @on-change="changeEndTimeSTR" placeholder="Select date and time" style="width: 100%"></DatePicker> -->
       </div>
       <div slot="footer">
         <Button type="primary" long @click="getExportData()">确定</Button>
@@ -91,7 +91,8 @@ export default {
       startTimeStr: '', // 搜索开始时间
       endTimeStr: '', // 搜索结束时间
       params: {
-        marketId: '', // 菜市场ID
+        areaId: null, // 区域ID
+        marketId: null, // 菜市场ID
         beginTime: '', // 开始时间
         endTime: '', // 结束时间
         pageNumber: 1, // 当前页码
@@ -174,15 +175,13 @@ export default {
                   on: {
                     click: () => {
                       // this.$router.push('/finance/' + params.row.psDeliverId)
-                      this.$router.push(
-                        {
-                          path: '/finance/' + params.row.psDeliverId,
-                          query: {
-                            'start': this.params.beginTime,
-                            'end': this.params.endTime
-                          }
+                      this.$router.push({
+                        path: '/finance/' + params.row.psDeliverId,
+                        query: {
+                          start: this.params.beginTime,
+                          end: this.params.endTime
                         }
-                      )
+                      })
                     }
                   }
                 },
@@ -194,10 +193,16 @@ export default {
       ], // table 数据
       finance: [], // 列表数据,
       total: '', // 总页面
-      exportModal: false // 导出时间弹框隐藏
+      exportModal: false, // 导出时间弹框隐藏
+      firstDate: '', // 获取本月第一天时间
+      currentDate: '', // 获取当天时间
     }
   },
   created: function() {
+    // 获取本月第一天时间
+    this.firstTime()
+    // 获取当天时间
+    this.currentTime()
     this.getDeployManager()
   },
   methods: {
@@ -206,7 +211,6 @@ export default {
       api.getFinanceList(this.params).then(data => {
         this.finance = data.records
         this.total = data.total
-        console.log(data)
       })
     },
     // 获取省区下拉框数据
@@ -237,7 +241,13 @@ export default {
     },
     // 获取菜市场下拉框数据
     changeAreaData(value) {
+      this.params.areaId = value // 获取区域ID
       this.marketManager = ''
+      if (!!this.params.areaId) {
+        // 获取区域列表
+        this.params.pageNumber = 1
+        this.getFinanceList()
+      }
       if (value && value != '') {
         api.getAreaMarket(value).then(data => {
           this.marketManager = data
@@ -249,6 +259,7 @@ export default {
     changeMarkData(value) {
       if (value && value != '') {
         this.params.marketId = value
+        this.params.pageNumber = 1
         this.getFinanceList()
       }
     },
@@ -258,22 +269,23 @@ export default {
       this.startTimeStr = ''
       this.endTimeStr = ''
     },
-    // 获取导出时间源
-    changeStartTimeSTR(data) {
-      this.startTimeStr = data
-    },
-    // 获取导出结束时间源
-    changeEndTimeSTR(data) {
-      this.endTimeStr = data
-    },
+    // // 获取导出时间源
+    // changeStartTimeSTR(data) {
+    //   this.startTimeStr = data
+    // },
+    // // 获取导出结束时间源
+    // changeEndTimeSTR(data) {
+    //   this.endTimeStr = data
+    // },
     // 导出数据
     getExportData() {
-      if (this.params.marketId && this.params.marketId != '') {
+      if (!!this.params.areaId) {
         if (!!this.startTimeStr && !!this.endTimeStr) {
           let params = {
             marketId: this.params.marketId,
             beginTime: this.startTimeStr,
-            endTime: this.endTimeStr
+            endTime: this.endTimeStr,
+            areaId: this.params.areaId
           }
           api.getFinanceListExport(params).then(data => {
             if (data && data != null) {
@@ -304,6 +316,27 @@ export default {
     changePage(page) {
       this.params.pageNumber = page
       this.getFinanceList()
+    },
+    //  时间过滤
+    firstTime() {
+      let date = new Date().setDate(1)
+      let date1 = new Date(date)
+      // 获取月份
+      let month = date1.getMonth() + 1 >= 10 ? date1.getMonth() + 1 : '0' + date1.getMonth()  + 1
+      // 获取日期
+      let day = date1.getDate() >= 10 ? date1.getDate() : '0' + date1.getDate()
+      this.params.beginTime = this.firstDate = date1.getFullYear() + '-' + month + '-' + day + ' ' + '00' + ':' + '00' + ':' + '00'
+      // console.log(date1.getFullYear() + '-' + month + '-' + day + ' ' + date1.getHours() + ':' + date1.getMinutes() + ':' + date1.getSeconds())
+    },
+    currentTime() {
+      let date = new Date()
+      let date1 = new Date(date)
+      // 获取月份
+      let month = date1.getMonth() + 1 >= 10 ? date1.getMonth() + 1 : '0' + date1.getMonth() + 1
+      // 获取日期
+      let days = date1.getDate() - 1
+      let day = days >= 10 ? days : '0' + days
+      this.params.endTime = this.currentDate = date1.getFullYear() + '-' + month + '-' + day + ' ' + '23' + ':' + '59' + ':' + '59'
     }
   }
 }

@@ -235,7 +235,7 @@ export default {
     },
     // 保存修改 清空修改
     onSave() {
-      if (!!this.id) {
+      if (!!this.id && !!this.areaIdData && !!this.cityIdIndex && !!this.provinceData && !!this.marketIdData && !!this.status) {
         let saveDate = {
           personStatus: this.status, // 保存上班状态
           psDeliverId: this.id, // 保存修改用户ID
@@ -256,6 +256,8 @@ export default {
             this.$Message.info('保存失败')
           }
         })
+      } else {
+        return this.$Message.info('相关信息不能为空')
       }
     },
     // onSave(status) {

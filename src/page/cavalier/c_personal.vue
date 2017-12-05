@@ -28,11 +28,11 @@
        <!-- 导出数据Modal -->
       <Modal v-model="exportModal" width="300">
         <div class="vm-textCenter">
-          <!-- <DatePicker type="date" v-model="startTime" placeholder="选择日期" style="width: 100%"></DatePicker> -->
-          <DatePicker type="datetime" @on-change="changeStartTime" placeholder="Select date and time" style="width: 100%"></DatePicker>
+          <DatePicker type="date" v-model="startTime" placeholder="选择日期" style="width: 100%"></DatePicker>
+          <!-- <DatePicker type="datetime" @on-change="changeStartTime" placeholder="Select date and time" style="width: 100%"></DatePicker> -->
           <div class="mtb10">到</div>
-          <!-- <DatePicker type="date" v-model="endTime" placeholder="选择日期" style="width: 100%"></DatePicker> -->
-          <DatePicker type="datetime" @on-change="changeEndTime" placeholder="Select date and time" style="width: 100%"></DatePicker>
+          <DatePicker type="date" v-model="endTime" placeholder="选择日期" style="width: 100%"></DatePicker>
+          <!-- <DatePicker type="datetime" @on-change="changeEndTime" placeholder="Select date and time" style="width: 100%"></DatePicker> -->
         </div>
         <div slot="footer">
           <Button type="primary" long @click="getExportData()">确定</Button>
@@ -199,14 +199,14 @@ export default {
       this.endTime = ''
       this.startTime = ''
     },
-    // 获取导出时间源
-    changeStartTime(data) {
-      this.startTime = data
-    },
-    // 获取导出结束时间源
-    changeEndTime(data) {
-      this.endTime = data
-    },
+    // // 获取导出时间源
+    // changeStartTime(data) {
+    //   this.startTime = data
+    // },
+    // // 获取导出结束时间源
+    // changeEndTime(data) {
+    //   this.endTime = data
+    // },
     // 导出数据
     getExportData() {
       if (!!this.startTime && !!this.endTime) {
