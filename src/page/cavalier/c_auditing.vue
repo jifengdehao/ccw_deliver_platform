@@ -75,30 +75,30 @@ export default {
       columns4: [
         {
           type: 'selection',
-          align: 'center'
+          align: 'center',
+          width: '60'
         },
         {
           title: '序号',
           key: 'ID',
           type: 'index',
-          align: 'center'
+          align: 'center',
+          width: '70'
         },
         {
           title: '用户ID',
           key: 'psDeliverApplyId',
-          width: '140',
           align: 'center'
         },
         {
           title: '姓名',
           key: 'name',
-          width: '100',
           align: 'center'
         },
         {
           title: '学历',
+          width: '70',
           key: 'educationStr',
-          width: '90',
           align: 'center'
         },
         {
@@ -110,14 +110,12 @@ export default {
         {
           title: '联系方式',
           key: 'mobileno',
-          align: 'center',
-          width: '100'
+          align: 'center'
         },
         {
           title: '出生年月日',
           key: 'birthday',
           align: 'center',
-          width: '100',
           render: (h, params) => {
             return 'span', this.formatTime(params.row.birthday)
           }
@@ -125,13 +123,12 @@ export default {
         {
           title: '身份证号码',
           key: 'identityCard',
-          align: 'center',
-          width: '100'
+          align: 'center'
         },
         {
           title: '身份证正反面',
-          width: '130',
           align: 'center',
+          width: '110',
           render: (h, params) => {
             return h('div', [
               h(
@@ -163,8 +160,8 @@ export default {
         },
         {
           title: '健康证',
-          width: '130',
           align: 'center',
+          width: '110',
           render: (h, params) => {
             return h('div', [
               h(
@@ -194,8 +191,8 @@ export default {
         {
           title: '操作',
           key: 'operation',
-          width: '170',
           align: 'center',
+          width: '170',
           render: (h, params) => {
             return h('div', [
               h(
@@ -305,7 +302,6 @@ export default {
     },
     // 选择时返回的数据
     changeSelect(data) {
-      console.log(data)
       this.selectData = data
     },
     // 通过/ 未通过
@@ -380,14 +376,14 @@ export default {
       let month =
         date.getMonth() + 1 >= 10
           ? date.getMonth() + 1
-          : '0' + (date.getMonth() + 1)
+          : '0' + date.getMonth() + 1
       let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
       let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
-      // let minutes =
-      //   date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()
-      // let seconds =
-      //   date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()
-      return `${date.getFullYear()}年${month}月${day}日`
+      let minutes =
+        date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()
+      let seconds =
+        date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()
+      return `${date.getFullYear()}/${month}/${day} ${hour}:${minutes}:${seconds}`
     }
   }
 }

@@ -5,7 +5,7 @@
  * FunctionPoint: 权限管理
  */
 <template>
-  <div id="s_rbac" class="main" :class="{'isShow':show}">
+  <div id="s_rbac" class="main">
     <!-- 头部 -->
     <div class="header">
       <h2>权限管理</h2>
@@ -97,11 +97,6 @@ export default {
   },
   created() {
     this.getUsersList()
-  },
-  computed: {
-    show() {
-      return this.$store.state.show
-    }
   },
   methods: {
     //  获取权限数据列表

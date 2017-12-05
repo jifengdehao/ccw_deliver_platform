@@ -1,5 +1,5 @@
 <template>
-  <div id="roleinfo" class="main" :class="{'isShow':show}"  v-if="menuData">
+  <div id="roleinfo" class="main" v-if="menuData">
     <p class="role-p"><span>角色：</span><input :disabled="menuData.role.isAdmin === 1 ? true : false" type="text" v-model="putParams.roleName"></p>
     <div class="tree-box">
       <ul>
@@ -28,11 +28,6 @@ export default {
         roleName: '', //  角色名称
         permissionList: [] //  用户权限
       }
-    }
-  },
-  computed: {
-    show() {
-      return this.$store.state.show
     }
   },
   created() {
