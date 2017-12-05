@@ -98,15 +98,15 @@ export default {
     })
     if (/^\d+$/.test(sessionStorage.getItem('index'))) {
       this.shengSelected = sessionStorage.getItem('index')
-      this.showCity(sessionStorage.getItem('provinceId'))
+      this.showCity(sessionStorage.getItem('provinceId'),sessionStorage.getItem('provinceName'))
     }
     if (/^\d+$/.test(sessionStorage.getItem('cityIndex'))) {
       this.citySelected = JSON.parse(sessionStorage.getItem('cityIndex'))
-      this.showQu(sessionStorage.getItem('cityId'))
+      this.showQu(sessionStorage.getItem('cityId'),sessionStorage.getItem('cityName'),)
     }
     if (/^\d+$/.test(sessionStorage.getItem('areaIndex'))) {
       this.areaSelected = JSON.parse(sessionStorage.getItem('areaIndex'))
-      this.showMarket(sessionStorage.getItem('areaId'))
+      this.showMarket(sessionStorage.getItem('areaId'),sessionStorage.getItem('areaName'),)
     }
   },
   methods: {
@@ -197,6 +197,7 @@ export default {
       this.areaSelected = null
       this.provinceName = provinceName
       sessionStorage.setItem('provinceId', provinceId)
+      sessionStorage.setItem('provinceName', provinceName)
       api.getCitys(provinceId).then(response => {
         this.citys = response
         this.qus = []
@@ -212,6 +213,7 @@ export default {
       this.cityName = cityName
       this.cityId = cityId
       sessionStorage.setItem('cityId', cityId)
+      sessionStorage.setItem('cityName', cityName)
       api.getQus(cityId).then(response => {
         this.qus = response
         this.markets = []
@@ -224,6 +226,7 @@ export default {
         sessionStorage.setItem('areaIndex', areaIndex)
       }
       sessionStorage.setItem('areaId',areaId)
+      sessionStorage.setItem('areaName',areaName)
       this.areaId = areaId
       this.areaName = areaName
       api.getMarkets(areaId).then(response => {
