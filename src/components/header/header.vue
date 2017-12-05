@@ -14,7 +14,9 @@
       </div>
       </Col>
       <Col :xs="12" :sm="3" :md="3" :lg="3">
-      <Icon type="android-person" :size="iconSize"></Icon>&nbsp;&nbsp;管理员：{{username}}
+      <router-link to="/user" tag="div">
+        <Icon type="android-person" :size="iconSize"></Icon>&nbsp;&nbsp;管理员：{{username}}
+      </router-link>
       </Col>
       <Col :xs="0" :sm="3" :md="3" :lg="3">
       <div @click="goToMsg">
@@ -44,6 +46,9 @@
     computed: {
       username() {
         return JSON.parse(sessionStorage.getItem('userInfo')).userName
+      },
+      userId() {
+        return JSON.parse(sessionStorage.getItem('userInfo')).psUserId
       },
       top() {
         return -this.activeIndex * 60 + 'px';
@@ -113,7 +118,7 @@
     .logo {
       font-size: 16px;
     }
-    .close-menu{
+    .close-menu {
       height: 60px;
       line-height: 60px;
       text-align: center;

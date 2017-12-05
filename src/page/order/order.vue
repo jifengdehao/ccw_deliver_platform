@@ -174,7 +174,19 @@
           </Col>
         </Row>
       </TabPane>
+      <Button type="primary" class="vm-fr" @click="exportModal=true" slot="extra">导出</Button>
     </Tabs>
+    <Modal v-model="exportModal" width="300">
+      <div slot="header">导出表格</div>
+      <div class="textCenter">
+        <DatePicker type="date" placeholder="选择日期" style="width: 100%" v-model="startTime"></DatePicker>
+        <div class="m10">到</div>
+        <DatePicker type="date" placeholder="选择日期" style="width: 100%" v-model="endTime"></DatePicker>
+      </div>
+      <div slot="footer">
+        <Button type="primary" long :loading="modal_loading" @click="exportData()">确定</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -261,18 +273,32 @@
         tableTotal: 0,  // 表格数据总数
         state: '5', // 状态
         deliverData: [], //配送员数据
-        loading: false
+        loading: false,
+        exportModal: false, // 导出选择框
+        modal_loading: false,  // 导出加载
+        startTime: '', // 导出开始时间
+        endTime: ''   // 导出结束时间
       }
     },
     created() {
       this.getInitOrderData()
-     // this.isQuery()
+      this.isQuery()
     },
     computed: {
       allClass() {
         return this.deliverId === '' ? true : false
       }
     },
+//    watch: {
+//      '$route'(to, from) {
+//        console.log(to)
+//        if (to.path === '/order') {
+//          this.$route.meta.keepAlive = true
+//        } else {
+//          this.$route.meta.keepAlive = false
+//        }
+//      }
+//    },
     methods: {
       // 获取省市数据
       getProvinceData() {
@@ -404,17 +430,35 @@
         } else {
           this.getProvinceData()
         }
+      },
+      isQuery() {
+        if (this.$route.query.market) {
+          this.market = this.$route.query.market
+          this.state = this.$route.query.state
+          this.$route.meta.keepAlive = !this.$route.meta.keepAlive
+          this.changeMarket(this.market)
+        } else {
+          this.$route.meta.keepAlive = !this.$route.meta.keepAlive
+        }
+      },
+      // 导出表格
+      exportData() {
+        if (this.market !== '') {
+          this.modal_loading = true;
+          let params = {
+            beginTime: this.startTime,
+            endTime: this.endTime,
+            marketId: this.market
+          }
+          api.exportOrderPoi(params).then((res) => {
+            if (res) {
+              console.log(res)
+              this.modal_loading = false
+              window.open(res)
+            }
+          })
+        }
       }
-//      isQuery() {
-//        if (this.$route.query.market) {
-//          this.market = this.$route.query.market
-//          this.state = this.$route.query.state
-//          this.$route.meta.keepAlive = false
-//          this.changeMarket(this.market)
-//        } else {
-//          this.$route.meta.keepAlive = true
-//        }
-//      }
     }
   }
 </script>
