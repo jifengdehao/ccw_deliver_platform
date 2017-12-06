@@ -61,6 +61,8 @@
     right: 0;
     top: 0;
     bottom: 0;
+    overflow: hidden;
+    min-width: 1366px;
   }
 
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="s_message" class="main" :class="{'isShow':show}">
+  <div id="s_message" class="main">
     <div class="header">
       <h2>消息</h2>
       <Button class="fr" @click="addMessage">新增</Button>
@@ -112,11 +112,6 @@ export default {
         }
       ],
       messageData: null
-    }
-  },
-  computed: {
-    show() {
-      return this.$store.state.show
     }
   },
   created() {

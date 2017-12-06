@@ -36,7 +36,7 @@ router.afterEach((to, from, next) => {
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  store,
+  // store,
   router,
   template: '<App/>',
   components: {

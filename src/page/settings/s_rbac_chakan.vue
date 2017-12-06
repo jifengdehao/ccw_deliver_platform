@@ -39,11 +39,6 @@ export default {
       }
     }
   },
-  computed: {
-    show() {
-      return this.$store.state.show
-    }
-  },
   created() {
     this.getUserInfoData()
   },

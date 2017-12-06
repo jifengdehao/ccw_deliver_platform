@@ -1,6 +1,7 @@
 <template>
-  <div id="datecenter" class="main" :class="{'isShow':show}">
-    <main-header>
+  <div id="datecenter" class="main">
+    <h1>二期项目</h1>
+    <!-- <main-header>
       <span slot="h3">数据中心</span>
     </main-header>
     <section class="datecenter_tonji clearfix">
@@ -35,13 +36,11 @@
         <h3>月推广量排行榜</h3>
         <Table border :columns="columns1" :data="data1"></Table>
       </div>
-    </section>
+    </section> -->
   </div>
 </template>
 <script>
-import mainHeader from '../../components/header/main_header.vue'
 export default {
-  components: { mainHeader },
   data() {
     return {
       columns1: [
@@ -80,11 +79,6 @@ export default {
           address: '深圳市南山区深南大道'
         }
       ]
-    }
-  },
-  computed: {
-    show() {
-      return this.$store.state.show
     }
   },
   methods: {

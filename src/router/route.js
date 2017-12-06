@@ -259,7 +259,12 @@ const settingMessageDetail = resolve => {
     resolve(module)
   })
 }
-
+// 个人中心
+const user = resolve => {
+  import('@/page/user/user').then(module => {
+    resolve(module)
+  })
+}
 export default [
   {
     path: '/login',
@@ -280,19 +285,19 @@ export default [
         path: '/home',
         name: 'home',
         component: Home,
-        meta: { keepAlive: true }
+        meta: {keepAlive: true}
       },
       {
         path: '/order',
         name: 'order',
         component: Order,
-        meta: { keepAlive: true }
+        meta: {keepAlive: true}
       },
       {
         path: '/order/:id',
         name: 'orderDetails',
         component: OrderDetails,
-        meta: { keepAlive: false }
+        meta: {keepAlive: false}
       },
       {
         path: '/finance',
@@ -437,6 +442,10 @@ export default [
       {
         path: '/setting_message/:smMssageId',
         component: settingMessageDetail
+      },
+      {
+        path: '/user',
+        component: user
       }
     ]
   }

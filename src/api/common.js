@@ -10,6 +10,22 @@ import * as ax from './instrance'
 export const uploadUrl = ax.uploadUrl
 
 // author: zhangwenlong start
+
+/**
+ * 修改个人密码
+ * @param params
+ */
+export const modifyPass = params => {
+  return ax.p('/User/updatePass', params)
+}
+
+/**
+ * 修改个人信息
+ * @param params
+ */
+export const modifyUserInfo = params => {
+  return ax.p('/User/updateSelf', params)
+}
 /**
  * 登录
  * @param params
@@ -45,6 +61,14 @@ export const getIndeData = params => {
 export const getOrderData = params => {
   return ax.g('/orderManager', params)
 }
+/**
+ * 导出订单列表
+ * @param params
+ */
+export const exportOrderPoi = params => {
+  return ax.g('/orderManager/poi', params)
+}
+
 
 /**
  * 订单详情

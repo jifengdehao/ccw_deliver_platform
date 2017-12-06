@@ -42,7 +42,7 @@
       </Col>
     </Row>
     <div v-show="indexData">
-      <Row style="margin-top: 40px;" :gutter="100">
+      <Row style="margin-top: 40px;" :gutter="80">
         <Col span="12">
         <Card class="H-card" dis-hover>
           <h3>系统消息</h3>
@@ -77,7 +77,7 @@
         </Card>
         </Col>
       </Row>
-      <Row style="margin-top: 40px;" :gutter="100">
+      <Row style="margin-top: 40px;" :gutter="80">
         <Col span="12">
         <Card class="H-card" dis-hover>
           <h3>实时监控</h3>
@@ -247,6 +247,7 @@
           // 获取首页数据
           api.getIndeData(value).then((res) => {
             if (res) {
+              console.log(res)
               this.indexData = true
               this.sysMsg = (res.custSysMsgList).map((item, index) => {
                 item.createdAt = time.formatDateTime(item.createdAt)
@@ -271,10 +272,10 @@
           this.getProvinceData()
           this.getCityData(user.provinceId)
           if (user.cityId) {
-            this.city = user.cityId  
+            this.city = user.cityId
             this.getAreaData(user.cityId)
             if (user.areaId) {
-              this.area = user.areaId    
+              this.area = user.areaId
               this.getMarketData(user.areaId)
               if (user.marketId) {
                 this.market = user.marketId
@@ -319,9 +320,8 @@
       }
     }
     .H-card {
-      height: 300px;
+      min-height: 300px;
       .ivu-card-body > ul {
-        overflow-y: scroll;
         height: 200px;
       }
       .ivu-card-body > ul > li {
