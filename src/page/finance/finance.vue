@@ -179,7 +179,9 @@ export default {
                         path: '/finance/' + params.row.psDeliverId,
                         query: {
                           start: this.params.beginTime,
-                          end: this.params.endTime
+                          end: this.params.endTime,
+                          areaId: this.params.areaId,
+                          marketId: this.params.marketId
                         }
                       })
                     }
@@ -242,6 +244,7 @@ export default {
     // 获取菜市场下拉框数据
     changeAreaData(value) {
       this.params.areaId = value // 获取区域ID
+      this.params.marketId = ''
       this.marketManager = ''
       if (!!this.params.areaId) {
         // 获取区域列表
@@ -303,12 +306,7 @@ export default {
     // 获取结束时间
     changeTime(data) {
       this.params.endTime = data
-      if (
-        this.params.marketId &&
-        this.params.marketId != '' &&
-        this.params.beginTime &&
-        this.params.beginTime != ''
-      ) {
+      if (this.params.marketId && this.params.marketId != '' && this.params.beginTime && this.params.beginTime != '' || this.params.areaId && this.params.areaId != '') {
         this.getFinanceList()
       }
     },
