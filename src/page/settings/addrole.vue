@@ -7,7 +7,7 @@
       </ul>
     </div>
     <p class="btn-p">
-      <Button @click="getRoleInfo">取消</Button>
+      <Button @click="getRoleInfo">重置</Button>
       <Button @click="submitInfoData">确认</Button>
     </p >
   </div>

@@ -94,7 +94,7 @@
 
     </div>
     <div class="footer">
-      <Button size="large" type="ghost" @click="saveOpen('1')">取消</Button>
+      <Button size="large" type="ghost" @click="saveOpen('1')">重置</Button>
       <Button size="large" type="ghost" @click="saveOpen('2')">确定</Button>
     </div>
   </div>
@@ -222,11 +222,14 @@ export default {
       switch (status) {
         case '1':
           this.$Message.info('取消修改')
-          this.cityManager = []
-          this.areaManager = []
-          this.marketManager = []
-          this.getDeployManager()
-          this.getDeliverInfo()
+          this.$router.go(0)
+          // this.cityManager = []
+          // this.areaManager = []
+          // this.marketManager = []
+          // this.getDeployManager()
+          // this.changeDate()
+          // this.changeCityData()
+          // this.getDeliverInfo()
           break
         case '2':
           this.showModal = true

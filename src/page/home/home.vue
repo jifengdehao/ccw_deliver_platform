@@ -15,7 +15,7 @@
     <Row>
       <Col span="6">
       <h3>省区</h3>
-      <Select v-model="province" clearable @on-change="changeProvince" style="width:200px">
+      <Select v-model="province" clearable @on-change="changeProvince" style="width:200px" :disabled="showProvince">
         <Option v-for="(item,index) in provinceData" :value="item.provinceId" :key="item.provinceId">{{
           item.provinceName}}
         </Option>
@@ -42,7 +42,7 @@
       </Col>
     </Row>
     <div v-show="indexData">
-      <Row style="margin-top: 40px;" :gutter="100">
+      <Row style="margin-top: 40px;" :gutter="80">
         <Col span="12">
         <Card class="H-card" dis-hover>
           <h3>系统消息</h3>
@@ -77,7 +77,7 @@
         </Card>
         </Col>
       </Row>
-      <Row style="margin-top: 40px;" :gutter="100">
+      <Row style="margin-top: 40px;" :gutter="80">
         <Col span="12">
         <Card class="H-card" dis-hover>
           <h3>实时监控</h3>
@@ -173,7 +173,8 @@
         areaData: [], // 区域数据集
         showArea: true, // 是否允许选择区域  true ===>不允许 false 允许
         marketData: [], // 市场数据集
-        showMarket: true  // 是否允许选择市场  true ===>不允许 false 允许
+        showMarket: true,  // 是否允许选择市场  true ===>不允许 false 允许
+        showProvince: true
       }
     },
     created() {
@@ -247,6 +248,7 @@
           // 获取首页数据
           api.getIndeData(value).then((res) => {
             if (res) {
+              console.log(res)
               this.indexData = true
               this.sysMsg = (res.custSysMsgList).map((item, index) => {
                 item.createdAt = time.formatDateTime(item.createdAt)
@@ -268,22 +270,34 @@
         let user = JSON.parse(sessionStorage.getItem('userInfo'))
         if (user.provinceId) {
           this.province = user.provinceId
-          this.getProvinceData()
-          this.getCityData(user.provinceId)
+          this.provinceData.push({provinceId: user.provinceId, provinceName: user.provinceName})
           if (user.cityId) {
-            this.city = user.cityId  
-            this.getAreaData(user.cityId)
+            this.city = user.cityId
+            this.cityData.push({cityId: user.cityId, cityName: user.cityName})
             if (user.areaId) {
-              this.area = user.areaId    
-              this.getMarketData(user.areaId)
+              this.area = user.areaId
+              this.areaData.push({areaId: user.areaName, areaName: user.areaName})
+              this.showArea = false
               if (user.marketId) {
                 this.market = user.marketId
+                this.marketData.push({marketId: user.marketId, marketName: user.marketName})
+                this.showMarket = true
                 this.changeMarket(user.marketId)
+              } else {
+                this.getMarketData(user.areaId)
+                this.showMarket = false
               }
+            } else {
+              this.getAreaData(user.cityId)
+              this.showArea = true
             }
+          } else {
+            this.getCityData(user.provinceId)
+            this.showCity = false
           }
         } else {
           this.getProvinceData()
+          this.showProvince = false
         }
       }
     }
@@ -319,9 +333,8 @@
       }
     }
     .H-card {
-      height: 300px;
+      min-height: 300px;
       .ivu-card-body > ul {
-        overflow-y: scroll;
         height: 200px;
       }
       .ivu-card-body > ul > li {

@@ -1,10 +1,10 @@
 <template>
   <div id="header">
     <Row>
-      <Col :xs="0" :sm="3" :md="3" :lg="3">
+      <Col :xs="3" :sm="3" :md="3" :lg="3">
       <div class="logo">菜城科技有限公司</div>
       </Col>
-      <Col :xs="0" :sm="12" :md="12" :lg="12">
+      <Col :xs="12" :sm="12" :md="12" :lg="12">
       <div class="message">
         <ul class="scroll-content" :style="{ top }">
           <li v-for="(item,index) in prizeList" @click="goToSysMsgDetails(item.smMssageId)" :key="item.smMssageId">
@@ -13,17 +13,17 @@
         </ul>
       </div>
       </Col>
-      <Col :xs="12" :sm="3" :md="3" :lg="3">
+      <Col :xs="3" :sm="3" :md="3" :lg="3">
       <router-link to="/user" tag="div">
         <Icon type="android-person" :size="iconSize"></Icon>&nbsp;&nbsp;管理员：{{username}}
       </router-link>
       </Col>
-      <Col :xs="0" :sm="3" :md="3" :lg="3">
+      <Col :xs="3" :sm="3" :md="3" :lg="3">
       <div @click="goToMsg">
         <Icon type="ios-chatboxes-outline" :size="iconSize"></Icon>&nbsp;&nbsp;消息
       </div>
       </Col>
-      <Col :xs="12" :sm="3" :md="3" :lg="3">
+      <Col :xs="3" :sm="3" :md="3" :lg="3">
       <div @click="logout">
         <Icon type="log-out" :size="iconSize"></Icon>&nbsp;&nbsp;安全退出
       </div>
@@ -115,6 +115,7 @@
     color: #fff;
     text-align: center;
     cursor: pointer;
+    min-width: 1366px;
     .logo {
       font-size: 16px;
     }

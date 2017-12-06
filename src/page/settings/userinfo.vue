@@ -58,7 +58,7 @@
      </ul>
     </section>
     <p class="btn-p">
-      <Button type="ghost" size="large" @click="getUserInfoData">取消</Button>
+      <Button type="ghost" size="large" @click="getUserInfoData">重置</Button>
       <Button type="ghost" size="large" @click="putUserInfo">确定</Button>
     </p>
   </div>
