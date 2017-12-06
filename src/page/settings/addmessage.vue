@@ -39,7 +39,7 @@
       </p>
     </section>
     <section class="addmessage_button">
-      <Button size="large" style="width:100px;background-color: #fff;margin-right:10px" @click="resetSingleInfo">取消</Button>
+      <Button size="large" style="width:100px;background-color: #fff;margin-right:10px" @click="resetSingleInfo">重置</Button>
       <Button size="large" style="width:100px;background-color: #fff;" @click="addSingleInfo">确定</Button>
     </section>
   </div>
