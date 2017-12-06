@@ -120,6 +120,8 @@ export default {
         psDeliverId: '',
         beginTime: '',
         endTime: '',
+        areaId: '',
+        marketId: '',
         pageSize: 10,
         pageNumber: 1
       }, // 搜索 获取列表数据
@@ -128,14 +130,17 @@ export default {
     }
   },
   created: function() {
+    this.params.beginTime = this.$route.query.start
+    this.params.endTime = this.$route.query.end
     this.getFinanceOrderList()
   },
   methods: {
     // 初始化列表数据
     getFinanceOrderList() {
+      window.history.pushState('', '', location.href)
       this.params.psDeliverId = this.$route.params.id
-      this.params.beginTime = this.$route.query.start
-      this.params.endTime = this.$route.query.end
+      this.params.areaId = this.$route.query.areaId
+      this.params.marketId = this.$route.query.marketId
       api.getFinanceOrderList(this.params).then(data => {
         this.seeFinanceData = data.records
         this.total = data.total
@@ -181,8 +186,8 @@ export default {
     },
     // 结束选择搜索时间
     changeEndTime(data) {
+      this.params.endTime = data
       if (this.params.beginTime && this.params.beginTime != '') {
-        this.params.endTime = data
         this.getFinanceOrderList()
       }
     },
