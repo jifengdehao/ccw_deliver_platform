@@ -101,7 +101,7 @@ export default {
       columns1: [
         {
           title: '用户ID',
-          key: 'psDeliverId',
+          key: 'psEmpno',
           align: 'center'
         },
         {

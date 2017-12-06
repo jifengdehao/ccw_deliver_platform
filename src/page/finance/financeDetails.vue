@@ -53,7 +53,7 @@ export default {
       columns1: [
         {
           title: '用户ID',
-          key: 'psDeliverId',
+          key: 'psEmpno',
           align: 'center'
         },
         {
@@ -187,6 +187,7 @@ export default {
     // 结束选择搜索时间
     changeEndTime(data) {
       this.params.endTime = data
+      this.params.pageNumber = 1
       if (this.params.beginTime && this.params.beginTime != '') {
         this.getFinanceOrderList()
       }
@@ -198,18 +199,23 @@ export default {
     },
     //  时间过滤
     formatTime(time) {
-      let date = new Date(time)
-      let month =
-        date.getMonth() + 1 >= 10
-          ? date.getMonth() + 1
-          : '0' + date.getMonth() + 1
-      let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
-      let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
-      // let minutes =
-      //   date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()
-      // let seconds =
-      //   date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()
-      return `${date.getFullYear()}/${month}/${day}`
+      if (time) {
+        let date = new Date(time)
+        let month =
+          date.getMonth() + 1 >= 10
+            ? date.getMonth() + 1
+            : '0' + (date.getMonth() + 1)
+        let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
+        let hour =
+          date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
+        // let minutes =
+        //   date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()
+        // let seconds =
+        //   date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()
+        return `${date.getFullYear()}/${month}/${day}`
+      } else {
+        return ''
+      }
     }
   }
 }
