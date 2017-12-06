@@ -18,8 +18,8 @@
         <div class="configuration_quyu_title clearfix">
           <h3>省区</h3>
         </div>
-        <ul class="configuration_quyu_content" v-for="(item,index) in shengs" :key="index">
-          <li >
+        <ul class="configuration_quyu_content" >
+          <li v-for="(item,index) in shengs" :key="index">
             <span @click="showCity(item.provinceId,item.provinceName,index)" :class="{current:shengSelected==index}"> {{item.provinceName}}</span>
             <Button type="info" size="small" class="fr" style="border: none" @click="seeThisSheng(item.provinceId,item.provinceName)">查看</Button>
           </li>
@@ -30,8 +30,8 @@
         <div class="configuration_quyu_title clearfix">
           <h3>市区</h3>
         </div>
-        <ul class="configuration_quyu_content" v-for="(item,index) in citys" :key="index">
-          <li>
+        <ul class="configuration_quyu_content">
+          <li  v-for="(item,index) in citys" :key="index">
             <span @click="showQu(item.cityId,item.cityName,index)" :class="{current:citySelected === index}"> {{item.cityName}}</span>
             <Button type="info" size="small" class="fr" style="border: none" @click="seeThisCity(item.cityId,item.cityName)">查看</Button>
           </li>
@@ -43,8 +43,8 @@
           <h3>区域</h3>
           <Button @click="addregion()" style="width: 60px;" type="ghost" size="small" v-if="addQu">新增</Button>
         </div>
-        <ul class="configuration_quyu_content" v-for="(item,index) in qus" :key="index">
-          <li>
+        <ul class="configuration_quyu_content" >
+          <li v-for="(item,index) in qus" :key="index">
             <span @click="showMarket(item.areaId,item.areaName,index)" :class="{current:areaSelected==index}" class="smallSpan"> {{item.areaName}}</span>
             <Button type="ghost" size="small" class="fr" style="color: red;border: none;" @click="delQu(index)">删除</Button>
             <Button type="info" size="small" class="fr" style="border: none;" @click="seeThisQu(item.areaId,item.areaName)">查看</Button>
@@ -57,8 +57,8 @@
           <h3>菜市场</h3>
           <Button @click="addmarket()" style="width: 60px;" type="ghost" size="small" v-if="addMarket">新增</Button>
         </div>
-        <ul class="configuration_quyu_content" v-for="(item,index) in markets" :key="index">
-          <li>
+        <ul class="configuration_quyu_content" >
+          <li v-for="(item,index) in markets" :key="index">
             <span class="smallSpan"> {{item.marketName}}</span>
             <Button type="ghost" size="small" class="fr" style="color: red;border: none" @click="delMarket(index)">删除</Button>
             <Button type="info" size="small" class="fr" style="border: none" @click="seeThisMarket(item.marketId)">查看</Button>
@@ -98,15 +98,24 @@ export default {
     })
     if (/^\d+$/.test(sessionStorage.getItem('index'))) {
       this.shengSelected = sessionStorage.getItem('index')
-      this.showCity(sessionStorage.getItem('provinceId'),sessionStorage.getItem('provinceName'))
+      this.showCity(
+        sessionStorage.getItem('provinceId'),
+        sessionStorage.getItem('provinceName')
+      )
     }
     if (/^\d+$/.test(sessionStorage.getItem('cityIndex'))) {
       this.citySelected = JSON.parse(sessionStorage.getItem('cityIndex'))
-      this.showQu(sessionStorage.getItem('cityId'),sessionStorage.getItem('cityName'),)
+      this.showQu(
+        sessionStorage.getItem('cityId'),
+        sessionStorage.getItem('cityName')
+      )
     }
     if (/^\d+$/.test(sessionStorage.getItem('areaIndex'))) {
       this.areaSelected = JSON.parse(sessionStorage.getItem('areaIndex'))
-      this.showMarket(sessionStorage.getItem('areaId'),sessionStorage.getItem('areaName'),)
+      this.showMarket(
+        sessionStorage.getItem('areaId'),
+        sessionStorage.getItem('areaName')
+      )
     }
   },
   methods: {
@@ -142,7 +151,7 @@ export default {
     delMarket(index) {
       let id = this.markets[index].marketId
       api.delMarket(id).then(response => {
-        this.$Message.success('添加成功')
+        this.$Message.success('删除成功')
         this.markets.splice(index, 1)
       })
     },
@@ -191,7 +200,6 @@ export default {
       if (/^\d+$/.test(index)) {
         this.shengSelected = index
         sessionStorage.setItem('index', index)
-        console.log(index)
       }
       this.citySelected = null
       this.areaSelected = null
@@ -200,9 +208,9 @@ export default {
       sessionStorage.setItem('provinceName', provinceName)
       api.getCitys(provinceId).then(response => {
         this.citys = response
-        this.qus = []
-        this.markets = []
       })
+      this.qus = []
+      this.markets = []
     },
     showQu(cityId, cityName, cityIndex) {
       if (/^\d+$/.test(cityIndex)) {
@@ -216,8 +224,8 @@ export default {
       sessionStorage.setItem('cityName', cityName)
       api.getQus(cityId).then(response => {
         this.qus = response
-        this.markets = []
       })
+      this.markets = []
       this.addQu = true
     },
     showMarket(areaId, areaName, areaIndex) {
@@ -225,8 +233,8 @@ export default {
         this.areaSelected = areaIndex
         sessionStorage.setItem('areaIndex', areaIndex)
       }
-      sessionStorage.setItem('areaId',areaId)
-      sessionStorage.setItem('areaName',areaName)
+      sessionStorage.setItem('areaId', areaId)
+      sessionStorage.setItem('areaName', areaName)
       this.areaId = areaId
       this.areaName = areaName
       api.getMarkets(areaId).then(response => {

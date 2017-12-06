@@ -16,12 +16,14 @@
         <BreadcrumbItem>{{cityName}}</BreadcrumbItem>
         <BreadcrumbItem href="/addregion">{{areaData.areaName}}</BreadcrumbItem>
         <!-- <BreadcrumbItem>{{formItem.marketName}}</BreadcrumbItem> -->
-        <p>提示： 单击右键开始规划菜市场区域，点击左键结束规划区域。双击选择菜市场地址。</p>
+        <p>提示： 单击左键开始规划菜市场区域，点击右键结束规划区域。双击选择菜市场地址。</p>
       </Breadcrumb>
     </section>
     <!-- 地图内容 -->
     <section class="addmarket_map" id="container">
-      
+      <Input v-model="searchData" type="text" style="width: 200px;float:right;zIndex:100" placeholder="搜索" @on-enter="searchPlace">
+      <span slot="prepend" >🔍</span>
+      </Input>
     </section>
     <!-- 菜市场信息 -->
     <section class="addmarket_marketinfo">
@@ -62,6 +64,7 @@ export default {
   components: {},
   data() {
     return {
+      searchData: '',
       marketId: Number,
       formItem: {
         latitude: 0, // 维度
@@ -70,7 +73,8 @@ export default {
       areaData: {},
       marketName: '',
       current: 0,
-      marketPath: []
+      marketPath: [],
+      map: null
     }
   },
   computed: {
@@ -104,9 +108,13 @@ export default {
         resizeEnable: true,
         zoom: 12
       })
-      AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
+      this.map = map
+      AMap.plugin(['AMap.ToolBar', 'AMap.Scale', 'AMap.Geocoder'], function() {
         map.addControl(new AMap.ToolBar())
         map.addControl(new AMap.Scale())
+      })
+      this.geocoder = new AMap.Geocoder({
+        city: this.cityName //城市，默认：“全国”
       })
       var editor = {}
       editor._polygon = (() => {
@@ -131,21 +139,15 @@ export default {
           this.current = 1 // 规划了区域状态为1
         })
       })
-      var _this = this
       // 选定菜市场地址
-      AMap.plugin('AMap.Geocoder', function() {
-        var geocoder = new AMap.Geocoder({
-          // city: '020' //城市，默认：“全国”
-        })
-        var marker = new AMap.Marker({
-          map: map,
-          bubble: true
-        })
-        map.on('dblclick', e => {
-          marker.setPosition(e.lnglat)
-          _this.formItem.latitude = e.lnglat.O
-          _this.formItem.longitude = e.lnglat.M
-        })
+      this.marker = new AMap.Marker({
+        map: map,
+        city: this.areaName
+      })
+      map.on('dblclick', e => {
+        this.marker.setPosition(e.lnglat)
+        this.formItem.latitude = e.lnglat.O
+        this.formItem.longitude = e.lnglat.M
       })
     },
     // 获取时间
@@ -167,10 +169,6 @@ export default {
       }
       if (!this.formItem.mobileno || isNaN(this.formItem.mobileno)) {
         this.$Message.error('请填写正确的电话号码')
-        return false
-      }
-      if (!this.formItem.selfPickAddress) {
-        this.$Message.error('自提点必填')
         return false
       }
       if (!this.formItem.address) {
@@ -201,6 +199,15 @@ export default {
     goback() {
       this.formItem = {}
       this.getQuInfo()
+    },
+    searchPlace() {
+      this.geocoder.getLocation(this.searchData, (status, result) => {
+        if (status == 'complete' && result.geocodes.length) {
+          this.marker.setPosition(result.geocodes[0].location)
+        } else {
+          alert('无法获取位置')
+        }
+      })
     }
   }
 }

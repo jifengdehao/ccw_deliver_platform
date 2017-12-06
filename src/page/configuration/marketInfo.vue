@@ -63,6 +63,9 @@ export default {
   components: {},
   data() {
     return {
+      searchData: '', // 搜索输入框内容
+      marker: null,
+      geocoder: null,
       marketData: {},
       // beginTime: this.marketData.beginTime,
       // endTime: '',
@@ -112,19 +115,21 @@ export default {
         zoom: 12
       })
       AMap.plugin(
-        ['AMap.ToolBar', 'AMap.Scale', 'AMap.PolyEditor'],
+        ['AMap.ToolBar', 'AMap.Scale', 'AMap.PolyEditor','AMap.Geocoder'],
         function() {
           map.addControl(new AMap.ToolBar())
           map.addControl(new AMap.Scale())
         }
       )
+      this.geocoder = new AMap.Geocoder({
+            city: this.areaName//城市，默认：“全国”
+        });
       // 菜市场位置
-      // AMap.Marker()
-      var marker = new AMap.Marker({
+      this.marker = new AMap.Marker({
         icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
         position: [this.marketData.longitude, this.marketData.latitude]
       })
-      marker.setMap(map)
+      this.marker.setMap(map)
       // 绘制多边形
       var editor = this.editor
       editor._polygon = (() => {
@@ -141,6 +146,12 @@ export default {
       })()
       map.setFitView() //地图自适应
       editor._polygonEditor = new AMap.PolyEditor(map, editor._polygon)
+      // 修改菜市场地址
+      editor._polygon.on('dblclick', e => {
+        this.marker.setPosition(e.lnglat)
+        this.marketData.latitude = e.lnglat.O
+        this.marketData.longitude = e.lnglat.M
+      })
     },
     // 开始修改区域
     polygonEditorOpen() {
@@ -173,10 +184,6 @@ export default {
       }
       if (!this.marketData.mobileno || isNaN(this.marketData.mobileno)) {
         this.$Message.error('请填写正确的电话号码')
-        return false
-      }
-      if (!this.marketData.selfPickAddress) {
-        this.$Message.error('自提点必填')
         return false
       }
       if (!this.marketData.address) {

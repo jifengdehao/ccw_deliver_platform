@@ -18,7 +18,9 @@
       </Breadcrumb>
     </section>
     <section class="addregion_map" id="container">
-    
+      <Input v-model="searchData" type="text" style="width: 200px;float:right;zIndex:100" placeholder="搜索" @on-enter="searchPlace">
+      <span slot="prepend" >🔍</span>
+      </Input>
     </section>
     <section class="addregion_marketinfo">
       <Form ref="formInline"  label-position="left"  inline>
@@ -44,10 +46,14 @@ export default {
   data() {
     return {
       formInline: {},
-      quPath: []
+      quPath: [],
+      searchData: '', // 搜索框输入内容
+      map: null,
+      geocoder: null,
+      placeSearch: null,
+      marker: null
     }
   },
-  computed: {},
   mounted() {
     this.initMap()
   },
@@ -59,9 +65,19 @@ export default {
           center: [113.4, 39.91], //地图中心点
           zoom: 10 //地图显示的缩放级别
         })
-      AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
-        map.addControl(new AMap.ToolBar())
-        map.addControl(new AMap.Scale())
+      this.map = map
+      AMap.plugin(
+        ['AMap.ToolBar', 'AMap.Scale', 'AMap.PlaceSearch'],
+        function() {
+          map.addControl(new AMap.ToolBar())
+          map.addControl(new AMap.Scale())
+        }
+      )
+      this.placeSearch = new AMap.PlaceSearch({
+        //构造地点查询类
+        pageSize: 1,
+        pageIndex: 1,
+        city: this.adcode //城市
       })
       // 获取到上级行政区域地图
       //加载行政区划插件
@@ -123,16 +139,29 @@ export default {
         areaName: this.formInline.user,
         areaCoordinate: this.path
       }
-      api
-        .addQu(params)
-        .then(response => {
-          this.$Message.success('添加成功')
-          this.$router.go(-1)
-        })
+      api.addQu(params).then(response => {
+        this.$Message.success('添加成功')
+        this.$router.go(-1)
+      })
     },
     // 点击取消按钮  返回设置主页
     goback() {
       this.initMap()
+    },
+    // 搜索
+    searchPlace() {
+      this.placeSearch.search(this.searchData, (status, result) => {
+        if (result.poiList.pois[0].location) {
+          this.marker = new AMap.Marker({
+            icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png'
+            // position: [lng, lat]
+          })
+          this.marker.setPosition(result.poiList.pois[0].location)
+          this.marker.setMap(this.map)
+        } else {
+          alert('无法获取数据')
+        }
+      })
     }
   },
   computed: {

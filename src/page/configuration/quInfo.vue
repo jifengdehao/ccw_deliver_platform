@@ -19,7 +19,9 @@
                 </Breadcrumb>
             </div>
             <div class="map" id="container">
-                当前区地图
+                <!-- <Input v-model="searchData" type="text" style="width: 200px;float:right;zIndex:100" placeholder="搜索" @on-enter="searchPlace">
+                <span slot="prepend" >🔍</span>
+                </Input> -->
             </div>
             <div style="marginBottom: 10px">
               <span>区域名称：</span>
@@ -43,6 +45,9 @@ export default {
   name: 'component_name',
   data() {
     return {
+      searchData: '',
+      placeSearch: null,
+      marker: null,
       areaData: {},
       editor: {},
       areaPath: [],
@@ -84,12 +89,19 @@ export default {
         zoom: 12
       })
       AMap.plugin(
-        ['AMap.ToolBar', 'AMap.Scale', 'AMap.PolyEditor'],
+        ['AMap.ToolBar', 'AMap.Scale', 'AMap.PolyEditor','AMap.PlaceSearch'],
         function() {
           map.addControl(new AMap.ToolBar())
           map.addControl(new AMap.Scale())
         }
       )
+      // 搜索
+      this.placeSearch = new AMap.PlaceSearch({
+        //构造地点查询类
+        pageSize: 1,
+        pageIndex: 1,
+        city: this.cityName //城市
+      })
       var editor = this.editor
       editor._polygon = (() => {
         // var arr = JSON.parse(this.areaData.areaCoordinate)
@@ -124,11 +136,11 @@ export default {
       this.getQuInfo()
     },
     modifyArea() {
-      if(!this.areaData.areaName){
+      if (!this.areaData.areaName) {
         this.$Message.error('区域名称不能为空')
         return false
       }
-      if(this.playStatus === true){
+      if (this.playStatus === true) {
         this.$Message.error('请结束编辑状态')
         return false
       }
@@ -138,6 +150,22 @@ export default {
         this.$router.go(-1)
       })
     }
+    // searchPlace() {
+    //    this.placeSearch.search(this.searchData, (status, result) => {
+    //     if (result.poiList.pois[0].location) {
+    //       this.marker = new AMap.Marker({
+    //         icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png'
+    //         // position: [lng, lat]
+    //       })
+    //       this.marker.setPosition(result.poiList.pois[0].location)
+    //       debugger
+    //       this.marker.setMap(this.map)
+    //       this.$forceUpdate()
+    //     } else {
+    //       alert('无法获取数据')
+    //     }
+    //   })
+    // }
   }
 }
 </script>
