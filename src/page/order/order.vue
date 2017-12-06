@@ -15,7 +15,8 @@
     <Row :gutter="24" class="mb20">
       <Col span="6">
       <h3>省区</h3>
-      <Select v-model="province" clearable style="max-width:200px;" @on-change="changeProvince">
+      <Select v-model="province" clearable style="max-width:200px;" @on-change="changeProvince"
+              :disabled="showProvince">
         <Option v-for="(item,index) in provinceData" :value="item.provinceId" :key="item.provinceId">{{
           item.provinceName}}
         </Option>
@@ -225,6 +226,7 @@
       return {
         provinceData: [], // 省或直轄市数据集
         province: '', // 省或直轄市
+        showProvince: true,
         city: '', // 市
         cityData: [], // 市数据集
         showCity: true, // 是否允许选择城市 true ===>不允许 false 允许
@@ -439,22 +441,35 @@
         let user = JSON.parse(sessionStorage.getItem('userInfo'))
         if (user.provinceId) {
           this.province = user.provinceId
-          this.getProvinceData()
-          this.getCityData(user.provinceId)
+          this.provinceData.push({provinceId: user.provinceId, provinceName: user.provinceName})
+          this.showProvince = true
           if (user.cityId) {
             this.city = user.cityId
-            this.getAreaData(user.cityId)
+            this.cityData.push({cityId: user.cityId, cityName: user.cityName})
             if (user.areaId) {
               this.area = user.areaId
-              this.getMarketData(user.areaId)
+              this.areaData.push({areaId: user.areaName, areaName: user.areaName})
+              this.showArea = false
               if (user.marketId) {
                 this.market = user.marketId
+                this.marketData.push({marketId: user.marketId, marketName: user.marketName})
+                this.showMarket = true
                 this.changeMarket(user.marketId)
+              } else {
+                this.getMarketData(user.areaId)
+                this.showMarket = false
               }
+            } else {
+              this.getAreaData(user.cityId)
+              this.showArea = true
             }
+          } else {
+            this.getCityData(user.provinceId)
+            this.showCity = false
           }
         } else {
           this.getProvinceData()
+          this.showProvince = false
         }
       },
       isQuery() {
