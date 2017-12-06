@@ -247,6 +247,7 @@
           // 获取首页数据
           api.getIndeData(value).then((res) => {
             if (res) {
+              console.log(res)
               this.indexData = true
               this.sysMsg = (res.custSysMsgList).map((item, index) => {
                 item.createdAt = time.formatDateTime(item.createdAt)
@@ -319,9 +320,8 @@
       }
     }
     .H-card {
-      height: 300px;
+      min-height: 300px;
       .ivu-card-body > ul {
-        overflow-y: scroll;
         height: 200px;
       }
       .ivu-card-body > ul > li {
