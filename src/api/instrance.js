@@ -5,19 +5,13 @@
  * 功能模块: axios底层的封装
  */
 import axios from 'axios'
-import config from '../../config/config.js'
 import qs from 'qs'
 import iview from 'iview'
 import hash from 'js-md5'
 
-// var URI = config.apiDomain
-var URI =
-  window.location.host.indexOf('localhost:') > -1
-    ? config.apiDomain
-    : 'http://192.168.0.151:8094/deliverpt'
 
 var ax = axios.create({
-  baseURL: URI,
+  baseURL: process.env.BASE_API,
   timeout: 30000,
   withCredentials: true,
   headers: {
@@ -73,8 +67,6 @@ export const pa = (url, params) => {
 export const op = (url, params) => {
   return base('options', url, params)
 }
-// 上传地址
-export const uploadUrl = config.imgUpload
 
 export function base(type, url, params) {
   return new Promise((resolve, reject) => {
