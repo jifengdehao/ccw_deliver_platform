@@ -128,9 +128,12 @@
         // 修改个人信息后保存
         this.$refs.userForm.validate((valid) => {
           if (valid) {
-            this.userForm.token = JSON.parse(sessionStorage.getItem('userInfo')).token
+            // this.userForm.token = JSON.parse(sessionStorage.getItem('userInfo')).token
             api.modifyUserInfo(this.userForm).then((res) => {
               if (res) {
+                let userInfo = Object.assign(JSON.parse(sessionStorage.getItem('userInfo')), this.userForm)
+                sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
+                console.log(userInfo)
                 this.$Notice.success({
                   title: '个人信息修改成功',
                   duration: 2
