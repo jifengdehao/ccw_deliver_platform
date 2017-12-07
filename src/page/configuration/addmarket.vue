@@ -14,16 +14,17 @@
       <Breadcrumb separator=">">
         <BreadcrumbItem>{{provinceName}}</BreadcrumbItem>
         <BreadcrumbItem>{{cityName}}</BreadcrumbItem>
-        <BreadcrumbItem href="/addregion">{{areaData.areaName}}</BreadcrumbItem>
-        <!-- <BreadcrumbItem>{{formItem.marketName}}</BreadcrumbItem> -->
-        <p>提示： 单击左键开始规划菜市场区域，点击右键结束规划区域。双击选择菜市场地址。</p>
+        <BreadcrumbItem >{{areaData.areaName}}</BreadcrumbItem>
+        <BreadcrumbItem>{{formItem.marketName}}</BreadcrumbItem>
       </Breadcrumb>
+      <p>提示： 单击左键开始规划菜市场区域，点击右键结束规划区域。双击选择菜市场地址。</p>
     </section>
     <!-- 地图内容 -->
     <section class="addmarket_map" id="container">
       <Input v-model="searchData" type="text" style="width: 200px;float:right;zIndex:100" placeholder="搜索" @on-enter="searchPlace">
-      <span slot="prepend" >🔍</span>
+      <span slot="prepend" >搜索</span>
       </Input>
+      <div id="result"></div>
     </section>
     <!-- 菜市场信息 -->
     <section class="addmarket_marketinfo">
@@ -51,10 +52,6 @@
         </FormItem>
     </Form>
     </section>
-    <!-- <section class="addmarket_button">
-      <Button type="ghost" size="large" style="width: 150px">取消</Button>
-      <Button type="ghost" size="large" style="width: 150px" @click="addMarket">保存</Button>
-    </section> -->
   </div>
 </template>
 <script>
@@ -74,7 +71,8 @@ export default {
       marketName: '',
       current: 0,
       marketPath: [],
-      map: null
+      map: null,
+      editor: {}
     }
   },
   computed: {
@@ -109,14 +107,24 @@ export default {
         zoom: 12
       })
       this.map = map
-      AMap.plugin(['AMap.ToolBar', 'AMap.Scale', 'AMap.Geocoder'], function() {
+      AMap.plugin(['AMap.ToolBar', 'AMap.Scale', 'AMap.Geocoder','AMap.PlaceSearch'], function() {
         map.addControl(new AMap.ToolBar())
         map.addControl(new AMap.Scale())
       })
       this.geocoder = new AMap.Geocoder({
         city: this.cityName //城市，默认：“全国”
       })
-      var editor = {}
+       // 搜索工具初始化
+      this.placeSearch = new AMap.PlaceSearch({
+        //构造地点查询类
+        pageSize: 1,
+        pageIndex: 1,
+        city: this.cityName, //城市
+        map: map,
+        panel: 'result'
+      })
+      // 绘制多边形
+     var editor = this.editor
       editor._polygon = (() => {
         var arr = this.areaData.areaCoordinate
         return new AMap.Polygon({
@@ -200,14 +208,9 @@ export default {
       this.formItem = {}
       this.getQuInfo()
     },
+    // 多边形内搜索
     searchPlace() {
-      this.geocoder.getLocation(this.searchData, (status, result) => {
-        if (status == 'complete' && result.geocodes.length) {
-          this.marker.setPosition(result.geocodes[0].location)
-        } else {
-          alert('无法获取位置')
-        }
-      })
+      this.placeSearch.searchInBounds(this.searchData, this.editor._polygon)
     }
   }
 }

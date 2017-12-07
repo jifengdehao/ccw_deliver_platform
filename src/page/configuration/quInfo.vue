@@ -19,9 +19,10 @@
                 </Breadcrumb>
             </div>
             <div class="map" id="container">
-                <!-- <Input v-model="searchData" type="text" style="width: 200px;float:right;zIndex:100" placeholder="搜索" @on-enter="searchPlace">
-                <span slot="prepend" >🔍</span>
-                </Input> -->
+                <Input v-model="searchData" type="text" style="width: 200px;float:right;zIndex:100" placeholder="搜索" @on-enter="searchPlace">
+                <span slot="prepend" >搜索</span>
+                </Input>
+                <div id="result"></div>
             </div>
             <div style="marginBottom: 10px">
               <span>区域名称：</span>
@@ -48,6 +49,7 @@ export default {
       searchData: '',
       placeSearch: null,
       marker: null,
+      map: null,
       areaData: {},
       editor: {},
       areaPath: [],
@@ -88,19 +90,22 @@ export default {
         resizeEnable: true,
         zoom: 12
       })
+      this.map = map
       AMap.plugin(
-        ['AMap.ToolBar', 'AMap.Scale', 'AMap.PolyEditor','AMap.PlaceSearch'],
+        ['AMap.ToolBar', 'AMap.Scale', 'AMap.PolyEditor', 'AMap.PlaceSearch'],
         function() {
           map.addControl(new AMap.ToolBar())
           map.addControl(new AMap.Scale())
         }
       )
-      // 搜索
+      // 搜索工具初始化
       this.placeSearch = new AMap.PlaceSearch({
         //构造地点查询类
         pageSize: 1,
         pageIndex: 1,
-        city: this.cityName //城市
+        city: this.cityName, //城市
+        map: map,
+        panel: 'result'
       })
       var editor = this.editor
       editor._polygon = (() => {
@@ -149,23 +154,12 @@ export default {
         this.$Message.success('修改成功')
         this.$router.go(-1)
       })
+    },
+    // 搜索
+    searchPlace() {
+      // 多边形内搜索
+      this.placeSearch.searchInBounds(this.searchData, this.editor._polygon)
     }
-    // searchPlace() {
-    //    this.placeSearch.search(this.searchData, (status, result) => {
-    //     if (result.poiList.pois[0].location) {
-    //       this.marker = new AMap.Marker({
-    //         icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png'
-    //         // position: [lng, lat]
-    //       })
-    //       this.marker.setPosition(result.poiList.pois[0].location)
-    //       debugger
-    //       this.marker.setMap(this.map)
-    //       this.$forceUpdate()
-    //     } else {
-    //       alert('无法获取数据')
-    //     }
-    //   })
-    // }
   }
 }
 </script>

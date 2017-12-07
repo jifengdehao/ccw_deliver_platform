@@ -19,17 +19,15 @@
     </section>
     <section class="addregion_map" id="container">
       <Input v-model="searchData" type="text" style="width: 200px;float:right;zIndex:100" placeholder="搜索" @on-enter="searchPlace">
-      <span slot="prepend" >🔍</span>
+      <span slot="prepend" >搜索</span>
       </Input>
+      <div id="result" style="zIndex:500"></div>
     </section>
     <section class="addregion_marketinfo">
       <Form ref="formInline"  label-position="left"  inline>
         <FormItem>
             <span>区域名称：</span>
             <Input type="text" v-model="formInline.user" style="width: 150px" required></Input>
-            <!-- <span>区域范围：</span>
-            <Button type="info" size="large" style="width: 150px" @click="startEditable">编辑</Button>
-            <Button type="info" size="large" style="width: 150px" @click="endEditable">清除</Button> -->
         </FormItem>
     </Form>
     </section>
@@ -73,11 +71,14 @@ export default {
           map.addControl(new AMap.Scale())
         }
       )
+      // 搜索插件初始化
       this.placeSearch = new AMap.PlaceSearch({
         //构造地点查询类
         pageSize: 1,
         pageIndex: 1,
-        city: this.adcode //城市
+        city: this.adcode, //城市
+        map: map,
+        panel: 'result'
       })
       // 获取到上级行政区域地图
       //加载行政区划插件
@@ -151,10 +152,9 @@ export default {
     // 搜索
     searchPlace() {
       this.placeSearch.search(this.searchData, (status, result) => {
-        if (result.poiList.pois[0].location) {
+        if (status=='complete'&&result.info == 'OK') {
           this.marker = new AMap.Marker({
             icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png'
-            // position: [lng, lat]
           })
           this.marker.setPosition(result.poiList.pois[0].location)
           this.marker.setMap(this.map)

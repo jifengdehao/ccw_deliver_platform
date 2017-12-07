@@ -20,7 +20,10 @@
     </section>
     <!-- 地图内容 -->
     <section class="addmarket_map" id="container">
-      
+      <Input v-model="searchData" type="text" style="width: 200px;float:right;zIndex:100" placeholder="搜索" @on-enter="searchPlace">
+          <span slot="prepend" >搜索</span>
+          </Input>
+          <div id="result"></div>
     </section>
     <!-- 菜市场信息 -->
     <section class="addmarket_marketinfo">
@@ -64,6 +67,7 @@ export default {
   data() {
     return {
       searchData: '', // 搜索输入框内容
+      placeSearch: null,
       marker: null,
       geocoder: null,
       marketData: {},
@@ -115,15 +119,31 @@ export default {
         zoom: 12
       })
       AMap.plugin(
-        ['AMap.ToolBar', 'AMap.Scale', 'AMap.PolyEditor','AMap.Geocoder'],
+        [
+          'AMap.ToolBar',
+          'AMap.Scale',
+          'AMap.PolyEditor',
+          'AMap.Geocoder',
+          'AMap.PlaceSearch'
+        ],
         function() {
           map.addControl(new AMap.ToolBar())
           map.addControl(new AMap.Scale())
         }
       )
+      // 搜索工具初始化
+      this.placeSearch = new AMap.PlaceSearch({
+        //构造地点查询类
+        pageSize: 1,
+        pageIndex: 1,
+        city: this.cityName, //城市
+        map: map,
+        panel: 'result'
+      })
+      // 点绘制
       this.geocoder = new AMap.Geocoder({
-            city: this.areaName//城市，默认：“全国”
-        });
+        city: this.areaName //城市，默认：“全国”
+      })
       // 菜市场位置
       this.marker = new AMap.Marker({
         icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
@@ -207,6 +227,11 @@ export default {
     },
     goback() {
       this.getQuInfo()
+    },
+    // 搜索
+    searchPlace() {
+      // 多边形内搜索
+      this.placeSearch.searchInBounds(this.searchData, this.editor._polygon)
     }
   }
 }

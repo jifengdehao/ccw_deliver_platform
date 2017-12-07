@@ -66,6 +66,14 @@
         </ul>
       </div>
     </section>
+    <Modal
+        v-model="delModal"
+        :title= "modalTitle"
+        :mask-closable = "false"
+        :closable = "false"
+        @on-ok="del">
+       <h2>{{modalMain}}</h2>
+    </Modal>
   </div>
 </template>
 <script>
@@ -74,6 +82,12 @@ export default {
   components: {},
   data() {
     return {
+      delModal: false,
+      delAreaId: '',
+      delMarketId: '',
+      delIndex: NaN,
+      modalTitle: '', // 弹框标题
+      modalMain: '', // 弹框内容
       shengSelected: NaN, // 点击省区选择
       citySelected: NaN, // 点击城市
       areaSelected: NaN, // 点击区域
@@ -142,18 +156,40 @@ export default {
     },
     // 删除
     delQu(index) {
-      let id = this.qus[index].areaId
-      api.delQu(id).then(response => {
-        this.$Message.success('删除成功')
-        this.qus.splice(index, 1)
-      })
+      this.delAreaId = this.qus[index].areaId
+      this.delIndex = index
+      this.delModal = true
+      this.modalTitle = '删除区域'
+      this.modalMain = '是否删除该区域'
+      // api.delQu(id).then(response => {
+      //   this.$Message.success('删除成功')
+      //   this.qus.splice(index, 1)
+      // })
     },
     delMarket(index) {
-      let id = this.markets[index].marketId
-      api.delMarket(id).then(response => {
-        this.$Message.success('删除成功')
-        this.markets.splice(index, 1)
-      })
+      this.delMarketId = this.markets[index].marketId
+      this.delIndex = index
+      this.delModal = true
+      this.modalTitle = '删除菜市场'
+      this.modalMain = '是否删除该菜市场'
+      // api.delMarket(id).then(response => {
+      //   this.$Message.success('删除成功')
+      //   this.markets.splice(index, 1)
+      // })
+    },
+    // 确定删除按钮
+    del() {
+      if (this.modalTitle === '删除区域') {
+        api.delQu(this.delAreaId).then(response => {
+          this.$Message.success('删除成功')
+          this.qus.splice(this.delIndex, 1)
+        })
+      } else if (this.modalTitle === '删除菜市场') {
+        api.delMarket(this.delMarketId).then(response => {
+          this.$Message.success('删除成功')
+          this.markets.splice(this.delIndex, 1)
+        })
+      }
     },
     // 查看
     seeThisSheng(provinceId, provinceName) {
