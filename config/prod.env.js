@@ -1,4 +1,4 @@
 module.exports = {
   NODE_ENV: '"production"',
-  BASE_API: '"deliverpt.caichengwang.com"'
+  BASE_API: '"http://gatway.caichengwang.com/deliverpt"'
 }
