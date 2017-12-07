@@ -276,7 +276,7 @@
             this.cityData.push({cityId: user.cityId, cityName: user.cityName})
             if (user.areaId) {
               this.area = user.areaId
-              this.areaData.push({areaId: user.areaName, areaName: user.areaName})
+              this.areaData.push({areaId: user.areaId, areaName: user.areaName})
               this.showArea = false
               if (user.marketId) {
                 this.market = user.marketId
