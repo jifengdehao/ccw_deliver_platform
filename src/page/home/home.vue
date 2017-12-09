@@ -268,16 +268,19 @@
       // 获取默认的数据
       getInitData() {
         let user = JSON.parse(sessionStorage.getItem('userInfo'))
+        console.log(user)
         if (user.provinceId) {
           this.province = user.provinceId
           this.provinceData.push({provinceId: user.provinceId, provinceName: user.provinceName})
+          this.showProvince = true
           if (user.cityId) {
             this.city = user.cityId
             this.cityData.push({cityId: user.cityId, cityName: user.cityName})
+            this.showCity = true
             if (user.areaId) {
               this.area = user.areaId
               this.areaData.push({areaId: user.areaId, areaName: user.areaName})
-              this.showArea = false
+              this.showArea = true
               if (user.marketId) {
                 this.market = user.marketId
                 this.marketData.push({marketId: user.marketId, marketName: user.marketName})
@@ -289,7 +292,7 @@
               }
             } else {
               this.getAreaData(user.cityId)
-              this.showArea = true
+              this.showArea = false
             }
           } else {
             this.getCityData(user.provinceId)
