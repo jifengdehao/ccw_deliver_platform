@@ -486,7 +486,7 @@
       },
       // 导出表格
       exportData() {
-        if (this.market !== '') {
+        if (this.market !== '' && this.endTime !== '' && this.startTime !== '') {
           this.modal_loading = true;
           let params = {
             beginTime: this.startTime,
