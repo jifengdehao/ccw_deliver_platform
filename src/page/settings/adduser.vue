@@ -19,27 +19,27 @@
                                    </Select></li>
         <li><span>联系方式</span><input type="text" v-model="params.mobileno"></li>
         <li><span>邮箱地址</span><input type="text" v-model="params.email"></li>
-        <li><span>角色名称</span><Select v-model="params.role" style="width:168px;"
+        <li><span>角色名称</span><Select v-model="params.role" clearable style="width:168px;"
                                    >
                                    <Option v-for="role in roleArray" :value="role.roleId" :key="role.roleName">{{ role.roleName }}</Option> 
                                    </Select></li>
         <li><span>所属省区</span>
-          <Select v-model="params.provinceId"  style="width:168px;height:30px;" @on-change="chooseProvince">
+          <Select v-model="params.provinceId" clearable style="width:168px;height:30px;" @on-change="chooseProvince">
             <Option v-for="item in provinceList" :value="item.provinceId" :key="item.provinceId">{{ item.provinceName }}</Option>
           </Select>
         </li>
         <li><span>所属市区</span>
-          <Select v-model="params.cityId"  style="width:168px;height:30px;" @on-change="chooseCity">
+          <Select v-model="params.cityId" clearable style="width:168px;height:30px;" @on-change="chooseCity">
             <Option v-for="item in cityList" :value="item.cityId" :key="item.cityId">{{ item.cityName }}</Option>
           </Select>
         </li>
         <li><span>所属区域</span>
-          <Select v-model="params.areaId"  style="width:168px;height:30px;" @on-change="chooseArea">
+          <Select v-model="params.areaId" clearable style="width:168px;height:30px;" @on-change="chooseArea">
           <Option v-for="item in areaList" :value="item.areaId" :key="item.areaId">{{ item.areaName }}</Option>
         </Select>
         </li>
         <li><span>所属菜市场</span>
-          <Select v-model="params.marketId"  style="width:168px;height:30px;">
+          <Select v-model="params.marketId" clearable style="width:168px;height:30px;">
           <Option v-for="item in marketList" :value="item.marketId" :key="item.marketId">{{ item.marketName }}</Option>
         </Select>
         </li>
@@ -47,7 +47,7 @@
 
     </section>
     <p class="btn-p">
-      <Button type="ghost" size="large" @click="resetInfo">取消</Button>
+      <Button type="ghost" size="large" @click="resetInfo">重置</Button>
       <Button type="ghost" size="large" @click="putUserInfo">确定</Button>
     </p>
   </div>
@@ -94,12 +94,18 @@ export default {
     },
     //  选择省区
     chooseProvince(provinceId) {
+      if (!provinceId) {
+        return
+      }
       this.cityList = []
       http.getProvinceIndex(provinceId).then(data => {
         this.cityList = data
       })
     }, //  选择市区 获取区域集合
     chooseCity(cityId) {
+      if (!cityId) {
+        return
+      }
       this.areaList = []
       http.getCityManager(cityId).then(data => {
         this.areaList = data
@@ -108,6 +114,9 @@ export default {
     },
     //  选择区域 获取菜市场集合
     chooseArea(areaId) {
+      if (!areaId) {
+        return
+      }
       this.marketList = []
       http.getAreaMarket(areaId).then(data => {
         this.marketList = data
