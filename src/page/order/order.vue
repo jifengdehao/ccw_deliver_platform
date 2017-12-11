@@ -251,7 +251,7 @@
             }
           },
           {
-            title: '期待取货',
+            title: '期待送达',
             align: 'center',
             key: 'endTime',
             render: (h, params) => {
