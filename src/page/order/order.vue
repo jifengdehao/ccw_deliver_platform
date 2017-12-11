@@ -251,7 +251,7 @@
             }
           },
           {
-            title: '期待取货',
+            title: '期待送达',
             align: 'center',
             key: 'endTime',
             render: (h, params) => {
@@ -439,6 +439,7 @@
       // 获取默认数据
       getInitOrderData() {
         let user = JSON.parse(sessionStorage.getItem('userInfo'))
+        console.log(user)
         if (user.provinceId) {
           this.province = user.provinceId
           this.provinceData.push({provinceId: user.provinceId, provinceName: user.provinceName})
@@ -446,10 +447,11 @@
           if (user.cityId) {
             this.city = user.cityId
             this.cityData.push({cityId: user.cityId, cityName: user.cityName})
+            this.showCity = true
             if (user.areaId) {
               this.area = user.areaId
               this.areaData.push({areaId: user.areaId, areaName: user.areaName})
-              this.showArea = false
+              this.showArea = true
               if (user.marketId) {
                 this.market = user.marketId
                 this.marketData.push({marketId: user.marketId, marketName: user.marketName})
@@ -461,7 +463,7 @@
               }
             } else {
               this.getAreaData(user.cityId)
-              this.showArea = true
+              this.showArea = false
             }
           } else {
             this.getCityData(user.provinceId)
@@ -484,7 +486,7 @@
       },
       // 导出表格
       exportData() {
-        if (this.market !== '') {
+        if (this.market !== '' && this.endTime !== '' && this.startTime !== '') {
           this.modal_loading = true;
           let params = {
             beginTime: this.startTime,
