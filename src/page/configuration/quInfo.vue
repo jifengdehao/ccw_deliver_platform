@@ -107,24 +107,50 @@ export default {
         map: map,
         panel: 'result'
       })
-      var editor = this.editor
-      editor._polygon = (() => {
-        // var arr = JSON.parse(this.areaData.areaCoordinate)
-        var arr = this.areaData.areaCoordinate
+      // var editor = this.editor
+      // editor._polygon = (() => {
+      //   // var arr = JSON.parse(this.areaData.areaCoordinate)
+      //   var arr = this.areaData.areaCoordinate
+      //   return new AMap.Polygon({
+      //     map: map,
+      //     path: arr,
+      //     strokeColor: '#0000ff',
+      //     strokeOpacity: 1,
+      //     strokeWeight: 1,
+      //     fillColor: '#f5deb3',
+      //     fillOpacity: 0.5
+      //   })
+      // })()
+      // 绘制区域范围
+      if (this.areaData.areaCoordinate) {
+        this.polygon(this.areaData.areaCoordinate, 'red')
+      }
+      // 绘制区域下面菜市场范围
+      if (this.areaData.mrketList) {
+        for (var i = 0, len = this.areaData.mrketList.length; i < len; i++) {
+          this.polygon(this.areaData.mrketList[i].areaCoordinate, 'green')
+        }
+      }
+      // 修改地图区域
+      this.editor._polygonEditor = new AMap.PolyEditor(
+        map,
+        this.editor._polygon
+      )
+    },
+    // 绘制自定义区域
+    polygon(arr, color) {
+      this.editor._polygon = (() => {
         return new AMap.Polygon({
-          map: map,
+          map: this.map,
           path: arr,
-          strokeColor: '#0000ff',
+          strokeColor: color,
           strokeOpacity: 1,
           strokeWeight: 1,
           fillColor: '#f5deb3',
           fillOpacity: 0.5
         })
       })()
-
-      map.setFitView() //地图自适应
-      // 修改地图区域
-      editor._polygonEditor = new AMap.PolyEditor(map, editor._polygon)
+      this.map.setFitView() //地图自适应
     },
     // 开始修改区域
     polygonEditorOpen(map) {

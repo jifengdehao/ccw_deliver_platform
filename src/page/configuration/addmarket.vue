@@ -107,14 +107,17 @@ export default {
         zoom: 12
       })
       this.map = map
-      AMap.plugin(['AMap.ToolBar', 'AMap.Scale', 'AMap.Geocoder','AMap.PlaceSearch'], function() {
-        map.addControl(new AMap.ToolBar())
-        map.addControl(new AMap.Scale())
-      })
+      AMap.plugin(
+        ['AMap.ToolBar', 'AMap.Scale', 'AMap.Geocoder', 'AMap.PlaceSearch'],
+        function() {
+          map.addControl(new AMap.ToolBar())
+          map.addControl(new AMap.Scale())
+        }
+      )
       this.geocoder = new AMap.Geocoder({
         city: this.cityName //城市，默认：“全国”
       })
-       // 搜索工具初始化
+      // 搜索工具初始化
       this.placeSearch = new AMap.PlaceSearch({
         //构造地点查询类
         pageSize: 1,
@@ -123,21 +126,16 @@ export default {
         map: map,
         panel: 'result'
       })
-      // 绘制多边形
-     var editor = this.editor
-      editor._polygon = (() => {
-        var arr = this.areaData.areaCoordinate
-        return new AMap.Polygon({
-          map: map,
-          path: arr,
-          strokeColor: '#0000ff',
-          strokeOpacity: 1,
-          strokeWeight: 1,
-          fillColor: '#f5deb3',
-          fillOpacity: 0.5
-        })
-      })()
-      map.setFitView() //地图自适应
+      // 绘制区域范围
+      if (this.areaData.areaCoordinate) {
+        this.polygon(this.areaData.areaCoordinate,'#f00')
+      }
+      // 绘制区域已有菜市场范围
+      if (this.areaData.mrketList) {
+        for (var i = 0, len = this.areaData.mrketList.length; i < len; i++) {
+          this.polygon(this.areaData.mrketList[i].areaCoordinate,'00f')
+        }
+      }
       // 加载鼠标工具
       AMap.service('AMap.MouseTool', response => {
         var mouseTool = new AMap.MouseTool(map) //在地图中添加MouseTool插件
@@ -157,6 +155,21 @@ export default {
         this.formItem.latitude = e.lnglat.O
         this.formItem.longitude = e.lnglat.M
       })
+    },
+    // 绘制自定义区域
+    polygon(arr, color) {
+      this.editor._polygon = (() => {
+        return new AMap.Polygon({
+          map: this.map,
+          path: arr,
+          strokeColor: color,
+          strokeOpacity: 1,
+          strokeWeight: 1,
+          fillColor: '#f5deb3',
+          fillOpacity: 0.5
+        })
+      })()
+      this.map.setFitView() //地图自适应
     },
     // 获取时间
     getbeginTime(time) {

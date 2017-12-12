@@ -46,8 +46,9 @@
             <span>菜市场地址：</span>
             <Input v-model="marketData.address" style="width:200px" ></Input>
             <div class="button">
-              <Button @click="polygonEditorOpen()">开始编辑区域范围</Button>
-              <Button @click="polygonEditorClose()">结束编辑区域范围</Button>
+              <Button @click="polygonEditorOpen()">开始编辑当前市场范围</Button>
+              <Button @click="polygonEditorClose()">结束编辑当前市场范围</Button>
+              <Button @click="showOtherMarket()">显示该区域所有菜市场</Button>
             </div>
         </FormItem>
     </Form>
@@ -67,9 +68,11 @@ export default {
   data() {
     return {
       searchData: '', // 搜索输入框内容
+      map: null,
       placeSearch: null,
       marker: null,
       geocoder: null,
+      areaData: {}, // 上一级区域的信息
       marketData: {},
       // beginTime: this.marketData.beginTime,
       // endTime: '',
@@ -106,11 +109,12 @@ export default {
     getQuInfo() {
       api.getMarketInfo(this.marketId).then(response => {
         this.marketData = response
-        // this.beginTime = response.beginTime
-        // this.endTime = response.endTime
         this.marketName = response.marketName
         this.marketPath = response.areaCoordinate
-        this.init()
+        api.getQuInfo(this.marketData.areaId).then(response => {
+          this.areaData = response
+          this.init()
+        })
       })
     },
     init: function() {
@@ -118,6 +122,7 @@ export default {
         resizeEnable: true,
         zoom: 12
       })
+      this.map = map
       AMap.plugin(
         [
           'AMap.ToolBar',
@@ -150,28 +155,48 @@ export default {
         position: [this.marketData.longitude, this.marketData.latitude]
       })
       this.marker.setMap(map)
-      // 绘制多边形
-      var editor = this.editor
-      editor._polygon = (() => {
-        var arr = this.marketData.areaCoordinate
+      // 绘制区域范围
+      // console.log(this.areaData)
+      if (this.areaData.areaCoordinate) {
+        this.polygon(this.areaData.areaCoordinate, 'red')
+      }
+      // // 绘制本市场范围
+      if (this.marketData.areaCoordinate) {
+        this.polygon(this.marketData.areaCoordinate, '00f')
+      }
+      this.editor._polygonEditor = new AMap.PolyEditor(
+        map,
+        this.editor._polygon
+      )
+      // 修改菜市场地址
+      this.editor._polygon.on('dblclick', e => {
+        this.marker.setPosition(e.lnglat)
+        this.marketData.latitude = e.lnglat.O
+        this.marketData.longitude = e.lnglat.M
+      })
+    },
+    // 绘制自定义区域
+    polygon(arr, color) {
+      this.editor._polygon = (() => {
         return new AMap.Polygon({
-          map: map,
+          map: this.map,
           path: arr,
-          strokeColor: '#0000ff',
+          strokeColor: color,
           strokeOpacity: 1,
           strokeWeight: 1,
           fillColor: '#f5deb3',
           fillOpacity: 0.5
         })
       })()
-      map.setFitView() //地图自适应
-      editor._polygonEditor = new AMap.PolyEditor(map, editor._polygon)
-      // 修改菜市场地址
-      editor._polygon.on('dblclick', e => {
-        this.marker.setPosition(e.lnglat)
-        this.marketData.latitude = e.lnglat.O
-        this.marketData.longitude = e.lnglat.M
-      })
+      this.map.setFitView() //地图自适应
+    },
+    // 显示其他菜市场范围
+    showOtherMarket() {
+      if (this.areaData.mrketList) {
+        for (var i = 0, len = this.areaData.mrketList.length; i < len; i++) {
+          this.polygon(this.areaData.mrketList[i].areaCoordinate, 'green')
+        }
+      }
     },
     // 开始修改区域
     polygonEditorOpen() {
