@@ -1,6 +1,6 @@
 require('./check-versions')()
 
-process.env.NODE_ENV = 'Test'
+process.env.NODE_ENV = 'production'
 
 var ora = require('ora')
 var rm = require('rimraf')
@@ -8,12 +8,12 @@ var path = require('path')
 var chalk = require('chalk')
 var webpack = require('webpack')
 var config = require('../config')
-var webpackConfig = require('./webpack.test.conf')
+var webpackConfig = require('./webpack.internal.conf')
 
-var spinner = ora('test for production...')
+var spinner = ora('internal for production...')
 spinner.start()
 
-rm(path.join(config.test.assetsRoot, config.test.assetsSubDirectory), err => {
+rm(path.join(config.internal.assetsRoot, config.internal.assetsSubDirectory), err => {
   if (err) throw err
   webpack(webpackConfig, function (err, stats) {
     spinner.stop()
