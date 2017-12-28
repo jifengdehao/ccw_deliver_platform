@@ -2,7 +2,7 @@
   <div id="header">
     <Row>
       <Col :xs="3" :sm="3" :md="3" :lg="3">
-      <div class="logo">菜城科技有限公司</div>
+      <div class="logo"></div>
       </Col>
       <Col :xs="12" :sm="12" :md="12" :lg="12">
       <div class="message">
@@ -117,7 +117,10 @@
     cursor: pointer;
     min-width: 1366px;
     .logo {
-      font-size: 16px;
+      width: 100%;
+      height: 60px;
+      background: url("../../assets/WechatIMG23.png") no-repeat center;
+      background-size: contain;
     }
     .close-menu {
       height: 60px;
