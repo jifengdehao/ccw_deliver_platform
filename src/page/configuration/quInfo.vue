@@ -11,6 +11,7 @@
             <span slot="h3">查看-区</span>
         </section>
         <section class="quInfo_map">
+          <!-- 面包屑 -->
             <div class="Breadcrumb">
                 <Breadcrumb separator=">">
                     <BreadcrumbItem>{{provinceName}}</BreadcrumbItem>
@@ -18,6 +19,7 @@
                     <BreadcrumbItem>{{areaData.areaName}}</BreadcrumbItem>
                 </Breadcrumb>
             </div>
+            <!-- 地图部分 -->
             <div class="map" id="container">
                 <Input v-model="searchData" type="text" style="width: 200px;float:right;zIndex:100" placeholder="搜索" @on-enter="searchPlace">
                 <span slot="prepend" >搜索</span>
@@ -107,29 +109,16 @@ export default {
         map: map,
         panel: 'result'
       })
-      // var editor = this.editor
-      // editor._polygon = (() => {
-      //   // var arr = JSON.parse(this.areaData.areaCoordinate)
-      //   var arr = this.areaData.areaCoordinate
-      //   return new AMap.Polygon({
-      //     map: map,
-      //     path: arr,
-      //     strokeColor: '#0000ff',
-      //     strokeOpacity: 1,
-      //     strokeWeight: 1,
-      //     fillColor: '#f5deb3',
-      //     fillOpacity: 0.5
-      //   })
-      // })()
-      // 绘制区域范围
-      if (this.areaData.areaCoordinate) {
-        this.polygon(this.areaData.areaCoordinate, 'red')
-      }
+
       // 绘制区域下面菜市场范围
       if (this.areaData.mrketList) {
         for (var i = 0, len = this.areaData.mrketList.length; i < len; i++) {
           this.polygon(this.areaData.mrketList[i].areaCoordinate, 'green')
         }
+      }
+      // 绘制区域范围
+      if (this.areaData.areaCoordinate) {
+        this.polygon(this.areaData.areaCoordinate, 'red')
       }
       // 修改地图区域
       this.editor._polygonEditor = new AMap.PolyEditor(

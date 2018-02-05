@@ -11,6 +11,7 @@
             <span slot="h3">查看-城市</span>
         </section>
         <section class="cityInfo_map">
+          <!-- 面包屑 -->
             <div class="Breadcrumb">
                 <Breadcrumb separator=">">
                     <BreadcrumbItem>{{provinceName}}</BreadcrumbItem>
@@ -21,16 +22,22 @@
                 当前市地图
             </div>
             <div class="setprice" >
-              <Form v-model="cityData" inline>
-                <FormItem >
-                  <span>运费(元):</span> 
-                  <Input-number  v-model="cityData.expense"  placeholder="请输入运费" style="width:80px">
-                  </Input-number>
+              <Form :model="cityData" :label-width="200">
+                <FormItem label="运费(元):">
+                  <InputNumber v-model="cityData.expense" :step="0.50" placeholder="请输入运费" style="width:180px">
+                  </InputNumber>
                 </FormItem>
-                <FormItem>
-                  <span>即时配送价(元):</span>
-                  <Input-number v-model="cityData.instantExpense" placeholder="请输入即时配送价" style="width:80px">
-                  </Input-number>
+                <FormItem label="免费配送门槛(元):">
+                  <InputNumber v-model="cityData.instantExpense" :step="0.50" placeholder="请输入即时配送价" style="width:180px">
+                  </InputNumber>
+                </FormItem>
+                <FormItem label="计重收费门槛(斤):">
+                  <InputNumber v-model="cityData.freeFeeWeight"  placeholder="请输入即时配送价" style="width:180px">
+                  </InputNumber>
+                </FormItem>
+                <FormItem label="每超出门槛一斤收费(元):">
+                  <InputNumber v-model="cityData.oneKgFee" :step="0.50" placeholder="请输入即时配送价" style="width:180px">
+                  </InputNumber>
                 </FormItem>
               </Form>
             </div>
@@ -50,14 +57,17 @@ export default {
   data() {
     return {
       cityData: {
-        expense: 0,
-        instantExpense: 0
-      }
+        expense: null,
+        instantExpense: null,
+        oneKgFee: null,
+        freeFeeWeight: null
+      },
+      editor: {},
+      map: null
     }
   },
   mounted() {
     this.getCityInfo(this.adcode)
-    this.initMap()
   },
   methods: {
     // 查询城市详情
@@ -65,6 +75,7 @@ export default {
       api.getCityInfo(adcode).then(response => {
         this.cityData = response
         // console.log(response)
+        this.initMap()
       })
     },
     initMap: function() {
@@ -74,10 +85,14 @@ export default {
           center: [113.4, 39.91], //地图中心点
           zoom: 10 //地图显示的缩放级别
         })
-      AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
-        map.addControl(new AMap.ToolBar())
-        map.addControl(new AMap.Scale())
-      })
+      this.map = map
+      AMap.plugin(
+        ['AMap.ToolBar', 'AMap.Scale', 'AMap.PolyEditor'],
+        function() {
+          map.addControl(new AMap.ToolBar())
+          map.addControl(new AMap.Scale())
+        }
+      )
       //加载行政区划插件
       var adcode = this.adcode.toString()
       AMap.service('AMap.DistrictSearch', function() {
@@ -101,7 +116,7 @@ export default {
                   map: map,
                   strokeWeight: 1,
                   path: bounds[i],
-                  fillOpacity: 0.7,
+                  fillOpacity: 0.5,
                   fillColor: '#CCF3FF',
                   strokeColor: '#CC66CC'
                 })
@@ -112,13 +127,33 @@ export default {
           }
         })
       })
+      // 绘制该城市的区域信息
+      if (this.cityData.arealList) {
+        for (let i = 0, len = this.cityData.arealList.length; i < len; i++) {
+          this.polygon(this.cityData.arealList[i].areaCoordinate, 'red')
+        }
+      }
+    },
+    polygon(arr, color) {
+      this.editor._polygon = (() => {
+        return new AMap.Polygon({
+          map: this.map,
+          path: JSON.parse(arr),
+          strokeColor: color,
+          strokeOpacity: 1,
+          strokeWeight: 1,
+          fillColor: '#f5deb3',
+          fillOpacity: 0.5
+        })
+      })()
+      this.map.setFitView() //地图自适应
     },
     nodifyCityInfo(cityData) {
-      if(!cityData.expense){
+      if (!cityData.expense) {
         this.$Message.erroe('请填写运费')
         return false
       }
-      if(!cityData.instantExpense){
+      if (!cityData.instantExpense) {
         this.$Message.erroe('请填写及时配送价')
         return false
       }
@@ -151,11 +186,6 @@ export default {
     line-height: 40px;
     margin-bottom: 20px;
     background-color: #363e54;
-    span {
-      margin-left: 10px;
-      font-size: 18px;
-      color: #fff;
-    }
   }
   .cityInfo_map {
     .Breadcrumb {
@@ -165,12 +195,13 @@ export default {
     }
     .map {
       width: 100%;
-      height: 500px;
+      height: 400px;
       background-color: rgba(202, 238, 233, 0.93);
       margin-bottom: 20px;
     }
     .setprice {
-      text-align: center;
+      width: 500px;
+      margin: 0 auto;
       p {
         font-size: 18px;
         height: 40px;

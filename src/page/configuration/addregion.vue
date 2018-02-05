@@ -46,6 +46,8 @@ export default {
       formInline: {},
       quPath: [],
       searchData: '', // 搜索框输入内容
+      cityData: {}, // 区域父级city信息
+      editor: {},
       map: null,
       geocoder: null,
       placeSearch: null,
@@ -53,9 +55,17 @@ export default {
     }
   },
   mounted() {
-    this.initMap()
+    this.getCityInfo()
   },
   methods: {
+    // 查询城市详情
+    getCityInfo() {
+      api.getCityInfo(this.adcode).then(response => {
+        this.cityData = response
+        console.log(response)
+        this.initMap()
+      })
+    },
     initMap: function() {
       var district,
         map = new AMap.Map('container', {
@@ -65,7 +75,7 @@ export default {
         })
       this.map = map
       AMap.plugin(
-        ['AMap.ToolBar', 'AMap.Scale', 'AMap.PlaceSearch'],
+        ['AMap.ToolBar', 'AMap.Scale', 'AMap.PolyEditor', 'AMap.PlaceSearch'],
         function() {
           map.addControl(new AMap.ToolBar())
           map.addControl(new AMap.Scale())
@@ -115,6 +125,12 @@ export default {
           }
         })
       })
+      // 绘制该城市的区域信息
+      if (this.cityData.arealList) {
+        for (let i = 0, len = this.cityData.arealList.length; i < len; i++) {
+          this.polygon(this.cityData.arealList[i].areaCoordinate, 'red')
+        }
+      }
       // 加载鼠标工具
       AMap.service('AMap.MouseTool', response => {
         var mouseTool = new AMap.MouseTool(map) //在地图中添加MouseTool插件
@@ -123,6 +139,21 @@ export default {
           this.quPath = e.obj.getPath()
         })
       })
+    },
+    // 绘制自定义区域
+    polygon(arr, color) {
+      this.editor._polygon = (() => {
+        return new AMap.Polygon({
+          map: this.map,
+          path: JSON.parse(arr),
+          strokeColor: color,
+          strokeOpacity: 1,
+          strokeWeight: 1,
+          fillColor: '#f5deb3',
+          fillOpacity: 0.5
+        })
+      })()
+      this.map.setFitView() //地图自适应
     },
     // 添加
     addQu() {
@@ -152,7 +183,7 @@ export default {
     // 搜索
     searchPlace() {
       this.placeSearch.search(this.searchData, (status, result) => {
-        if (status=='complete'&&result.info == 'OK') {
+        if (status == 'complete' && result.info == 'OK') {
           this.marker = new AMap.Marker({
             icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png'
           })
