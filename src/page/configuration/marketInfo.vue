@@ -28,26 +28,75 @@
     <!-- 菜市场信息 -->
     <section class="addmarket_marketinfo">
       <h2>菜市场信息</h2>
-      <Form v-model="marketData"  inline>
+      <Form :model="marketData" :label-width="100">
+        <Row>
+          <Col span="8">
+            <FormItem label="菜市场名称：">
+            <Input v-model="marketData.marketName" style="width:200px" required></Input>
+            </FormItem>
+            <FormItem label="菜市场电话：">
+              <Input :maxlength="11" v-model="marketData.mobileno" style="width:200px" required></Input>
+            </FormItem>
+            <FormItem label="菜市场地址：">
+              <Input v-model="marketData.address" style="width:200px" required ></Input>
+            </FormItem>
+            <FormItem label="菜市场坐标：">
+              <Button type="info" size="large" style="width: 150px" @click="chooseMarker">重新选点</Button>
+            </FormItem>
+            <FormItem >
+              <RadioGroup v-model="marketData.isSelfPick" type="button" >
+                <Radio label="0">自提关闭</Radio>
+                <Radio label="1">自提开启</Radio>
+              </RadioGroup>
+            </FormItem>
+            <FormItem label="自提点：">
+              <Input v-model="marketData.selfPickAddress" style="width:200px" :disabled="marketData.isSelfPick === '0'"></Input>
+            </FormItem>
+            <FormItem label="自提点电话：">   
+              <Input v-model="marketData.self_pick_address_number" style="width:200px" :disabled="marketData.isSelfPick === '1'"></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="配送时间：">
+            <!-- <CheckboxGroup v-model="formItem.timePick">
+              <Checkbox label="两小时送达" ></Checkbox> </br>
+              <Checkbox label="按时段送达" ></Checkbox>
+            </CheckboxGroup> -->
+              <Checkbox v-model="marketData.isTwoHoursPickBoolean">两小时送达</Checkbox>
+              <Checkbox v-model="marketData.isTimeSlotPickBoolean" >按时段送达</Checkbox>
+            </FormItem>
+            <FormItem >
+             <div  v-for="(item,index) in marketData.pickTimeList" :key="index" style="display: inline">
+               <TimePicker v-model="marketData.pickTimeList[index].beginTime" :disabled="!marketData.isTimeSlotPick" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker> - 
+               <TimePicker v-model="marketData.pickTimeList[index].endTime" :disabled="!marketData.isTimeSlotPick" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker>
+               <Button size="small"   shape="circle" @click="deltimeInput(index)"> - </Button>
+             </div>
+              <Button size="small"  shape="circle"  style="display: inline" @click="addtimeInput">+</Button>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="配送区域：">
+              <RadioGroup v-model="marketData.isAreaSelect" vertical>
+                <Radio label="0"> 
+                  <!-- <Button size="small" type="info" :disabled="marketData.isAreaSelect == 1" >绘制菜市场 </Button>   -->
+                  <Button size="small" :disabled="marketData.isAreaSelect == 1" @click="polygonEditorOpen()">开始编辑当前市场范围</Button> 
+                  <Button size="small" :disabled="marketData.isAreaSelect == 1" @click="polygonEditorClose()">结束编辑当前市场范围</Button>
+                </Radio>
+                <Radio label="1"> <Input size="small" v-model="marketData.deliverRange" :disabled="marketData.isAreaSelect == 0" style="width:100px" placeholder="配送半径(km)" @on-blur="deliverRange"></Input> </Radio>
+              </RadioGroup>
+            </FormItem>
+            <FormItem >
+                <Checkbox v-model="mapScale" >地图标尺</Checkbox> <br>
+                <div  v-for="(cicleR,index) in cicleRs" :key="index" style="display: inline">
+                  <Input v-model="cicleRs[index]" size="small" style="width:150px" :disabled="!mapScale" placeholder="输入标尺半径" @on-blur="editScale(index)"></Input>
+                  <Button size="small"  v-if="cicleRs.length <= 5&&cicleRs.length !== 1" shape="circle" @click="delScaleInput(index)"> - </Button>
+                </div>
+              <Button size="small" v-if="cicleRs.length < 5" shape="circle"  style="display: inline" @click="addScaleInput">+</Button>
+            </FormItem>
+          </Col>
+        </Row>
         <FormItem >
-            <span>菜市场名称：</span>
-            <Input v-model="marketData.marketName"  style="width:200px"></Input>
-            <span>菜市场电话：</span>
-            <Input v-model="marketData.mobileno"  style="width:200px"></Input>
-            <span>配送时间段：</span>
-            <!-- <TimePicker :value="beginTime" format="HH:mm:ss" placeholder="Select time" style="width: 95px"></TimePicker> -->
-            <TimePicker @on-change="getbeginTime" :value="marketData.beginTime"  placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker> - 
-            <TimePicker  @on-change="getendTime" :value="marketData.endTime" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker>
-            <br>
-            <span>自提点电话：</span>            
-            <Input v-model="marketData.self_pick_address_number" style="width:200px" ></Input> 
-             <span>自提点：</span>
-            <Input v-model="marketData.selfPickAddress"  style="width:200px"></Input>
-            <span>菜市场地址：</span>
-            <Input v-model="marketData.address" style="width:200px" ></Input>
             <div class="button">
-              <Button @click="polygonEditorOpen()">开始编辑当前市场范围</Button>
-              <Button @click="polygonEditorClose()">结束编辑当前市场范围</Button>
               <Button @click="showOtherMarket()">显示该区域所有菜市场</Button>
             </div>
         </FormItem>
@@ -80,7 +129,10 @@ export default {
       current: 0,
       marketPath: [],
       editor: {},
-      playStatus: false
+      playStatus: false,
+      cicleRs: [''],
+      mapScale: false,
+      othermarketEdit: false // 其他区域是否绘制
     }
   },
   computed: {
@@ -105,6 +157,7 @@ export default {
   created() {
     this.getQuInfo()
   },
+  mounted() {},
   methods: {
     getQuInfo() {
       api.getMarketInfo(this.marketId).then(response => {
@@ -149,31 +202,26 @@ export default {
       this.geocoder = new AMap.Geocoder({
         city: this.areaName //城市，默认：“全国”
       })
-      // 菜市场位置
-      this.marker = new AMap.Marker({
-        icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
-        position: [this.marketData.longitude, this.marketData.latitude]
-      })
-      this.marker.setMap(map)
+
       // 绘制区域范围
       // console.log(this.areaData)
       if (this.areaData.areaCoordinate) {
         this.polygon(this.areaData.areaCoordinate, 'red')
       }
       // // 绘制本市场范围
-      if (this.marketData.areaCoordinate) {
+      if (this.marketData.areaCoordinate && this.marketData.isAreaSelect == 0) {
         this.polygon(this.marketData.areaCoordinate, '00f')
+      } else if (
+        this.marketData.deliverRange &&
+        this.marketData.isAreaSelect == 1
+      ) {
+        this.circle(this.marketData.deliverRange * 1000, 'blue', 0.15)
       }
+
       this.editor._polygonEditor = new AMap.PolyEditor(
         map,
         this.editor._polygon
       )
-      // 修改菜市场地址
-      this.editor._polygon.on('dblclick', e => {
-        this.marker.setPosition(e.lnglat)
-        this.marketData.latitude = e.lnglat.O
-        this.marketData.longitude = e.lnglat.M
-      })
     },
     // 绘制自定义区域
     polygon(arr, color) {
@@ -190,13 +238,46 @@ export default {
       })()
       this.map.setFitView() //地图自适应
     },
+    // 绘制圆
+    circle(radius, color, fillOpacity) {
+      this.editor._circle = (() => {
+        var circle = new AMap.Circle({
+          center: [this.marketData.longitude, this.marketData.latitude], // 圆心位置
+          radius: radius, //半径
+          strokeColor: color, //线颜色
+          strokeOpacity: 1, //线透明度
+          strokeWeight: 1, //线粗细度
+          fillOpacity: fillOpacity
+        })
+        circle.setMap(this.map)
+        return circle
+      })()
+    },
     // 显示其他菜市场范围
     showOtherMarket() {
-      if (this.areaData.mrketList) {
+      if (this.areaData.mrketList && !this.othermarketEdit) {
         for (var i = 0, len = this.areaData.mrketList.length; i < len; i++) {
           this.polygon(this.areaData.mrketList[i].areaCoordinate, 'green')
+          this.othermarketEdit = true // 绘制了其他区域赋值为true
         }
       }
+    },
+    // 菜市场选点
+    chooseMarker() {
+      // // 选定菜市场地址
+      // 菜市场位置
+      this.marker = new AMap.Marker({
+        icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
+        position: [this.marketData.longitude, this.marketData.latitude],
+        draggable: true,
+        cursor: 'move',
+        raiseOnDrag: true
+      })
+      this.marker.setMap(this.map)
+      this.marker.on('dragend', e => {
+        this.marketData.latitude = e.lnglat.O
+        this.marketData.longitude = e.lnglat.M
+      })
     },
     // 开始修改区域
     polygonEditorOpen() {
@@ -209,22 +290,50 @@ export default {
       this.editor._polygonEditor.close()
       this.marketPath = this.editor._polygon.getPath()
     },
-    // 获取选择框的时间
-    // 获取时间
-    getbeginTime(time) {
-      this.marketData.beginTime = time
+    editScale(index) {
+      if (this.marketData.latitude) {
+        this.circle(this.cicleRs[index] * 1000, 'red', 0)
+      } else {
+        alert('选择市场位置')
+      }
     },
-    getendTime(time) {
-      this.marketData.endTime = time
+    // 获取选择框的时间
+    // 增加营业时间输入框
+    addtimeInput() {
+      if (this.marketData.pickTimeList.length < 5) {
+        this.marketData.pickTimeList.push({})
+      }
+    },
+    // 删除配送时段
+    deltimeInput(index) {
+      if (this.marketData.pickTimeList.length != 1) {
+        this.marketData.pickTimeList.splice(index, 1)
+      }
+    },
+    // 添加标尺
+    addScaleInput() {
+      if (this.cicleRs.length < 5) {
+        this.cicleRs.push('')
+      }
+    },
+    // 删除标尺
+    delScaleInput(index) {
+      if (this.cicleRs.length != 1) {
+        this.cicleRs.splice(index, 1)
+      }
+    },
+    // 选择配送范围为 绘制yuan
+    deliverRange() {
+      if (this.marketData.latitude) {
+        this.circle(this.marketData.deliverRange * 1000, '#ccc', 0.1)
+      } else {
+        alert('选择市场位置')
+      }
     },
     // 修改菜市场信息
     modifyMarket() {
       if (!this.marketData.marketName) {
         this.$Message.error('菜市场名称必填')
-        return false
-      }
-      if (!this.marketData.beginTime || !this.marketData.endTime) {
-        this.$Message.error('配送时间端必填')
         return false
       }
       if (!this.marketData.mobileno || isNaN(this.marketData.mobileno)) {
@@ -244,7 +353,7 @@ export default {
         marketId: this.marketId,
         market: this.marketData
       }
-      // console.log(params,3)
+      // console.log(params, 3)
       api.addMarket(params).then(response => {
         this.$Message.info('修改菜市场成功')
         this.$router.go(-1)
@@ -283,16 +392,13 @@ export default {
     }
   }
   .addmarket_map {
+    min-width: 1200px;
     height: 500px;
     margin-top: 10px;
     background-color: #caeee9;
   }
   .addmarket_marketinfo {
-    min-width: 1000px;
-    margin: 0 auto;
-    form {
-      text-align: center;
-    }
+    min-width: 1260px;
     h2 {
       text-align: center;
       line-height: 40px;

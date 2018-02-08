@@ -24,10 +24,14 @@
       <div id="result" style="zIndex:500"></div>
     </section>
     <section class="addregion_marketinfo">
-      <Form ref="formInline"  label-position="left"  inline>
+      <Form ref="formInline"  label-position="left"  >
         <FormItem>
             <span>区域名称：</span>
             <Input type="text" v-model="formInline.user" style="width: 150px" required></Input>
+        </FormItem>
+        <FormItem>
+            <span>区域范围：</span>
+            <Button size="large" style="width: 150px" @click="editPolygon">开始绘制区域</Button>
         </FormItem>
     </Form>
     </section>
@@ -51,7 +55,8 @@ export default {
       map: null,
       geocoder: null,
       placeSearch: null,
-      marker: null
+      marker: null,
+      mouseTool: null
     }
   },
   mounted() {
@@ -62,7 +67,6 @@ export default {
     getCityInfo() {
       api.getCityInfo(this.adcode).then(response => {
         this.cityData = response
-        console.log(response)
         this.initMap()
       })
     },
@@ -75,10 +79,17 @@ export default {
         })
       this.map = map
       AMap.plugin(
-        ['AMap.ToolBar', 'AMap.Scale', 'AMap.PolyEditor', 'AMap.PlaceSearch'],
+        [
+          'AMap.ToolBar',
+          'AMap.Scale',
+          'AMap.PolyEditor',
+          'AMap.PlaceSearch',
+          'AMap.MouseTool'
+        ],
         function() {
           map.addControl(new AMap.ToolBar())
           map.addControl(new AMap.Scale())
+          map.addControl(new AMap.MouseTool(map))
         }
       )
       // 搜索插件初始化
@@ -133,12 +144,16 @@ export default {
       }
       // 加载鼠标工具
       AMap.service('AMap.MouseTool', response => {
-        var mouseTool = new AMap.MouseTool(map) //在地图中添加MouseTool插件
-        var drawPolygon = mouseTool.polygon() //用鼠标工具画多边形
-        AMap.event.addListener(mouseTool, 'draw', e => {
+        this.mouseTool = new AMap.MouseTool(map) //在地图中添加MouseTool插件
+        //  this.mouseTool.polygon() //用鼠标工具画多边形
+        AMap.event.addListener(this.mouseTool, 'draw', e => {
           this.quPath = e.obj.getPath()
         })
       })
+    },
+    // 开始绘制区域按钮
+    editPolygon() {
+      this.mouseTool.polygon()
     },
     // 绘制自定义区域
     polygon(arr, color) {
