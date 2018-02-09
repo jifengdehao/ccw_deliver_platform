@@ -43,18 +43,28 @@
   .textLeft {
     text-align: left;
   }
-  .ml10{
+
+  .mbt10 {
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+
+  .ml10 {
     margin-left: 10px;
   }
-  .mb10{
+
+  .mb10 {
     margin-bottom: 10px;
   }
-  .mb20{
+
+  .mb20 {
     margin-bottom: 20px;
   }
-  .mr10{
+
+  .mr10 {
     margin-right: 10px;
   }
+
   #app {
     position: absolute;
     left: 0;

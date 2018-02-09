@@ -67,14 +67,21 @@ export const exportOrderPoi = params => {
   return ax.g('/orderManager/poi', params)
 }
 
-
 /**
- * 订单详情
+ * 订单指派
  * @param params
  */
 export const getOrderDetails = params => {
   return ax.g(`/orderManager/${params}`)
 }
+/**
+ * 订单详情
+ * @param params
+ */
+export const getOrderDetailsTo = params => {
+  return ax.g(`/orderManager/detail/${params}`)
+}
+
 /**
  * 指派配送员
  * @param params

@@ -12,6 +12,12 @@
            @click="clearSearch"></i>
       </div>
     </div>
+    <Row class="mb20">
+      <Col span="6">
+      <h3>请选择时间</h3>
+      <DatePicker type="daterange" placeholder="请选择时间" style="width: 200px" @on-change="selectTime"></DatePicker>
+      </Col>
+    </Row>
     <Row :gutter="24" class="mb20">
       <Col span="6">
       <h3>省区</h3>
@@ -52,6 +58,34 @@
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
                 :class="{active:item.psDeliverId === deliverId}" v-if="item">
               {{item.name}}
+              <i class="xiu" v-if="item.personStatusStr">{{item.personStatusStr}}</i>
+            </li>
+          </ul>
+          </Col>
+          <Col span="21" offset="1">
+          <Table border :columns="columns" :data="data" :loading="loading"></Table>
+          <Page
+            :total="tableTotal"
+            :current="pageNumber"
+            :page-size="pageSize"
+            @on-change="changePage"
+            show-total
+            class="fr"
+            style="margin-top: 20px;"
+          ></Page>
+          </Col>
+        </Row>
+      </TabPane>
+      <TabPane label="预订单" name="8">
+        <Row class="O_cava">
+          <Col span="2" class="O_cava_name">
+          <ul>
+            <li>姓名</li>
+            <li @click="getDeliver()" :class="{active:allClass}">全部</li>
+            <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
+                :class="{active:item.psDeliverId === deliverId}" v-if="item">
+              {{item.name}}
+              <i class="xiu" v-if="item.personStatusStr">{{item.personStatusStr}}</i>
             </li>
           </ul>
           </Col>
@@ -78,6 +112,61 @@
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
                 :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
+              <i class="xiu" v-if="item.personStatusStr">{{item.personStatusStr}}</i>
+            </li>
+          </ul>
+          </Col>
+          <Col span="21" offset="1">
+          <Table border :columns="columns" :data="data" :loading="loading"></Table>
+          <Page
+            :total="tableTotal"
+            :current="pageNumber"
+            :page-size="pageSize"
+            @on-change="changePage"
+            show-total
+            class="fr"
+            style="margin-top: 20px;"
+          ></Page>
+          </Col>
+        </Row>
+      </TabPane>
+      <TabPane label="已接单" name="9">
+        <Row class="O_cava">
+          <Col span="2" class="O_cava_name">
+          <ul>
+            <li>姓名</li>
+            <li @click="getDeliver()" :class="{active:allClass}">全部</li>
+            <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
+                :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
+              {{item.name}}
+              <i class="xiu" v-if="item.personStatusStr">{{item.personStatusStr}}</i>
+            </li>
+          </ul>
+          </Col>
+          <Col span="21" offset="1">
+          <Table border :columns="columns" :data="data" :loading="loading"></Table>
+          <Page
+            :total="tableTotal"
+            :current="pageNumber"
+            :page-size="pageSize"
+            @on-change="changePage"
+            show-total
+            class="fr"
+            style="margin-top: 20px;"
+          ></Page>
+          </Col>
+        </Row>
+      </TabPane>
+      <TabPane label="待取货" name="10">
+        <Row class="O_cava">
+          <Col span="2" class="O_cava_name">
+          <ul>
+            <li>姓名</li>
+            <li @click="getDeliver()" :class="{active:allClass}">全部</li>
+            <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
+                :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
+              {{item.name}}
+              <i class="xiu" v-if="item.personStatusStr">{{item.personStatusStr}}</i>
             </li>
           </ul>
           </Col>
@@ -106,6 +195,7 @@
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
                 :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
+              <i class="xiu" v-if="item.personStatusStr">{{item.personStatusStr}}</i>
             </li>
           </ul>
           </Col>
@@ -123,7 +213,7 @@
           </Col>
         </Row>
       </TabPane>
-      <TabPane label="配送完成" name="2">
+      <TabPane label="已完成" name="2">
         <Row class="O_cava">
           <Col span="2" class="O_cava_name">
           <ul>
@@ -132,32 +222,7 @@
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
                 :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
-            </li>
-          </ul>
-          </Col>
-          <Col span="21" offset="1">
-          <Table border :columns="columns" :data="data" :loading="loading"></Table>
-          <Page
-            :total="tableTotal"
-            :current="pageNumber"
-            :page-size="pageSize"
-            @on-change="changePage"
-            show-total
-            class="fr"
-            style="margin-top: 20px;"
-          ></Page>
-          </Col>
-        </Row>
-      </TabPane>
-      <TabPane label="配送异常" name="3">
-        <Row class="O_cava">
-          <Col span="2" class="O_cava_name">
-          <ul>
-            <li>姓名</li>
-            <li @click="getDeliver()" :class="{active:allClass}">全部</li>
-            <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
-                :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
-              {{item.name}}
+              <i class="xiu" v-if="item.personStatusStr">{{item.personStatusStr}}</i>
             </li>
           </ul>
           </Col>
@@ -184,6 +249,34 @@
             <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
                 :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
               {{item.name}}
+              <i class="xiu" v-if="item.personStatusStr">{{item.personStatusStr}}</i>
+            </li>
+          </ul>
+          </Col>
+          <Col span="21" offset="1">
+          <Table border :columns="columns" :data="data" :loading="loading"></Table>
+          <Page
+            :total="tableTotal"
+            :current="pageNumber"
+            :page-size="pageSize"
+            @on-change="changePage"
+            show-total
+            class="fr"
+            style="margin-top: 20px;"
+          ></Page>
+          </Col>
+        </Row>
+      </TabPane>
+      <TabPane label="异常订单" name="3">
+        <Row class="O_cava">
+          <Col span="2" class="O_cava_name">
+          <ul>
+            <li>姓名</li>
+            <li @click="getDeliver()" :class="{active:allClass}">全部</li>
+            <li v-for="(item,index) in deliverData" :key="item.psDeliverId" @click="getDeliver(item.psDeliverId)"
+                :class="{active:item.psDeliverId === deliverId}" v-if="deliverData.length > 0">
+              {{item.name}}
+              <i class="xiu" v-if="item.personStatusStr">{{item.personStatusStr}}</i>
             </li>
           </ul>
           </Col>
@@ -207,7 +300,7 @@
       <div slot="header">导出表格</div>
       <div class="textCenter">
         <DatePicker type="date" placeholder="选择日期" style="width: 100%" v-model="startTime"></DatePicker>
-        <div class="m10">到</div>
+        <div class="mbt10">到</div>
         <DatePicker type="date" placeholder="选择日期" style="width: 100%" v-model="endTime"></DatePicker>
       </div>
       <div slot="footer">
@@ -224,6 +317,8 @@
     name: 'order',
     data() {
       return {
+        beginTime: '', // 订单选择开始时间
+        endTime: '', // 订单选择结束时间
         provinceData: [], // 省或直轄市数据集
         province: '', // 省或直轄市
         showProvince: true,
@@ -238,7 +333,7 @@
         showMarket: true,  // 是否允许选择市场  true ===>不允许 false 允许
         columns: [
           {
-            title: '用户名',
+            title: '用户姓名',
             key: 'customerName',
             align: 'center'
           },
@@ -251,7 +346,7 @@
             }
           },
           {
-            title: '期待送达',
+            title: '期待取货',
             align: 'center',
             key: 'endTime',
             render: (h, params) => {
@@ -262,6 +357,35 @@
             title: '订单状态',
             align: 'center',
             key: 'status'
+          },
+          {
+            title: '接单时间',
+            align: 'center',
+            key: 'takeOrderTime',
+            render: (h, params) => {
+              return time.formatDateTime(params.row.takeOrderTime)
+            }
+          },
+          {
+            title: '取货时间',
+            align: 'center',
+            key: 'deliverTokeTime',
+            render: (h, params) => {
+              return time.formatDateTime(params.row.deliverTokeTime)
+            }
+          },
+          {
+            title: '送达时间',
+            align: 'center',
+            key: 'arrivalTime',
+            render: (h, params) => {
+              return time.formatDateTime(params.row.arrivalTime)
+            }
+          },
+          {
+            title: '订单编号',
+            align: 'center',
+            key: 'orderId'
           },
           {
             title: '运单编号',
@@ -310,24 +434,23 @@
     },
     created() {
       this.getInitOrderData()
-      this.isQuery()
     },
     computed: {
       allClass() {
         return this.deliverId === '' ? true : false
       }
     },
-//    watch: {
-//      '$route'(to, from) {
-//        console.log(to)
-//        if (to.path === '/order') {
-//          this.$route.meta.keepAlive = true
-//        } else {
-//          this.$route.meta.keepAlive = false
-//        }
-//      }
-//    },
     methods: {
+      // 选择时间
+      selectTime(value) {
+        console.log(value)
+        this.beginTime = value[0]
+        this.endTime = value[1]
+        this.pageNumber = 1
+        if (this.market !== '') {
+          this.changeMarket(this.market)
+        }
+      },
       // 获取省市数据
       getProvinceData() {
         api.getDeployManager().then((res) => {
@@ -393,11 +516,14 @@
             pageNumber: this.pageNumber,
             psDeliverId: this.deliverId,
             expressId: this.expressId,
-            state: this.state
+            state: this.state,
+            endTime: this.endTime,
+            beginTime: this.beginTime
           }
           this.loading = true
           api.getOrderData(params).then((res) => {
             if (res) {
+              console.log(res)
               this.loading = false
               this.data = res.expressPage.records
               this.tableTotal = res.expressPage.total
@@ -428,8 +554,6 @@
         this.pageNumber = 1
         if (this.market !== '') {
           this.changeMarket(this.market)
-        } else {
-          this.changeMarket(0)
         }
       },
       // 清除搜索
@@ -472,16 +596,6 @@
         } else {
           this.getProvinceData()
           this.showProvince = false
-        }
-      },
-      isQuery() {
-        if (this.$route.query.market) {
-          this.market = this.$route.query.market
-          this.state = this.$route.query.state
-          this.$route.meta.keepAlive = !this.$route.meta.keepAlive
-          this.changeMarket(this.market)
-        } else {
-          this.$route.meta.keepAlive = !this.$route.meta.keepAlive
         }
       },
       // 导出表格
@@ -541,6 +655,21 @@
           line-height: 35px;
           border-bottom: 1px solid #ccc;
           cursor: pointer;
+          position: relative;
+          .xiu {
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-size: 8px;
+            color: #ffffff;
+            font-style: normal;
+            background-color: #C81623;
+            border-radius: 50%;
+            height: 15px;
+            line-height: 15px;
+            text-align: center;
+            width: 15px;
+          }
           &:first-child {
             height: 40px;
             line-height: 40px;

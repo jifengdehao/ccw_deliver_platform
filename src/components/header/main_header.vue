@@ -22,6 +22,7 @@
     background-color: #363e54;
     margin-bottom: 20px;
     padding: 0 20px;
+    position: relative;
     & > h2 {
       color: #fff;
       display: inline-block;

@@ -9,18 +9,18 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
-var env = config.test.env
+var env = config.internal.env
 
 var webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
-      sourceMap: config.test.productionSourceMap,
+      sourceMap: config.internal.productionSourceMap,
       extract: true
     })
   },
   devtool: false,
   output: {
-    path: config.test.assetsRoot,
+    path: config.internal.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
@@ -50,7 +50,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: config.test.index,
+      filename: config.internal.index,
       template: 'index.html',
       inject: true,
       minify: {
@@ -89,14 +89,14 @@ var webpackConfig = merge(baseWebpackConfig, {
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),
-        to: config.test.assetsSubDirectory,
+        to: config.internal.assetsSubDirectory,
         ignore: ['.*']
       }
     ])
   ]
 })
 
-if (config.test.productionGzip) {
+if (config.internal.productionGzip) {
   var CompressionWebpackPlugin = require('compression-webpack-plugin')
 
   webpackConfig.plugins.push(
@@ -105,7 +105,7 @@ if (config.test.productionGzip) {
       algorithm: 'gzip',
       test: new RegExp(
         '\\.(' +
-        config.test.productionGzipExtensions.join('|') +
+        config.internal.productionGzipExtensions.join('|') +
         ')$'
       ),
       threshold: 10240,
@@ -114,7 +114,7 @@ if (config.test.productionGzip) {
   )
 }
 
-if (config.test.bundleAnalyzerReport) {
+if (config.internal.bundleAnalyzerReport) {
   var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())
 }
