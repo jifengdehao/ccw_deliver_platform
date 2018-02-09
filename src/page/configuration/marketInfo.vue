@@ -53,7 +53,7 @@
               <Input v-model="marketData.selfPickAddress" style="width:200px" :disabled="marketData.isSelfPick === '0'"></Input>
             </FormItem>
             <FormItem label="自提点电话：">   
-              <Input v-model="marketData.self_pick_address_number" style="width:200px" :disabled="marketData.isSelfPick === '1'"></Input>
+              <Input v-model="marketData.self_pick_address_number" style="width:200px" :disabled="marketData.isSelfPick === '0'"></Input>
             </FormItem>
           </Col>
           <Col span="8">
@@ -67,8 +67,8 @@
             </FormItem>
             <FormItem >
              <div  v-for="(item,index) in marketData.pickTimeList" :key="index" style="display: inline">
-               <TimePicker v-model="marketData.pickTimeList[index].beginTime" :disabled="!marketData.isTimeSlotPick" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker> - 
-               <TimePicker v-model="marketData.pickTimeList[index].endTime" :disabled="!marketData.isTimeSlotPick" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker>
+               <TimePicker v-model="marketData.pickTimeList[index].beginTime" :disabled="!marketData.isTimeSlotPickBoolean" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker> - 
+               <TimePicker v-model="marketData.pickTimeList[index].endTime" :disabled="!marketData.isTimeSlotPickBoolean" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker>
                <Button size="small"   shape="circle" @click="deltimeInput(index)"> - </Button>
              </div>
               <Button size="small"  shape="circle"  style="display: inline" @click="addtimeInput">+</Button>
@@ -392,13 +392,13 @@ export default {
     }
   }
   .addmarket_map {
-    min-width: 1200px;
+    min-width: 1160px;
     height: 500px;
     margin-top: 10px;
     background-color: #caeee9;
   }
   .addmarket_marketinfo {
-    min-width: 1260px;
+    min-width: 1100px;
     h2 {
       text-align: center;
       line-height: 40px;

@@ -67,9 +67,9 @@
               <Checkbox v-model="formItem.isTimeSlotPickBoolean" @on-change="isTimeSlotPick">按时段送达</Checkbox>
             </FormItem>
             <FormItem >
-             <div  v-for="(item,index) in formItem.pickTimeList" :key="index" style="display: inline">
-               <TimePicker v-model="formItem.pickTimeList[index].beginTime" :disabled="!formItem.isTimeSlotPick" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker> - 
-               <TimePicker v-model="formItem.pickTimeList[index].endTime" :disabled="!formItem.isTimeSlotPick" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker>
+             <div  v-for="(item,index) in formItem.pickTimeList" :key="index" style="display: inline;marginRight: 50px;">
+               <TimePicker v-model="formItem.pickTimeList[index].beginTime" :disabled="!formItem.isTimeSlotPickBoolean" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker> - 
+               <TimePicker v-model="formItem.pickTimeList[index].endTime" :disabled="!formItem.isTimeSlotPickBoolean" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker>
                <Button size="small"  v-if="formItem.pickTimeList.length <= 5&&formItem.pickTimeList.length !== 1" shape="circle" @click="deltimeInput(index)"> - </Button>
              </div>
               <Button size="small" v-if="formItem.pickTimeList.length < 5" shape="circle" @click="addtimeInput" style="display: inline">+</Button>
