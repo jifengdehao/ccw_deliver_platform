@@ -14,8 +14,8 @@
           <!-- 面包屑 -->
             <div class="Breadcrumb">
                 <Breadcrumb separator=">">
-                    <BreadcrumbItem>{{provinceName}}</BreadcrumbItem>
-                    <BreadcrumbItem>{{cityName}}</BreadcrumbItem>
+                    <BreadcrumbItem>{{cityData.provinceName}}</BreadcrumbItem>
+                    <BreadcrumbItem>{{cityData.cityName}}</BreadcrumbItem>
                 </Breadcrumb>
             </div>
             <div class="map" id="container">
@@ -74,7 +74,7 @@ export default {
     getCityInfo(adcode) {
       api.getCityInfo(adcode).then(response => {
         this.cityData = response
-        // console.log(response)
+        console.log(response)
         this.initMap()
       })
     },
@@ -169,12 +169,6 @@ export default {
   computed: {
     adcode() {
       return this.$route.query.cityId
-    },
-    cityName() {
-      return this.$route.query.cityName
-    },
-    provinceName() {
-      return this.$route.query.provinceName
     }
   }
 }

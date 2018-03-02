@@ -14,29 +14,18 @@
     <!-- 显示地址内容 -->
     <section class="clearfix">
       <!-- 省区 -->
-      <div class="configuration_quyu clearfix">
-        <div class="configuration_quyu_title clearfix">
-          <h3>省区</h3>
-        </div>
-        <ul class="configuration_quyu_content" >
-          <li v-for="(item,index) in shengs" :key="index">
-            <span @click="showCity(item.provinceId,item.provinceName,index)" :class="{current:shengSelected==index}"> {{item.provinceName}}</span>
-            <Button type="info" size="small" class="fr" style="border: none" @click="seeThisSheng(item.provinceId,item.provinceName)">查看</Button>
-          </li>
-        </ul>
+      <div class="SelectCity">
+        <Select v-model="provinceId" clearable :disabled="selectedProvince" style="max-width:200px;" @on-change="changeProvince" >
+         <Option v-for="(item,index) in shengs" :value="item.provinceId" :key="item.provinceId">{{
+          item.provinceName}}
+          </Option>
+        </Select>
+        <Select v-model="cityId" style="max-width:200px;" clearable  @on-change="changeCity">
+           <Option v-for="item in citys" :value="item.cityId" :key="item.cityId">{{ item.cityName }}</Option>
+        </Select>
+        <Button type="info" style="border: none;" @click="seeThisCity">查看</Button>
       </div>
-      <!-- 市区 -->
-      <div class="configuration_quyu clearfix">
-        <div class="configuration_quyu_title clearfix">
-          <h3>市区</h3>
-        </div>
-        <ul class="configuration_quyu_content">
-          <li  v-for="(item,index) in citys" :key="index">
-            <span @click="showQu(item.cityId,item.cityName,index)" :class="{current:citySelected === index}"> {{item.cityName}}</span>
-            <Button type="info" size="small" class="fr" style="border: none" @click="seeThisCity(item.cityId,item.cityName)">查看</Button>
-          </li>
-        </ul>
-      </div>
+       
       <!-- 大区 -->
       <div class="configuration_quyu clearfix">
         <div class="configuration_quyu_title clearfix">
@@ -88,15 +77,15 @@ export default {
       delIndex: NaN,
       modalTitle: '', // 弹框标题
       modalMain: '', // 弹框内容
-      shengSelected: NaN, // 点击省区选择
-      citySelected: NaN, // 点击城市
       areaSelected: NaN, // 点击区域
       showCitys: true,
       addQu: false,
       addMarket: false,
+      selectedProvince: false, // 省份是否可选
       provinceName: '',
       cityName: '',
       areaName: '',
+      provinceId: 440000, // 省id 固定广东省
       cityId: '',
       areaId: '',
       hide: '',
@@ -107,22 +96,18 @@ export default {
     }
   },
   created() {
+    // 获取省份信息
     api.getShengs().then(response => {
       this.shengs = response
     })
-    if (/^\d+$/.test(sessionStorage.getItem('index'))) {
-      this.shengSelected = sessionStorage.getItem('index')
-      this.showCity(
-        sessionStorage.getItem('provinceId'),
-        sessionStorage.getItem('provinceName')
-      )
+    // sessionStorage中有保存省的id
+    if (/^\d+$/.test(sessionStorage.getItem('provinceId'))) {
+      this.provinceId = JSON.parse(sessionStorage.getItem('provinceId'))
+      this.changeProvince(this.provinceId)
     }
-    if (/^\d+$/.test(sessionStorage.getItem('cityIndex'))) {
-      this.citySelected = JSON.parse(sessionStorage.getItem('cityIndex'))
-      this.showQu(
-        sessionStorage.getItem('cityId'),
-        sessionStorage.getItem('cityName')
-      )
+    if (/^\d+$/.test(sessionStorage.getItem('cityId'))) {
+      this.cityId = JSON.parse(sessionStorage.getItem('cityId'))
+      this.changeCity(this.cityId)
     }
     if (/^\d+$/.test(sessionStorage.getItem('areaIndex'))) {
       this.areaSelected = JSON.parse(sessionStorage.getItem('areaIndex'))
@@ -132,25 +117,20 @@ export default {
       )
     }
   },
+  mounted() {
+    // alert(this.provinceId)
+    if (this.provinceId) {
+      this.changeProvince(this.provinceId)
+    }
+  },
   methods: {
     // 新增 区  菜市场
     addregion() {
-      this.$router.push(
-        '/addregion?provinceName=' +
-          this.provinceName +
-          '&cityName=' +
-          this.cityName +
-          '&cityId=' +
-          this.cityId
-      )
+      this.$router.push('/addregion?cityId=' + this.cityId)
     },
     addmarket() {
       this.$router.push(
-        '/addmarket?provinceName=' +
-          this.provinceName +
-          '&cityName=' +
-          this.cityName +
-          '&areaId=' +
+        '/addmarket?areaId=' +
           this.areaId
       )
     },
@@ -192,78 +172,47 @@ export default {
       }
     },
     // 查看
-    seeThisSheng(provinceId, provinceName) {
-      this.$router.push(
-        '/shengInfo?provinceName=' + provinceName + '&provinceId=' + provinceId
-      )
-    },
-    seeThisCity(cityId, cityName) {
-      this.$router.push(
-        '/cityInfo?cityName=' +
-          cityName +
-          '&provinceName=' +
-          this.provinceName +
-          '&cityId=' +
-          cityId
-      )
+    // seeThisSheng(provinceId, provinceName) {
+    //   this.$router.push(
+    //     '/shengInfo?provinceName=' + provinceName + '&provinceId=' + provinceId
+    //   )
+    // },
+    seeThisCity() {
+      this.$router.push('/cityInfo?cityId=' + this.cityId)
     },
     seeThisQu(areaId) {
       this.areaId = areaId
-      this.$router.push(
-        '/quInfo?areaId=' +
-          areaId +
-          '&provinceName=' +
-          this.provinceName +
-          '&cityName=' +
-          this.cityName
-      )
+      this.$router.push('/quInfo?areaId=' + areaId)
     },
     seeThisMarket(marketId) {
-      this.$router.push(
-        '/marketInfo?marketId=' +
-          marketId +
-          '&provinceName=' +
-          this.provinceName +
-          '&cityName=' +
-          this.cityName +
-          '&areaName=' +
-          this.areaName
-      )
+      this.$router.push('/marketInfo?marketId=' + marketId)
     },
-    // 获取下级列表
-    showCity(provinceId, provinceName, index) {
-      // index为非负整数的时候
-      if (/^\d+$/.test(index)) {
-        this.shengSelected = index
-        sessionStorage.setItem('index', index)
+
+    // 选择省
+    changeProvince(value) {
+      // alert(this.provinceId)
+      if (value) {
+        sessionStorage.setItem('provinceId', value)
+        // 获取该省内城市信息
+        api.getCitys(value).then(response => {
+          this.citys = response
+        })
+        this.qus = []
+        this.markets = []
       }
-      this.citySelected = null
-      this.areaSelected = null
-      this.provinceName = provinceName
-      sessionStorage.setItem('provinceId', provinceId)
-      sessionStorage.setItem('provinceName', provinceName)
-      api.getCitys(provinceId).then(response => {
-        this.citys = response
-      })
-      this.qus = []
-      this.markets = []
     },
-    showQu(cityId, cityName, cityIndex) {
-      if (/^\d+$/.test(cityIndex)) {
-        this.citySelected = cityIndex
-        sessionStorage.setItem('cityIndex', cityIndex)
+    // 选择城市
+    changeCity(value) {
+      if (value) {
+        sessionStorage.setItem('cityId', value)
+        api.getQus(value).then(response => {
+          this.qus = response
+        })
+        this.markets = []
+        this.addQu = true
       }
-      this.areaSelected = null
-      this.cityName = cityName
-      this.cityId = cityId
-      sessionStorage.setItem('cityId', cityId)
-      sessionStorage.setItem('cityName', cityName)
-      api.getQus(cityId).then(response => {
-        this.qus = response
-      })
-      this.markets = []
-      this.addQu = true
     },
+
     showMarket(areaId, areaName, areaIndex) {
       if (/^\d+$/.test(areaIndex)) {
         this.areaSelected = areaIndex
@@ -294,6 +243,9 @@ export default {
       font-size: 18px;
       color: #fff;
     }
+  }
+  .SelectCity {
+    margin-bottom: 30px;
   }
   .configuration_quyu {
     border: 1px solid #aaa;

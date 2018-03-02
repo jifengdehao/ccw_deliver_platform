@@ -12,8 +12,8 @@
     </section>
     <section class="addregion_breadcrumb">
       <Breadcrumb separator=">">
-        <BreadcrumbItem>{{provinceName}}</BreadcrumbItem>
-        <BreadcrumbItem>{{cityName}}</BreadcrumbItem>
+        <BreadcrumbItem>{{cityData.provinceName}}</BreadcrumbItem>
+        <BreadcrumbItem>{{cityData.cityName}}</BreadcrumbItem>
         <BreadcrumbItem>{{formInline.user}}</BreadcrumbItem>
       </Breadcrumb>
     </section>
@@ -213,12 +213,6 @@ export default {
   computed: {
     adcode() {
       return this.$route.query.cityId
-    },
-    cityName() {
-      return this.$route.query.cityName
-    },
-    provinceName() {
-      return this.$route.query.provinceName
     },
     path() {
       return this.quPath.map(item => {

@@ -443,7 +443,7 @@
     methods: {
       // 选择时间
       selectTime(value) {
-        console.log(value)
+        // console.log(value)
         this.beginTime = value[0]
         this.endTime = value[1]
         this.pageNumber = 1

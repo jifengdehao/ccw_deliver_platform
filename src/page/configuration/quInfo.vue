@@ -14,8 +14,8 @@
           <!-- 面包屑 -->
             <div class="Breadcrumb">
                 <Breadcrumb separator=">">
-                    <BreadcrumbItem>{{provinceName}}</BreadcrumbItem>
-                    <BreadcrumbItem>{{cityName}}</BreadcrumbItem>
+                    <BreadcrumbItem>{{areaData.provinceName}}</BreadcrumbItem>
+                    <BreadcrumbItem>{{areaData.cityName}}</BreadcrumbItem>
                     <BreadcrumbItem>{{areaData.areaName}}</BreadcrumbItem>
                 </Breadcrumb>
             </div>
@@ -63,12 +63,6 @@ export default {
     areaId() {
       return this.$route.query.areaId
     },
-    cityName() {
-      return this.$route.query.cityName
-    },
-    provinceName() {
-      return this.$route.query.provinceName
-    },
     modifyPath() {
       return this.areaPath.map(item => {
         return [item.lng, item.lat]
@@ -85,6 +79,7 @@ export default {
         this.areaData = response
         this.areaPath = response.areaCoordinate
         this.init()
+        console.log(response)
       })
     },
     init: function() {

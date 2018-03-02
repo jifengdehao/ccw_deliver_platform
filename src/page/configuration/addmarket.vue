@@ -12,8 +12,8 @@
     </section>
     <section class="addmarket_breadcrumb">
       <Breadcrumb separator=">">
-        <BreadcrumbItem>{{provinceName}}</BreadcrumbItem>
-        <BreadcrumbItem>{{cityName}}</BreadcrumbItem>
+        <BreadcrumbItem>{{areaData.cityName}}</BreadcrumbItem>
+        <BreadcrumbItem>{{areaData.cityName}}</BreadcrumbItem>
         <BreadcrumbItem >{{areaData.areaName}}</BreadcrumbItem>
         <BreadcrumbItem>{{formItem.marketName}}</BreadcrumbItem>
       </Breadcrumb>
@@ -67,7 +67,7 @@
               <Checkbox v-model="formItem.isTimeSlotPickBoolean" @on-change="isTimeSlotPick">按时段送达</Checkbox>
             </FormItem>
             <FormItem >
-             <div  v-for="(item,index) in formItem.pickTimeList" :key="index" style="display: inline;marginRight: 50px;">
+             <div  v-for="(item,index) in formItem.pickTimeList" :key="index" style="">
                <TimePicker v-model="formItem.pickTimeList[index].beginTime" :disabled="!formItem.isTimeSlotPickBoolean" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker> - 
                <TimePicker v-model="formItem.pickTimeList[index].endTime" :disabled="!formItem.isTimeSlotPickBoolean" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker>
                <Button size="small"  v-if="formItem.pickTimeList.length <= 5&&formItem.pickTimeList.length !== 1" shape="circle" @click="deltimeInput(index)"> - </Button>
@@ -132,12 +132,6 @@ export default {
   computed: {
     areaId() {
       return this.$route.query.areaId
-    },
-    cityName() {
-      return this.$route.query.cityName
-    },
-    provinceName() {
-      return this.$route.query.provinceName
     },
     path() {
       return this.marketPath.map(item => {
