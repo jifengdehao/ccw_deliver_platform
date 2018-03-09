@@ -114,9 +114,15 @@ const cAuditing = resolve => {
     resolve(module)
   })
 }
-// 骑士管理 - 培训管理
-const cTrain = resolve => {
-  import('@/page/cavalier/c_train').then(module => {
+// 骑士管理 - 培训管理-课程培训
+const courseTrain = resolve => {
+  import('@/page/cavalier/course_train').then(module => {
+    resolve(module)
+  })
+}
+// 骑士管理 - 培训管理-课程审核
+const courseAudit = resolve => {
+  import('@/page/cavalier/course_audit').then(module => {
     resolve(module)
   })
 }
@@ -343,9 +349,27 @@ export default [
         path: '/cAuditing',
         component: cAuditing
       },
+      // {
+      //   path: '/cTrain',
+      //   component: courseTrain,
+      //   children: [
+      //     {
+      //       path: '/cTrain/courseTrain',
+      //       component: courseTrain,
+      //     },
+      //     {
+      //       path: '/cTrain/courseAudit',
+      //       component: courseAudit
+      //     },
+      //   ]
+      // },
       {
-        path: '/cTrain',
-        component: cTrain
+        path: '/course_train',
+        component: courseTrain,
+      },
+      {
+        path: '/course_audit',
+        component: courseAudit
       },
       {
         path: '/cPersonal',

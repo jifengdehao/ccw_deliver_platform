@@ -145,6 +145,35 @@ export const addQu = params => {
 export const addMarket = params => {
   return ax.p(`/deployManager/market`, params)
 }
+
+// 骑士管理-培训管理
+// 获取所有课程
+export const getCourseTrain = params => {
+  return ax.g(`/deliverManager/course`,params)
+}
+// 查询指定课程
+// /deliverManager/course/{psTrainCourseId}
+export const getCourseInfo = psTrainCourseId => {
+  return ax.g(`/deliverManager/course/${psTrainCourseId}`)
+}
+// 增加课程
+export const addCourse = params => {
+  return ax.p(`/deliverManager/course`,params)
+}
+// 增加课程
+export const delCourse = psTrainCourseId => {
+  return ax.d(`/deliverManager/course/${psTrainCourseId}`)
+}
+/**骑士管理-课程审核 */
+// 审核的骑士列表
+// /deliverManager/course/psDeliverTraining
+export const getCourseAuditList = params => {
+  return ax.g(`/deliverManager/course/psDeliverTraining`,params)
+}
+// 骑士课程审核
+export const auditCourse = params => {
+  return ax.u(`/deliverManager/course/audit`,params)
+}
 // 配置设置  end   *******************************************************
 /**
  * @author: Zeng FanLu

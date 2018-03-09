@@ -70,7 +70,6 @@
 </template>
 <script>
 import mainHeader from '../../components/header/main_header.vue'
-import citySelect from '../../components/changecity/cityselect.vue'
 export default {
   components: {
     mainHeader, citySelect

@@ -15,7 +15,6 @@
   </div>
 </template>
 <script>
-import citySelect from '../../components/changecity/cityselect.vue'
 import mainHeader from '../../components/header/main_header.vue'
 export default {
   components: {
