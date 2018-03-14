@@ -47,7 +47,7 @@
 </template>
 <script>
 import * as api from '@/api/common'
-
+import * as time from '@/until/time'
 export default {
   components: {},
   data() {
@@ -74,7 +74,7 @@ export default {
           key: 'registerDt',
           align: 'center',
           render: (h, params) => {
-            return 'span', this.formatTime(params.row.registerDt)
+            return time.formatDateTime(params.row.registerDt)
           }
         },
         {
@@ -175,21 +175,6 @@ export default {
     changePage(page) {
       this.params.pageNumber = page
       this.getDeliverManager()
-    },
-    //  时间过滤
-    formatTime(time) {
-      let date = new Date(time)
-      let month =
-        date.getMonth() + 1 >= 10
-          ? date.getMonth() + 1
-          : '0' + date.getMonth() + 1
-      let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
-      let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
-      let minutes =
-        date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()
-      let seconds =
-        date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()
-      return `${date.getFullYear()}/${month}/${day} ${hour}:${minutes}:${seconds}`
     }
   }
 }

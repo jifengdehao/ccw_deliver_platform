@@ -32,30 +32,30 @@
     <Modal v-model="addCourse" :title="modalTitle" :mask-closable="false" >
        <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="80">
         <FormItem label="课程编号:" prop="courseNo">
-            <Input v-model="formItem.courseNo" style="width:200px" placeholder="Enter something..." ></Input>
+            <Input v-model="formItem.courseNo" style="width:200px" placeholder="Enter something..." :disabled = "isEdit"></Input>
         </FormItem>
          <FormItem label="课程类型:" prop="courseType">
             <!-- <Input v-model="formItem.courseType" style="width:200px" placeholder="Enter something..." ></Input> -->
-            <Select v-model="formItem.courseType" style="width:200px">
+            <Select v-model="formItem.courseType" style="width:200px" :disabled = "isEdit">
               <Option :value="1">新人培训</Option>
               <Option :value="2">星级培训</Option>
             </Select>
         </FormItem> 
          <FormItem label="课程名称:" prop="courseName">
-            <Input v-model="formItem.courseName" style="width:200px" placeholder="Enter something..." ></Input>
+            <Input v-model="formItem.courseName" style="width:200px" placeholder="Enter something..." :disabled = "isEdit" ></Input>
         </FormItem> 
          <FormItem label="课程内容:">
-            <Input v-model="formItem.content" style="width:200px" placeholder="Enter something..." ></Input>
+            <Input v-model="formItem.content" style="width:200px" placeholder="Enter something..." :disabled = "isEdit"></Input>
         </FormItem> 
          <FormItem label="课程地点:" prop="address">
-            <Input v-model="formItem.address" style="width:200px" placeholder="Enter something..." ></Input>
+            <Input v-model="formItem.address" style="width:200px" placeholder="Enter something..." :disabled = "isEdit"></Input>
         </FormItem> 
          <FormItem label="课程时间:" prop="trainingDate">
             <!-- <Input v-model="formItem.trainingDate" style="width:200px" placeholder="Enter something..." ></Input> -->
-            <DatePicker v-model="formItem.trainingDate" :options="options3" type="datetime" placeholder="Select date and time" style="width: 200px"></DatePicker>
+            <DatePicker v-model="formItem.trainingDate" :options="options3" type="datetime" placeholder="Select date and time" style="width: 200px" :disabled = "isEdit"></DatePicker>
         </FormItem> 
          <FormItem label="人数限制:">
-            <Input v-model="formItem.upper_limit" style="width:200px" placeholder="Enter something..." ></Input>
+            <Input v-model="formItem.upper_limit" style="width:200px" placeholder="Enter something..." :disabled = "isEdit"></Input>
         </FormItem> 
         <FormItem label="介绍图片:">
           <div class="img fl" v-if="formItem.coursePic">
@@ -69,7 +69,8 @@
           </div>
         </FormItem>
          <FormItem >
-            <Button type="info" style="width:60px;margin:auto" @click="addcourse('formItem')">保存</Button>
+            <Button type="info" style="width:60px;margin:auto" @click="addcourse('formItem')" v-if="!isEdit">保存</Button>
+            <Button type="info" style="width:60px;margin:auto" @click="hideAddCourse" v-else>返回</Button>
         </FormItem>
       </Form>
       <div slot="footer">
@@ -106,6 +107,7 @@ export default {
         courseType: 1
       }, // 弹窗表格内容
       modalTitle: '',
+      isEdit: false, // 查看的时候不能编辑
       columns: [
         {
           title: '序号',
@@ -163,13 +165,19 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.modalTitle = '编辑课程'
+                      this.isEdit =
+                        params.row.trainingDate < new Date().getTime()
+                          ? true
+                          : false
+                      this.modalTitle = params.row.trainingDate < new Date().getTime()
+                          ? "查看课程"
+                          : "编辑课程"
                       this.addCourse = true
                       this.getCourseInfo(params.row.psTrainCourseId)
                     }
                   }
                 },
-                '编辑'
+                params.row.trainingDate < new Date().getTime() ? '查看' : '编辑'
               ),
               h(
                 'Button',
@@ -275,6 +283,9 @@ export default {
           this.$Message.error('Fail!')
         }
       })
+    },
+    hideAddCourse(){
+      this.addCourse = false
     },
     // 删除课程
     delCourse() {

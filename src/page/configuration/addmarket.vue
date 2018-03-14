@@ -12,7 +12,7 @@
     </section>
     <section class="addmarket_breadcrumb">
       <Breadcrumb separator=">">
-        <BreadcrumbItem>{{areaData.cityName}}</BreadcrumbItem>
+        <BreadcrumbItem>{{areaData.provinceName}}</BreadcrumbItem>
         <BreadcrumbItem>{{areaData.cityName}}</BreadcrumbItem>
         <BreadcrumbItem >{{areaData.areaName}}</BreadcrumbItem>
         <BreadcrumbItem>{{formItem.marketName}}</BreadcrumbItem>
@@ -46,15 +46,15 @@
             </FormItem>
             <FormItem >
               <RadioGroup v-model="formItem.isSelfPick" type="button" @on-change="changeSelfPick">
-                <Radio label="自提关闭"></Radio>
-                <Radio label="自提开启"></Radio>
+                <Radio label="0">自提关闭</Radio>
+                <Radio label="1">自提开启</Radio>
               </RadioGroup>
             </FormItem>
             <FormItem label="自提点：">
-              <Input v-model="formItem.selfPickAddress" style="width:200px" :disabled="formItem.isSelfPick === '自提关闭'"></Input>
+              <Input v-model="formItem.selfPickAddress" style="width:200px" :disabled="formItem.isSelfPick === '0'"></Input>
             </FormItem>
             <FormItem label="自提点电话：">   
-              <Input v-model="formItem.self_pick_address_number" style="width:200px" :disabled="formItem.isSelfPick === '自提关闭'"></Input>
+              <Input v-model="formItem.self_pick_address_number" style="width:200px" :disabled="formItem.isSelfPick === '0'"></Input>
             </FormItem>
           </Col>
           <Col span="8">
@@ -113,7 +113,7 @@ export default {
         latitude: 0, // 维度
         longitude: 0, // 经度
         pickTimeList: [{ beginTime: '', endTime: '' }],
-        isSelfPick: '自提关闭',
+        isSelfPick: '0',
         isAreaSelect: 0, // 配送范围:0按经纬度，1按距离
         deliverRange: null // 按距离时的半径
       },
