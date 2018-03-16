@@ -74,7 +74,6 @@ export default {
     getCityInfo(adcode) {
       api.getCityInfo(adcode).then(response => {
         this.cityData = response
-        console.log(response)
         this.initMap()
       })
     },
