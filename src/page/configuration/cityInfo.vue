@@ -24,19 +24,19 @@
             <div class="setprice" >
               <Form :model="cityData" :label-width="200">
                 <FormItem label="运费(元):">
-                  <InputNumber v-model="cityData.expense" :step="0.50" placeholder="请输入运费" style="width:180px">
+                  <InputNumber v-model="cityData.expense" :min="0" :step="0.50" placeholder="请输入运费" style="width:180px">
                   </InputNumber>
                 </FormItem>
                 <FormItem label="免费配送门槛(元):">
-                  <InputNumber v-model="cityData.instantExpense" :step="0.50" placeholder="请输入即时配送价" style="width:180px">
+                  <InputNumber v-model="cityData.instantExpense" :min="0" :step="0.50" placeholder="请输入即时配送价" style="width:180px">
                   </InputNumber>
                 </FormItem>
                 <FormItem label="计重收费门槛(斤):">
-                  <InputNumber v-model="cityData.freeFeeWeight"  placeholder="请输入即时配送价" style="width:180px">
+                  <InputNumber v-model="cityData.freeFeeWeight"  :min="0" placeholder="请输入即时配送价" style="width:180px">
                   </InputNumber>
                 </FormItem>
                 <FormItem label="每超出门槛一斤收费(元):">
-                  <InputNumber v-model="cityData.oneKgFee" :step="0.50" placeholder="请输入即时配送价" style="width:180px">
+                  <InputNumber v-model="cityData.oneKgFee" :min="0" :step="0.50" placeholder="请输入即时配送价" style="width:180px">
                   </InputNumber>
                 </FormItem>
               </Form>
