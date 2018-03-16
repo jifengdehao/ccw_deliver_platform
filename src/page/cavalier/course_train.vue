@@ -54,8 +54,8 @@
             <!-- <Input v-model="formItem.trainingDate" style="width:200px" placeholder="Enter something..." ></Input> -->
             <DatePicker v-model="formItem.trainingDate" :options="options3" type="datetime" placeholder="Select date and time" style="width: 200px" :disabled = "isEdit"></DatePicker>
         </FormItem> 
-         <FormItem label="人数限制:">
-            <Input v-model="formItem.upper_limit" style="width:200px" placeholder="Enter something..." :disabled = "isEdit"></Input>
+         <FormItem label="人数限制:" prop="upper_limit">
+            <InputNumber :min="0" v-model="formItem.upper_limit" style="width:200px" placeholder="Enter something..." :disabled = "isEdit"></InputNumber>
         </FormItem> 
         <FormItem label="介绍图片:">
           <div class="img fl" v-if="formItem.coursePic">
@@ -231,6 +231,12 @@ export default {
           {
             required: true,
             message: '请选择课程时间'
+          }
+        ],
+        upper_limit: [
+          {
+            required: true,
+            message: '请输入人数限制'
           }
         ]
       }
