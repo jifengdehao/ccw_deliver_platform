@@ -148,12 +148,12 @@ export default {
       this.map.setFitView() //地图自适应
     },
     nodifyCityInfo(cityData) {
-      if (!cityData.expense) {
-        this.$Message.erroe('请填写运费')
+      if (!/^\d+(\.{0,1}\d+){0,1}$/.test(cityData.expense)) {
+        this.$Message.error('请填写运费')
         return false
       }
-      if (!cityData.instantExpense) {
-        this.$Message.erroe('请填写及时配送价')
+      if (!/^\d+(\.{0,1}\d+){0,1}$/.test(cityData.instantExpense)) {
+        this.$Message.error('请填写及时配送价')
         return false
       }
       cityData.cityId = this.adcode

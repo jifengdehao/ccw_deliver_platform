@@ -89,9 +89,9 @@
                 <Checkbox v-model="mapScale" >地图标尺</Checkbox> <br>
                 <div  v-for="(cicleR,index) in cicleRs" :key="index" style="display: inline">
                   <Input v-model="cicleRs[index]" size="small" style="width:150px" :disabled="!mapScale" placeholder="输入标尺半径" @on-blur="editScale(index)"></Input>
-                  <Button size="small"  v-if="cicleRs.length <= 5&&cicleRs.length !== 1" shape="circle" @click="delScaleInput(index)"> - </Button>
+                  <Button size="small"  v-if="cicleRs.length <= 7&&cicleRs.length !== 1" shape="circle" @click="delScaleInput(index)"> - </Button>
                 </div>
-              <Button size="small" v-if="cicleRs.length < 5" shape="circle"  style="display: inline" @click="addScaleInput">+</Button>
+              <Button size="small" v-if="cicleRs.length < 7" shape="circle"  style="display: inline" @click="addScaleInput">+</Button>
             </FormItem>
           </Col>
         </Row>
@@ -291,7 +291,7 @@ export default {
     // 获取选择框的时间
     // 增加营业时间输入框
     addtimeInput() {
-      if (this.marketData.pickTimeList.length < 5) {
+      if (this.marketData.pickTimeList.length < 7) {
         this.marketData.pickTimeList.push({})
       }
     },

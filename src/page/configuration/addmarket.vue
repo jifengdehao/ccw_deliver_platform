@@ -70,9 +70,9 @@
              <div  v-for="(item,index) in formItem.pickTimeList" :key="index" style="">
                <TimePicker v-model="formItem.pickTimeList[index].beginTime" :disabled="!formItem.isTimeSlotPickBoolean" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker> - 
                <TimePicker v-model="formItem.pickTimeList[index].endTime" :disabled="!formItem.isTimeSlotPickBoolean" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker>
-               <Button size="small"  v-if="formItem.pickTimeList.length <= 5&&formItem.pickTimeList.length !== 1" shape="circle" @click="deltimeInput(index)"> - </Button>
+               <Button size="small"  v-if="formItem.pickTimeList.length <= 7&&formItem.pickTimeList.length !== 1" shape="circle" @click="deltimeInput(index)"> - </Button>
              </div>
-              <Button size="small" v-if="formItem.pickTimeList.length < 5" shape="circle" @click="addtimeInput" style="display: inline">+</Button>
+              <Button size="small" v-if="formItem.pickTimeList.length < 7" shape="circle" @click="addtimeInput" style="display: inline">+</Button>
             </FormItem>
           </Col>
           <Col span="8">
@@ -112,6 +112,7 @@ export default {
       formItem: {
         latitude: 0, // 维度
         longitude: 0, // 经度
+        isTimeSlotPickBoolean: true,
         pickTimeList: [{ beginTime: '', endTime: '' }],
         isSelfPick: '0',
         isAreaSelect: 0, // 配送范围:0按经纬度，1按距离
@@ -262,7 +263,7 @@ export default {
     },
     // 增加营业时间输入框
     addtimeInput() {
-      if (this.formItem.pickTimeList.length < 5) {
+      if (this.formItem.pickTimeList.length < 7) {
         this.formItem.pickTimeList.push({})
       }
     },
