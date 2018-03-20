@@ -523,7 +523,6 @@
           this.loading = true
           api.getOrderData(params).then((res) => {
             if (res) {
-              console.log(res)
               this.loading = false
               this.data = res.expressPage.records
               this.tableTotal = res.expressPage.total
@@ -563,7 +562,6 @@
       // 获取默认数据
       getInitOrderData() {
         let user = JSON.parse(sessionStorage.getItem('userInfo'))
-        console.log(user)
         if (user.provinceId) {
           this.province = user.provinceId
           this.provinceData.push({provinceId: user.provinceId, provinceName: user.provinceName})
@@ -609,7 +607,6 @@
           }
           api.exportOrderPoi(params).then((res) => {
             if (res) {
-              console.log(res)
               this.modal_loading = false
               window.open(res)
             }
