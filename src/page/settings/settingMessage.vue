@@ -16,6 +16,7 @@
  </template>
  <script>
 import * as http from '@/api/common'
+import * as time from '@/until/time'
 export default {
   name: 'setting_message',
   data() {
@@ -33,7 +34,7 @@ export default {
           title: '消息时间',
           key: 'pushTime',
           render: (h, params) => {
-            return h('span', this.formatTime(params.row.pushTime))
+            return h('span', time.formatDateTime(params.row.pushTime))
           }
         },
         {
@@ -93,21 +94,6 @@ export default {
       this.params.pageNumber = pageNum
       this.getMsgListData()
     },
-    //  时间过滤
-    formatTime(time) {
-      let date = new Date(time)
-      let month =
-        date.getMonth() + 1 >= 10
-          ? date.getMonth() + 1
-          : '0' + date.getMonth() + 1
-      let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
-      let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
-      let minutes =
-        date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()
-      let seconds =
-        date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()
-      return `${date.getFullYear()}/${month}/${day} ${hour}:${minutes}:${seconds}`
-    }
   }
 }
 </script>
