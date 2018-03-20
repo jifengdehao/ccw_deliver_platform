@@ -129,10 +129,7 @@ export default {
       this.$router.push('/addregion?cityId=' + this.cityId)
     },
     addmarket() {
-      this.$router.push(
-        '/addmarket?areaId=' +
-          this.areaId
-      )
+      this.$router.push('/addmarket?areaId=' + this.areaId)
     },
     // 删除
     delQu(index) {
@@ -178,7 +175,9 @@ export default {
     //   )
     // },
     seeThisCity() {
-      this.$router.push('/cityInfo?cityId=' + this.cityId)
+      if (this.cityId) {
+        this.$router.push('/cityInfo?cityId=' + this.cityId)
+      }
     },
     seeThisQu(areaId) {
       this.areaId = areaId

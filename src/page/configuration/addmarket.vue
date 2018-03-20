@@ -12,7 +12,7 @@
     </section>
     <section class="addmarket_breadcrumb">
       <Breadcrumb separator=">">
-        <BreadcrumbItem>{{areaData.cityName}}</BreadcrumbItem>
+        <BreadcrumbItem>{{areaData.provinceName}}</BreadcrumbItem>
         <BreadcrumbItem>{{areaData.cityName}}</BreadcrumbItem>
         <BreadcrumbItem >{{areaData.areaName}}</BreadcrumbItem>
         <BreadcrumbItem>{{formItem.marketName}}</BreadcrumbItem>
@@ -46,15 +46,15 @@
             </FormItem>
             <FormItem >
               <RadioGroup v-model="formItem.isSelfPick" type="button" @on-change="changeSelfPick">
-                <Radio label="自提关闭"></Radio>
-                <Radio label="自提开启"></Radio>
+                <Radio label="0">自提关闭</Radio>
+                <Radio label="1">自提开启</Radio>
               </RadioGroup>
             </FormItem>
             <FormItem label="自提点：">
-              <Input v-model="formItem.selfPickAddress" style="width:200px" :disabled="formItem.isSelfPick === '自提关闭'"></Input>
+              <Input v-model="formItem.selfPickAddress" style="width:200px" :disabled="formItem.isSelfPick === '0'"></Input>
             </FormItem>
             <FormItem label="自提点电话：">   
-              <Input v-model="formItem.self_pick_address_number" style="width:200px" :disabled="formItem.isSelfPick === '自提关闭'"></Input>
+              <Input v-model="formItem.self_pick_address_number" style="width:200px" :disabled="formItem.isSelfPick === '0'"></Input>
             </FormItem>
           </Col>
           <Col span="8">
@@ -70,9 +70,9 @@
              <div  v-for="(item,index) in formItem.pickTimeList" :key="index" style="">
                <TimePicker v-model="formItem.pickTimeList[index].beginTime" :disabled="!formItem.isTimeSlotPickBoolean" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker> - 
                <TimePicker v-model="formItem.pickTimeList[index].endTime" :disabled="!formItem.isTimeSlotPickBoolean" placeholder="Select time" format="HH:mm" style="width: 95px"></TimePicker>
-               <Button size="small"  v-if="formItem.pickTimeList.length <= 5&&formItem.pickTimeList.length !== 1" shape="circle" @click="deltimeInput(index)"> - </Button>
+               <Button size="small"  v-if="formItem.pickTimeList.length <= 7&&formItem.pickTimeList.length !== 1" shape="circle" @click="deltimeInput(index)"> - </Button>
              </div>
-              <Button size="small" v-if="formItem.pickTimeList.length < 5" shape="circle" @click="addtimeInput" style="display: inline">+</Button>
+              <Button size="small" v-if="formItem.pickTimeList.length < 7" shape="circle" @click="addtimeInput" style="display: inline">+</Button>
             </FormItem>
           </Col>
           <Col span="8">
@@ -112,8 +112,9 @@ export default {
       formItem: {
         latitude: 0, // 维度
         longitude: 0, // 经度
+        isTimeSlotPickBoolean: true,
         pickTimeList: [{ beginTime: '', endTime: '' }],
-        isSelfPick: '自提关闭',
+        isSelfPick: '0',
         isAreaSelect: 0, // 配送范围:0按经纬度，1按距离
         deliverRange: null // 按距离时的半径
       },
@@ -262,7 +263,7 @@ export default {
     },
     // 增加营业时间输入框
     addtimeInput() {
-      if (this.formItem.pickTimeList.length < 5) {
+      if (this.formItem.pickTimeList.length < 7) {
         this.formItem.pickTimeList.push({})
       }
     },
