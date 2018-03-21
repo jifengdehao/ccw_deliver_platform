@@ -169,9 +169,10 @@ export default {
                         params.row.trainingDate < new Date().getTime()
                           ? true
                           : false
-                      this.modalTitle = params.row.trainingDate < new Date().getTime()
-                          ? "查看课程"
-                          : "编辑课程"
+                      this.modalTitle =
+                        params.row.trainingDate < new Date().getTime()
+                          ? '查看课程'
+                          : '编辑课程'
                       this.addCourse = true
                       this.getCourseInfo(params.row.psTrainCourseId)
                     }
@@ -272,6 +273,7 @@ export default {
     },
     // 增加按钮
     showAddModal() {
+      this.isEdit = false
       this.formItem = {}
       this.modalTitle = '增加课程'
       this.addCourse = true
@@ -281,16 +283,20 @@ export default {
       this.$refs[name].validate(valid => {
         if (valid) {
           api.addCourse(this.formItem).then(res => {
-            this.addCourse = false
-            this.$Message.success('提交成功')
-            this.getCourseTrain()
+            if (res.result) {
+              this.addCourse = false
+              this.$Message.success('提交成功')
+              this.getCourseTrain()
+            }else{
+              this.$Message.error(res.msg)
+            }
           })
         } else {
           this.$Message.error('Fail!')
         }
       })
     },
-    hideAddCourse(){
+    hideAddCourse() {
       this.addCourse = false
     },
     // 删除课程

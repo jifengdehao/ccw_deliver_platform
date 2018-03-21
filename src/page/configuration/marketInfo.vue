@@ -50,10 +50,10 @@
               </RadioGroup>
             </FormItem>
             <FormItem label="自提点：">
-              <Input v-model="marketData.selfPickAddress" style="width:200px" :disabled="marketData.isSelfPick === '0'"></Input>
+              <Input v-model="marketData.selfPickAddress" style="width:200px" :disabled="marketData.isSelfPick == '0'"></Input>
             </FormItem>
             <FormItem label="自提点电话：">   
-              <Input v-model="marketData.self_pick_address_number" style="width:200px" :disabled="marketData.isSelfPick === '0'"></Input>
+              <Input v-model="marketData.self_pick_address_number" style="width:200px" :disabled="marketData.isSelfPick == '0'"></Input>
             </FormItem>
           </Col>
           <Col span="8">
@@ -77,12 +77,12 @@
           <Col span="8">
             <FormItem label="配送区域：">
               <RadioGroup v-model="marketData.isAreaSelect" vertical>
-                <Radio label="0" v-if="!marketData.isAreaSelect"> 
+                <Radio label="0" v-show="!marketData.isAreaSelect"> 
                   <!-- <Button size="small" type="info" :disabled="marketData.isAreaSelect == 1" >绘制菜市场 </Button>   -->
                   <Button size="small" :disabled="marketData.isAreaSelect == 1" @click="polygonEditorOpen()">开始编辑当前市场范围</Button> 
                   <Button size="small" :disabled="marketData.isAreaSelect == 1" @click="polygonEditorClose()">结束编辑当前市场范围</Button>
                 </Radio>
-                <Radio label="1" v-else> <Input size="small" v-model="marketData.deliverRange" :disabled="marketData.isAreaSelect == 0" style="width:100px" placeholder="配送半径(km)" @on-blur="deliverRange"></Input> </Radio>
+                <Radio label="1" v-show="marketData.isAreaSelect"> <Input size="small" v-model="marketData.deliverRange" :disabled="marketData.isAreaSelect == 0" style="width:100px" placeholder="配送半径(km)" @on-blur="deliverRange"></Input> </Radio>
               </RadioGroup>
             </FormItem>
             <FormItem >
@@ -140,7 +140,7 @@ export default {
       return this.$route.query.marketId
     },
     modifyPath() {
-      if (this.marketPath == []) {
+      if (Array.isArray(this.marketPath)) {
         return this.marketPath.map(item => {
           return [item.lng, item.lat]
         })
