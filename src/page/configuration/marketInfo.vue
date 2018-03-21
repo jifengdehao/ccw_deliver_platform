@@ -215,6 +215,20 @@ export default {
         map,
         this.editor._polygon
       )
+
+       // 菜市场位置
+        this.marker = new AMap.Marker({
+          icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
+          position: [this.marketData.longitude, this.marketData.latitude],
+          draggable: true,
+          cursor: 'move',
+          raiseOnDrag: true
+        })
+        this.marker.setMap(this.map)
+        this.marker.on('dragend', e => {
+          this.marketData.latitude = e.lnglat.O
+          this.marketData.longitude = e.lnglat.M
+        })
     },
     // 绘制自定义区域
     polygon(arr, color) {
@@ -259,19 +273,7 @@ export default {
     chooseMarker() {
       // // 选定菜市场地址
       if (!this.marker) {
-        // 菜市场位置
-        this.marker = new AMap.Marker({
-          icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
-          position: [this.marketData.longitude, this.marketData.latitude],
-          draggable: true,
-          cursor: 'move',
-          raiseOnDrag: true
-        })
-        this.marker.setMap(this.map)
-        this.marker.on('dragend', e => {
-          this.marketData.latitude = e.lnglat.O
-          this.marketData.longitude = e.lnglat.M
-        })
+       
       }
     },
     // 开始修改区域

@@ -19,7 +19,7 @@
         <li v-if="DeliverInfo.mobileno"><span>联系方式</span><span>{{ DeliverInfo.mobileno }}</span></li>
         <li v-if="DeliverInfo.identityNo"><span>身份证号</span><span>{{ DeliverInfo.identityNo }}</span></li>
         <li><span>审核结果</span><span>通过</span></li>
-        <li><span>新人培训结果</span><span>通过</span></li>
+        <li><span>新人培训结果</span><span>{{DeliverInfo.trainResult == 1 ? "通过": "未通过"}}</span></li>
         <li><span>身份证正反面</span></li>
         <li><img :src="PositiveImg" alt=""><img :src="negativeImg" alt=""><img :src="inHandImg" alt=""></li>
       </ul>
@@ -238,7 +238,14 @@ export default {
     },
     // 保存修改 清空修改
     onSave() {
-      if (!!this.id && !!this.areaIdData && !!this.cityIdIndex && !!this.provinceData && !!this.marketIdData && !!this.status) {
+      if (
+        !!this.id &&
+        !!this.areaIdData &&
+        !!this.cityIdIndex &&
+        !!this.provinceData &&
+        !!this.marketIdData &&
+        !!this.status
+      ) {
         let saveDate = {
           personStatus: this.status, // 保存上班状态
           psDeliverId: this.id, // 保存修改用户ID
