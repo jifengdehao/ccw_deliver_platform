@@ -23,7 +23,7 @@
       <li>
         <span>所属省区</span>
         <!-- data.user.provinceId -->
-        <Select v-model="data.user.provinceId" style="width:168px;height:30px;" @on-change="chooseProvince">
+        <Select v-model="data.user.provinceId" clearable style="width:168px;height:30px;" @on-change="chooseProvince">
           <Option v-for="item in provinceList" :value="item.provinceId" :key="item.provinceId">{{ item.provinceName }}</Option>
         </Select>
        </li>
