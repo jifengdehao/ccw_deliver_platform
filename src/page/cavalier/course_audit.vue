@@ -321,9 +321,12 @@ export default {
     // 审核
     audit() {
       api.auditCourse(this.auditParams).then(res => {
-        console.log(res)
-        this.getCourseAuditList()
-        this.$Message.success('审核成功')
+        if (res) {
+          this.getCourseAuditList()
+          this.$Message.success('审核成功')
+        }else{
+          this.$Message.error('课程未开始， 无法操作')
+        }
       })
     }
   }
